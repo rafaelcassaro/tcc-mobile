@@ -14,6 +14,7 @@ import com.example.tcc.databinding.FragmentGalleryBinding;
 
 public class GalleryFragment extends Fragment {
 
+
     private FragmentGalleryBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -27,6 +28,8 @@ public class GalleryFragment extends Fragment {
         final TextView textView = binding.textGallery;
         galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
+
+
     }
 
     @Override

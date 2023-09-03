@@ -1,6 +1,8 @@
-package com.example.tcc.ui.hamburguerScreens;
+package com.example.tcc.ui.user;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import android.os.Bundle;
 
@@ -13,4 +15,6 @@ public class TelaUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_usuario);
     }
+
+
 }

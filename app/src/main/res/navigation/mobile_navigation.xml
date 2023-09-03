@@ -22,4 +22,10 @@
         android:name="com.example.tcc.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_email"
+        android:name="com.example.tcc.ui.gallery.BlankFragment"
+        android:label="texte"
+        tools:layout="@layout/fragment_blank" />
 </navigation>
