@@ -7,8 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="Blue">#3944BC</color>
-    <color name="Cerulean">#0492C2</color>
-    <color name="Sky">#63C5DA</color>
+    <color name="Blue">#6666ff</color>
+    <color name="Cerulean">#9999ff</color>
+    <color name="Sky">#ccccff</color>
     <color name="Grey">#878787</color>
+    <color name="quasebranco">#e5e5ff</color>
+    <color name="gold">#ffd700</color>
 </resources>
+
+
+
+

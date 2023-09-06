@@ -46,6 +46,7 @@
         app:layout_constraintStart_toStartOf="@id/containerComponents"
         app:layout_constraintEnd_toEndOf="@id/containerComponents"
         app:layout_constraintTop_toTopOf="@id/containerComponents"
+
         />
     <EditText
         android:id="@+id/edit_senha"
@@ -97,6 +98,25 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:textAllCaps="true"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_esqueceu_senha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/esquceu_senha"
+        app:layout_constraintTop_toBottomOf="@id/containerComponents"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="40dp"
+
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
 
         />
 

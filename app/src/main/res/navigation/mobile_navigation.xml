@@ -3,29 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_moradias">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.tcc.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_moradias"
+        android:name="com.example.tcc.ui.moradias.MoradiasFragment"
+        android:label="@string/menu_moradias"
+        tools:layout="@layout/fragment_moradias" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.tcc.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_postagens"
+        android:name="com.example.tcc.ui.postagens.PostagensFragment"
+        android:label="@string/menu_postagens"
+        tools:layout="@layout/fragment_postagens" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.tcc.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_perfil"
+        android:name="com.example.tcc.ui.perfil.PerfilFragment"
+        android:label="@string/menu_perfil"
+        tools:layout="@layout/fragment_perfil" />
 
     <fragment
-        android:id="@+id/nav_email"
-        android:name="com.example.tcc.ui.gallery.BlankFragment"
-        android:label="texte"
-        tools:layout="@layout/fragment_blank" />
+        android:id="@+id/nav_anuncio_usuario"
+        android:name="com.example.tcc.ui.moradias.AnuncioUsuarioFragment"
+        android:label="@string/menu_anuncio_usuario"
+        tools:layout="@layout/fragment_anuncio_usuario" />
+
+    <fragment
+        android:id="@+id/nav_postagens_usuario"
+        android:name="com.example.tcc.ui.postagens.PostagensUsuarioFragment"
+        android:label="@string/menu_postagem_usuario"
+        tools:layout="@layout/fragment_postagens_usuario"
+        />
+
+    <fragment
+        android:id="@+id/nav_novo_anuncio"
+        android:name="com.example.tcc.ui.moradias.NovoAnuncioFragment"
+        android:label="@string/menu_nova_moradia"
+        tools:layout="@layout/fragment_novo_anuncio"
+        />
+
+    <fragment
+        android:id="@+id/nav_nova_postagem"
+        android:name="com.example.tcc.ui.postagens.NovaPostagemFragment"
+        android:label="@string/menu_nova_postagem"
+        tools:layout="@layout/fragment_nova_postagem"
+        />
+
+    <fragment
+        android:id="@+id/nav_feedback"
+        android:name="com.example.tcc.ui.user.FeedbackFragment"
+        android:label="@string/menu_feedback"
+        tools:layout="@layout/fragment_feedback"
+        />
+
+    <fragment
+        android:id="@+id/nav_planos"
+        android:name="com.example.tcc.ui.user.PlanosFragment"
+        android:label="@string/menu_planos"
+        tools:layout="@layout/fragment_planos"
+        />
 </navigation>

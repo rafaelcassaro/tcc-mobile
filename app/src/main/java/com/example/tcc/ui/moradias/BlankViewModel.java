@@ -1,4 +1,4 @@
-package com.example.tcc.ui.gallery;
+package com.example.tcc.ui.moradias;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

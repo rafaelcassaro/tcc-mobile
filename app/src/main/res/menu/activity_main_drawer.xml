@@ -5,21 +5,50 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_moradias"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:title="@string/menu_moradias"
+
+            />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_postagens"
+            android:icon="@drawable/ic_post"
+            android:title="@string/menu_postagens" />
         <item
-            android:id="@+id/nav_email"
-            android:icon="@drawable/ic_email"
-            android:title="Emails" />
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/ic_user"
+            android:title="@string/menu_perfil" />
+        <item
+            android:id="@+id/nav_anuncio_usuario"
+            android:icon="@drawable/ic_moradia_usuario"
+            android:title="@string/menu_anuncio_usuario" />
+        <item
+            android:id="@+id/nav_postagens_usuario"
+            android:icon="@drawable/ic_post_usuario"
+            android:title="@string/menu_postagem_usuario"
+            />
+        <item
+            android:id="@+id/nav_novo_anuncio"
+            android:icon="@drawable/ic_moradia_add"
+            android:title="@string/menu_nova_moradia"
+            />
+        <item
+            android:id="@+id/nav_nova_postagem"
+            android:icon="@drawable/ic_nova_postagem"
+            android:title="@string/menu_nova_postagem"
+            />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/menu_feedback"
+            />
+        <item
+            android:id="@+id/nav_planos"
+            android:icon="@drawable/ic_plano"
+            android:title="@string/menu_planos"
+            />
+
+
 
     </group>
 </menu>

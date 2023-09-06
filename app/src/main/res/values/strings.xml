@@ -7,14 +7,25 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_moradias">Moradias</string>
+    <string name="menu_postagens">Postagens</string>
+    <string name="menu_perfil">Editar Perfil</string>
+    <string name="menu_anuncio_usuario">Meus anúncios</string>
+    <string name="menu_postagem_usuario">Minhas postagens</string>
+    <string name="menu_nova_moradia">Anúnciar Imovel</string>
+    <string name="menu_nova_postagem">Fazer postagem</string>
+    <string name="menu_feedback">Nos envie um feedback</string>
+    <string name="menu_planos">Seja premium</string>
 
 
     <string name="entrar">Entrar</string>
     <string name="text_cadastro">Cadastrar-se</string>
     <string name="title_cadastro">Cadastre-se</string>
+    <string name="esquceu_senha">Esqueceu a senha?</string>
+    <string name="redes_cadastro">Redes Sociais</string>
+    <string name="foto_cadastro">Foto de perfil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

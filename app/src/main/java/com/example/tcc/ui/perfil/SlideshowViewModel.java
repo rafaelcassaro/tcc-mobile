@@ -1,7 +1,5 @@
-package com.example.tcc.ui.slideshow;
+package com.example.tcc.ui.perfil;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class SlideshowViewModel extends ViewModel {
