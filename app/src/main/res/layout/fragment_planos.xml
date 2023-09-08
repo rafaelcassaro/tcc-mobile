@@ -1,14 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_color"
     tools:context=".ui.user.PlanosFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <View
+        android:id="@+id/containerComponents_planos"
+        style="@style/ContainerComponents"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="20dp"
 
-</FrameLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.6"
+         />
+
+    <TextView
+        android:id="@+id/plano1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edit_text_planos_grey"
+
+        android:text="STANDARD"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="40dp"
+        android:fontFamily="serif"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/containerComponents_planos"
+        />
+
+    <TextView
+        android:id="@+id/plano1_text"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+
+        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta padrão"
+
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:padding="25dp"
+
+        android:background="@drawable/edit_text_planos_white"
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/plano1"
+        app:layout_constraintTop_toTopOf="@+id/containerComponents_planos"
+        app:layout_constraintEnd_toEndOf="@id/containerComponents_planos"
+        />
+
+    <TextView
+        android:id="@+id/plano2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edit_text_planos_grey"
+
+        android:text="BLACK"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="40dp"
+        android:fontFamily="serif"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plano1"
+        />
+
+    <TextView
+        android:id="@+id/plano2_text"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+
+        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta padrão"
+
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:padding="25dp"
+
+        android:background="@drawable/edit_text_planos_white"
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/plano1"
+        app:layout_constraintEnd_toEndOf="@id/containerComponents_planos"
+        app:layout_constraintTop_toBottomOf="@+id/plano1_text"
+        />
+
+    <TextView
+        android:id="@+id/plano3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edit_text_planos_grey"
+
+        android:text="PREMIUM"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="40dp"
+        android:fontFamily="serif"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plano2"
+        />
+
+    <TextView
+        android:id="@+id/plano3_text"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+
+        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta padrão"
+
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:padding="25dp"
+
+        android:background="@drawable/edit_text_planos_white"
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/plano1"
+        app:layout_constraintEnd_toEndOf="@id/containerComponents_planos"
+        app:layout_constraintTop_toBottomOf="@+id/plano2_text"
+        />
+
+    <TextView
+        android:id="@+id/preco"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edit_text_planos_grey"
+
+        android:text="Duração do plano em semanas"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="25dp"
+        android:fontFamily="serif"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plano3"
+        />
+
+    <TextView
+        android:id="@+id/semana1"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+
+
+        android:text="1 "
+
+        android:paddingTop="40dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+
+
+        android:background="@drawable/edit_text_planos_white"
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/preco"
+        app:layout_constraintTop_toBottomOf="@+id/plano3_text"
+        />
+
+    <TextView
+        android:id="@+id/semana2"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+
+
+        android:text="2"
+
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:paddingTop="40dp"
+
+        android:background="@drawable/edit_text_planos_white"
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/semana1"
+        app:layout_constraintTop_toBottomOf="@+id/plano3_text"
+        />
+
+    <TextView
+        android:id="@+id/semana3"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+
+
+        android:text="3"
+
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:paddingTop="40dp"
+
+        android:background="@drawable/edit_text_planos_white"
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/semana2"
+        app:layout_constraintTop_toBottomOf="@+id/plano3_text"
+        />
+
+    <TextView
+        android:id="@+id/valor"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+
+        android:text="Valor: "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:fontFamily="serif"
+        android:paddingTop="10dp"
+
+        android:layout_marginTop="20dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preco"
+        />
+
+    <TextView
+        android:id="@+id/preco_computado"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+
+        android:text="R$ 200,00 "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        android:paddingTop="10dp"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="7dp"
+
+
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toEndOf="@id/valor"
+        app:layout_constraintTop_toBottomOf="@+id/preco"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_post"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_login"
+
+        android:layout_margin="30dp"
+        android:text="Continuar"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+
+        app:layout_constraintTop_toBottomOf="@+id/semana3"
+        app:layout_constraintStart_toEndOf="@id/preco_computado"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

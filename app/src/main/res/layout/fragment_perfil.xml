@@ -9,18 +9,19 @@
 
     <View
         android:id="@+id/userImageContainer"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+
+        android:layout_marginTop="15dp"
         android:background="@drawable/container_user"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="30dp"
-        />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/ic_user"
         app:layout_constraintStart_toStartOf="@+id/userImageContainer"
         app:layout_constraintEnd_toEndOf="@+id/userImageContainer"
@@ -28,67 +29,119 @@
         app:layout_constraintBottom_toBottomOf="@+id/userImageContainer"
         />
 
-    <ImageView
-        android:id="@+id/iconUserName"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_user"
-        app:layout_constraintTop_toBottomOf="@+id/userImageContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        />
+    <View
+        android:id="@+id/containerComponents_cadastro"
+        style="@style/ContainerComponents"
+        android:layout_width="0dp"
+        android:layout_height="500dp"
 
-    <ImageView
-        android:id="@+id/iconEmailName"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_email"
-        app:layout_constraintTop_toBottomOf="@+id/iconUserName"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        />
 
-    <TextView
-        android:id="@+id/textNameUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome Sobrenome"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userImageContainer"
-        app:layout_constraintStart_toEndOf="@id/iconUserName"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
+        />
+
+    <EditText
+        android:id="@+id/et_nome"
+        style="@style/Edit_Text_Login"
+        android:hint="nome"
+        android:drawableRight="@drawable/ic_user"
+        android:textColorHint="@color/Grey"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@+id/containerComponents_cadastro"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        android:maxLength="30"
+        />
+
+    <EditText
+        android:id="@+id/et_email"
+        style="@style/Edit_Text_Login"
+        android:hint="Email"
+        android:textColorHint="@color/Grey"
+        android:inputType="textEmailAddress"
+        android:drawableRight="@drawable/ic_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_nome"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        />
+    <EditText
+        android:id="@+id/et_senha"
+        style="@style/Edit_Text_Login"
+        android:hint="Senha"
+        android:textColorHint="@color/Grey"
+        android:inputType="textPassword"
+        android:drawableRight="@drawable/ic_eye"
+        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        />
+
+    <EditText
+        android:id="@+id/et_celular"
+        style="@style/Edit_Text_Login"
+        android:hint="Celular"
+        android:textColorHint="@color/Grey"
+        android:inputType="phone"
+        android:drawableRight="@drawable/ic_celular"
+        app:layout_constraintTop_toBottomOf="@+id/et_senha"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        android:maxLength="11"
         />
 
     <TextView
-        android:id="@+id/textEmailUser"
+        android:id="@+id/tv_redes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="email@gmail.com"
         android:textColor="@color/black"
+        android:text="@string/redes_cadastro"
+        app:layout_constraintTop_toBottomOf="@+id/et_celular"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        android:layout_marginTop="10dp"
         android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/textNameUser"
-        app:layout_constraintStart_toEndOf="@id/iconEmailName"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
+
         />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Deslogar"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/textEmailUser"
-        android:layout_margin="20dp"
-        android:padding="15dp"
+    <EditText
+        android:id="@+id/et_link1"
+        style="@style/Edit_Text_Login"
+        android:hint="Link"
+        android:textColorHint="@color/Grey"
+        android:inputType="textUri"
+        android:drawableRight="@drawable/ic_link"
+        app:layout_constraintTop_toBottomOf="@+id/tv_redes"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         />
+
+    <EditText
+        android:id="@+id/et_link2"
+        style="@style/Edit_Text_Login"
+        android:hint="Link"
+        android:textColorHint="@color/Grey"
+        android:inputType="textUri"
+        android:drawableRight="@drawable/ic_link"
+        app:layout_constraintTop_toBottomOf="@+id/et_link1"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        />
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_post"
+        style="@style/ButtonGrey"
+
+        android:layout_margin="30dp"
+        android:text="Salvar"
+
+        app:layout_constraintTop_toBottomOf="@+id/containerComponents_cadastro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
