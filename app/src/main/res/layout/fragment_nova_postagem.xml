@@ -1,14 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.postagens.NovaPostagemFragment">
+    tools:context=".ui.postagens.NovaPostagemFragment"
+    android:background="@drawable/background_color"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <View
+        android:id="@+id/ContainerComponents_postagem"
+        style="@style/ContainerComponents"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="584dp"
 
-</FrameLayout>
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/ContainerUserImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+
+        android:layout_marginTop="24dp"
+        android:background="@drawable/container_user"
+
+        app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintHorizontal_bias="0.083"
+        app:layout_constraintStart_toStartOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintTop_toTopOf="@+id/ContainerComponents_postagem"
+
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_user"
+        app:layout_constraintStart_toStartOf="@+id/ContainerUserImage"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerUserImage"
+        app:layout_constraintTop_toTopOf="@+id/ContainerUserImage"
+        app:layout_constraintBottom_toBottomOf="@+id/ContainerUserImage"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:textColor="@color/black"
+        android:text="Nome Sobrenome"
+        app:layout_constraintTop_toTopOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintStart_toEndOf="@+id/ContainerUserImage"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintHorizontal_bias="0.15"
+
+        android:textSize="20sp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_cidade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/Grey"
+        android:text="São Paulo"
+        android:textSize="16sp"
+
+        app:layout_constraintTop_toBottomOf="@+id/ContainerUserImage"
+        app:layout_constraintStart_toStartOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintHorizontal_bias="0.05"
+        />
+
+    <TextView
+        android:id="@+id/tv_estado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:text="SP"
+        android:textColor="@color/Grey"
+        android:textSize="16sp"
+
+        app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintStart_toEndOf="@+id/tv_cidade"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        />
+
+    <EditText
+        android:id="@+id/et_cep"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/edit_text_login"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:padding="10dp"
+        android:hint="Digite o CEP da sua cidade"
+        android:textColorHint="@color/Grey"
+        android:maxLength="300"
+        android:inputType="textMultiLine"
+        android:textColor="@color/black"
+
+        app:layout_constraintStart_toStartOf="@id/ContainerComponents_postagem"
+        app:layout_constraintEnd_toEndOf="@id/ContainerComponents_postagem"
+        app:layout_constraintTop_toTopOf="@id/tv_cidade"
+
+        />
+
+    <EditText
+        android:id="@+id/et_comentario"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/edit_text_login"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+
+        android:paddingLeft="60dp"
+        android:hint="Digite um comentário "
+        android:textColorHint="@color/Grey"
+        android:maxLength="300"
+        android:inputType="textMultiLine"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/ContainerComponents_postagem"
+        app:layout_constraintEnd_toEndOf="@id/ContainerComponents_postagem"
+        app:layout_constraintTop_toBottomOf="@id/et_cep"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_postar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+
+        android:background="@drawable/button_grey"
+        android:text="Enviar"
+
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/ContainerComponents_postagem"
+        app:layout_constraintStart_toStartOf="@id/ContainerComponents_postagem"
+        app:layout_constraintTop_toBottomOf="@+id/et_comentario" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

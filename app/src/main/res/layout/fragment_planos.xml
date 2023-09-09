@@ -49,7 +49,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginRight="30dp"
 
-        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta padrão"
+        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta grátis"
 
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -90,11 +90,11 @@
         android:layout_marginTop="40dp"
         android:layout_marginRight="30dp"
 
-        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta padrão"
+        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta tipo Standard"
 
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:padding="25dp"
+        android:padding="18dp"
 
         android:background="@drawable/edit_text_planos_white"
 
@@ -131,7 +131,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginRight="30dp"
 
-        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta padrão"
+        android:text="Seus anúncios possuirão uma maior visualizacão do que uma conta tipo Black"
 
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -269,7 +269,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_post"
+        android:id="@+id/bt_continuar"
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:background="@drawable/button_login"
