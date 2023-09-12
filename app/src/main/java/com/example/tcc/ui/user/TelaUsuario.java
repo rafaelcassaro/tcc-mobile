@@ -13,7 +13,7 @@ public class TelaUsuario extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tela_usuario);
+        setContentView(R.layout.activity_anuncio_layout);
     }
 
 

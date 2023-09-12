@@ -14,14 +14,12 @@
             android:id="@+id/nav_postagens"
             android:icon="@drawable/ic_post"
             android:title="@string/menu_postagens" />
-        <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/ic_user"
-            android:title="@string/menu_perfil" />
+
         <item
             android:id="@+id/nav_anuncio_usuario"
             android:icon="@drawable/ic_moradia_usuario"
-            android:title="@string/menu_anuncio_usuario" />
+            android:title="@string/menu_anuncio_usuario"
+            />
         <item
             android:id="@+id/nav_postagens_usuario"
             android:icon="@drawable/ic_post_usuario"
@@ -38,15 +36,23 @@
             android:title="@string/menu_nova_postagem"
             />
         <item
-            android:id="@+id/nav_feedback"
-            android:icon="@drawable/ic_feedback"
-            android:title="@string/menu_feedback"
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/ic_user"
+            android:title="@string/menu_perfil"
+            android:iconTint="@color/black"
             />
         <item
             android:id="@+id/nav_planos"
             android:icon="@drawable/ic_plano"
             android:title="@string/menu_planos"
             />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/menu_feedback"
+            />
+
+
 
 
 

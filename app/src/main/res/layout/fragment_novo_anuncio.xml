@@ -323,7 +323,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
 
-        android:background="@drawable/button_grey"
+        android:background="@drawable/button_login"
         android:text="Publicar"
         android:textAllCaps="false"
         android:textSize="18sp"

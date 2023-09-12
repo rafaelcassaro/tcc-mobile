@@ -11,15 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentMoradiasBinding;
+import com.example.tcc.db.MoradiasDb;
+import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.user.TelaUsuario;
 
 public class MoradiasFragment extends Fragment {
 
     private FragmentMoradiasBinding binding;
-    Button botao;
+
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+
+    public static final String EXTRA_SHOW = "EXTRA_SHOW";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -27,28 +36,21 @@ public class MoradiasFragment extends Fragment {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
+
+
         binding = FragmentMoradiasBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        botao = root.findViewById(R.id.botao_teste);
-        binding.botaoTeste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), TelaUsuario.class);
-                startActivity(i);
-            }
-        });
+        binding.rvMoradias.setHasFixedSize(true);
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        adapter = new MoradiasAdapter(container.getContext(), new MoradiasDb());
 
-        /*botao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                startActivity(i);
-            }
-        });*/
+        binding.rvMoradias.setAdapter(adapter);
+        //layoutManager = new LinearLayoutManager(this);
+
+        //binding.rvMoradias.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+
 
 
         return root;
