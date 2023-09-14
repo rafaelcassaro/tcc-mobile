@@ -9,13 +9,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.databinding.FragmentPostagensBinding;
+import com.example.tcc.db.PostagemDb;
+import com.example.tcc.ui.adapter.PostagemAdapter;
 
 public class PostagensFragment extends Fragment {
 
 
     private FragmentPostagensBinding binding;
+    private RecyclerView.Adapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -25,8 +29,10 @@ public class PostagensFragment extends Fragment {
         binding = FragmentPostagensBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        // --------- recycler view  --------
+        binding.rvPostagens.setHasFixedSize(true);
+        adapter = new PostagemAdapter(container.getContext(), new PostagemDb());
+        binding.rvPostagens.setAdapter(adapter);
 
         return root;
     }

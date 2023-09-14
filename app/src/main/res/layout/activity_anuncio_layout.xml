@@ -223,6 +223,8 @@
         android:backgroundTint="@color/white"
         android:src="@drawable/ic_denunciar"
 
+
+
         app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.903"

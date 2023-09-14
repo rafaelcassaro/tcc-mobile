@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/ContainerPostagem"
+        android:layout_height="350dp"
+        style="@style/ContainerMoradias"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <View
+        android:id="@+id/ContainerUserImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="15dp"
+        android:background="@drawable/container_user"
+
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.1"
+
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+        app:layout_constraintTop_toTopOf="@+id/ContainerPostagem"
+
+        />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_user"
+        app:layout_constraintStart_toStartOf="@+id/ContainerUserImage"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerUserImage"
+        app:layout_constraintTop_toTopOf="@+id/ContainerUserImage"
+        app:layout_constraintBottom_toBottomOf="@+id/ContainerUserImage"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+
+        android:text="Nome Sobrenome"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toEndOf="@+id/ContainerUserImage"
+
+        app:layout_constraintTop_toTopOf="@+id/ContainerPostagem" />
+
+
+
+    <TextView
+        android:id="@+id/tv_cidade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="4dp"
+        android:textColor="@color/Grey"
+        android:text="São Paulo"
+        android:textSize="14sp"
+
+        app:layout_constraintTop_toBottomOf="@+id/ContainerUserImage"
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.05"
+        />
+
+    <TextView
+        android:id="@+id/tv_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/Grey"
+        android:text="10 Dez 2023"
+        android:textSize="14sp"
+
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        app:layout_constraintStart_toEndOf="@+id/ContainerUserImage"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.05"
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_estado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="SP"
+        android:textColor="@color/Grey"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintStart_toEndOf="@+id/tv_cidade"
+        app:layout_constraintTop_toBottomOf="@+id/ContainerUserImage"
+        />
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+
+
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:padding="10dp"
+
+
+        android:fontFamily="serif"
+        android:text="Procuro alguem para divir um ap próximo do lugar x, com valor de xxxx, que aceita pets xxxxxxxxxxxxxxxxxxxxxxxxxxx xxx
+...VER MAIS"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cidade" />
+
+
+    <TextView
+        android:id="@+id/tv_celular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+
+
+        android:text="Celular: "
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ContainerPostagem"
+        app:layout_constraintEnd_toStartOf="@+id/ib_denunciar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment"
+        app:layout_constraintVertical_bias="0.0"
+        />
+
+    <TextView
+        android:id="@+id/tv_celular_numero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+
+        android:layout_marginTop="5dp"
+        android:fontFamily="sans-serif-light"
+        android:text="16 00000-0000"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+
+
+        app:layout_constraintBottom_toBottomOf="@+id/ContainerPostagem"
+        app:layout_constraintEnd_toStartOf="@+id/ib_denunciar"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="@+id/tv_celular"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_wpp"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_whatsapp"
+
+        android:text="Whatsapp"
+        android:textSize="17sp"
+        android:textAllCaps="false"
+
+        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintTop_toBottomOf="@+id/tv_celular"
+        app:layout_constraintStart_toStartOf="@id/ContainerPostagem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/ContainerPostagem"
+        />
+
+    <ImageButton
+        android:id="@+id/ib_denunciar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/ic_denunciar"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+
+        app:layout_constraintBottom_toBottomOf="@id/ContainerPostagem"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="1.0"
+
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+
+        app:layout_constraintTop_toTopOf="@+id/ContainerPostagem"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

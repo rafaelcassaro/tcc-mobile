@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_anuncio_usuario"
-        android:name="com.example.tcc.ui.moradias.AnuncioUsuarioFragment"
+        android:name="com.example.tcc.ui.moradias.MoradiasUsuarioFragment"
         android:label="@string/menu_anuncio_usuario"
-        tools:layout="@layout/fragment_anuncio_usuario" />
+        tools:layout="@layout/fragment_moradia_usuario" />
 
     <fragment
         android:id="@+id/nav_postagens_usuario"
