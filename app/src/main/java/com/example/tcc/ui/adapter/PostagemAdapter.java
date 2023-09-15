@@ -15,12 +15,20 @@ import com.example.tcc.db.PostagemDb;
 public class PostagemAdapter  extends RecyclerView.Adapter<PostagemAdapter.MyViewHolder>{
 
     private PostagemDb db = new PostagemDb();
-
     private LayoutInflater inflater;
+    private OnItemClickListener clickListener;
 
     public PostagemAdapter(Context context, PostagemDb wordList) {
         inflater = LayoutInflater.from(context);
         this.db = wordList;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.clickListener =  listener;
     }
 
     @NonNull
@@ -60,7 +68,21 @@ public class PostagemAdapter  extends RecyclerView.Adapter<PostagemAdapter.MyVie
             cidadeTv = itemView.findViewById(R.id.tv_cidade);
             comentarioTv = itemView.findViewById(R.id.tv_comment);
             celularTv = itemView.findViewById(R.id.tv_celular_numero);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (clickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            clickListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
+
+
     }
 }
 

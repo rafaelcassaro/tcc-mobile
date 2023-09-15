@@ -15,20 +15,22 @@ import com.example.tcc.db.MoradiasDb;
 
 public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyViewHolder> {
 
-    private MoradiasDb db = new MoradiasDb();
+
     private LayoutInflater inflater;
+    private OnItemClickListener listener;
 
 
-    public MoradiasAdapter(Context context, MoradiasDb wordList){
+    public MoradiasAdapter(Context context, OnItemClickListener listener){
         inflater = LayoutInflater.from(context);
-        this.db = wordList;
+        this.listener = listener;
     }
 
 
     @NonNull
     @Override
     public MoradiasAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemList = inflater.inflate(R.layout.activity_anuncio_layout, parent, false);
+        //View itemList = inflater.inflate(R.layout.activity_anuncio_layout, parent, false);
+        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_anuncio_layout,parent,false);
         return new MyViewHolder(itemList);
     }
 
@@ -51,7 +53,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
         return MoradiasDb.myDataset.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView tipoMoradiaTv;
         public TextView cidadeTv;
@@ -62,10 +64,6 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
         public TextView garagemTv;
         public TextView petTv;
         public TextView valorTv;
-
-
-
-
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,8 +76,16 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
             garagemTv = itemView.findViewById(R.id.tv_ic_garagem);
             petTv = itemView.findViewById(R.id.tv_ic_pet);
             valorTv = itemView.findViewById(R.id.tv_valor);
-
-
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            listener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

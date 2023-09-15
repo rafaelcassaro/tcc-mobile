@@ -29,12 +29,9 @@ public class MoradiasUsuarioFragment extends Fragment {
         View root = binding.getRoot();
 
         //-------------rv
-        binding.rvMoradiasUsuario.setHasFixedSize(true);
-
-        adapter = new MoradiasAdapter(container.getContext(), new MoradiasDb());
-
-
-        binding.rvMoradiasUsuario.setAdapter(adapter);
+        //binding.rvMoradiasUsuario.setHasFixedSize(true);
+        //adapter = new MoradiasAdapter(container.getContext(), new MoradiasDb());
+        //binding.rvMoradiasUsuario.setAdapter(adapter);
 
         return root;
     }
