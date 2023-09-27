@@ -22,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+
     private ActivityMainBinding binding;
+
 
 
     @Override
@@ -32,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.appBarMain.toolbar);
+        setSupportActionBar(binding.appBarMain.toolbar.toolbar);
+
+
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_moradias, R.id.nav_postagens, R.id.nav_perfil,R.id.nav_anuncio_usuario, R.id.nav_postagens_usuario,
-                R.id.nav_novo_anuncio, R.id.nav_feedback, R.id.nav_planos)
+                R.id.nav_novo_anuncio, R.id.nav_feedback, R.id.nav_planos,R.id.nav_nova_postagem)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -48,12 +52,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //EMBAIXO: MENU DE SETTINGS
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 

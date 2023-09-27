@@ -39,6 +39,18 @@
 
     </style>
 
+    <style name="Edit_Text_procurar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height"> match_parent</item>
+        <item name="android:background">@drawable/button_filtrar</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:maxLength">50</item>
+        <item name="android:layout_marginLeft">45dp</item>
+        <item name="android:layout_marginRight">120dp</item>
+
+
+    </style>
+
     <style name="Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height"> wrap_content</item>

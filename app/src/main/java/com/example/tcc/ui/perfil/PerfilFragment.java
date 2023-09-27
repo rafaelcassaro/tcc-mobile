@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.ui.AppBarConfiguration;
 
+import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentPerfilBinding;
-
+import com.example.tcc.databinding.ToolbarBinding;
 
 public class PerfilFragment extends Fragment {
 
@@ -23,6 +25,9 @@ public class PerfilFragment extends Fragment {
 
         binding = FragmentPerfilBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
+
 
        // final TextView textView = binding.textSlideshow;
         //slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);

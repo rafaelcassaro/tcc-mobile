@@ -26,7 +26,7 @@ public class MoradiaExpandir extends AppCompatActivity {
 
         tvComentario = findViewById(R.id.tv_comentario);
 
-        tvComentario.setText("alou");
+       // tvComentario.setText("alou");
 
 
 
