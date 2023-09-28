@@ -7,6 +7,14 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@drawable/ic_lupa"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView" />
+    <item
+        />
+
 
 
 </menu>

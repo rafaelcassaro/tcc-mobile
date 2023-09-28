@@ -9,12 +9,13 @@
 
        <View
         android:id="@+id/ContainerMoradia"
-        android:layout_height="550dp"
-        style="@style/ContainerMoradias"
+           android:layout_height="700dp"
+        style="@style/ContainerMoradiasExpandir"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <TextView
@@ -24,15 +25,15 @@
 
         android:layout_marginTop="12dp"
 
-        android:text="Tipo Casa"
+        android:text="Apartamento"
         android:textSize="15sp"
         android:textColor="@color/black"
-        android:drawableLeft="@drawable/ic_tipo_casa"
+
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toTopOf="@+id/ContainerMoradia"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fotos"
         />
 
     <TextView
@@ -54,7 +55,8 @@
     <TextView
         android:id="@+id/tv_comentario"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="170dp"
+        android:background="@drawable/edit_text_planos_white"
 
         android:layout_marginTop="10dp"
         android:layout_marginRight="25dp"
@@ -63,14 +65,14 @@
 
         android:fontFamily="serif"
         android:text="Procuro alguem para divir um ap próximo do lugar x, com valor de xxxx, que aceita pets xxxxxxxxxxxxxxxxxxxxxxxxxxx xxx
-"
+        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         android:textColor="@color/black"
         android:textSize="16sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_rua" />
 
     <TextView
         android:id="@+id/tv_num_casa"
@@ -94,28 +96,31 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="12dp"
-        android:text=", Ribeirão preto"
+        android:text=", Ribeirão preto - SP"
         android:textSize="15sp"
         android:textColor="@color/black"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_tipo_moradia"
-        app:layout_constraintTop_toTopOf="@+id/ContainerMoradia"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fotos"
         />
 
     <ImageView
         android:id="@+id/iv_fotos"
         android:layout_width="370dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/img_not_found"
+        android:layout_height="200dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitXY"
+
+
+        android:src="@drawable/apartamento_foto2"
 
         app:layout_constraintHorizontal_bias="0.5"
 
         app:layout_constraintStart_toStartOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@id/tv_rua"
+        app:layout_constraintTop_toTopOf="@id/ContainerMoradia"
         />
 
     <TextView
@@ -200,18 +205,18 @@
 
 
         android:text="R$"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
 
-        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
-
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
         app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
 
-        />
+        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+        app:layout_constraintHorizontal_bias="0.028"
+        app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
+
+        app:layout_constraintVertical_bias="0.806" />
 
     <TextView
         android:id="@+id/tv_valor"
@@ -223,18 +228,35 @@
 
 
         android:text="250,00"
-        android:textSize="20sp"
-
         android:textColor="@color/black"
 
-        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+        android:textSize="20sp"
 
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@+id/tv_valor_cifra"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
         app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
 
-        />
+        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+        app:layout_constraintHorizontal_bias="0.007"
+        app:layout_constraintStart_toEndOf="@+id/tv_valor_cifra"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
+
+        app:layout_constraintVertical_bias="0.806" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_wpp"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_whatsapp"
+
+        android:text="Whatsapp"
+        android:textAllCaps="false"
+        android:textSize="17sp"
+
+        app:layout_constraintBottom_toTopOf="@id/tv_valor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toStartOf="@id/ContainerMoradia"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
+        app:layout_constraintVertical_bias="0.806" />
 
     <ImageButton
         android:layout_width="50dp"
@@ -243,17 +265,14 @@
         android:src="@drawable/ic_denunciar"
 
 
-
         app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
-        app:layout_constraintHorizontal_bias="0.903"
+        app:layout_constraintHorizontal_bias="0.925"
 
         app:layout_constraintStart_toEndOf="@+id/tv_valor"
 
         app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
-        app:layout_constraintVertical_bias="0.555" />
-
-
+        app:layout_constraintVertical_bias="0.861" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
