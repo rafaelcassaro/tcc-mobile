@@ -2,14 +2,12 @@ package com.example.tcc;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 
 
 import com.example.tcc.databinding.ActivityMainBinding;
+import com.example.tcc.network.SessaoManager;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar.toolbar);
-
+        SessaoManager sessaoManager = SessaoManager.getInstance();
+        sessaoManager.setLoggedIn(true);
 
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //EMBAIXO: MENU DE SETTINGS
+
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }
 
 

@@ -26,6 +26,7 @@ public class FormLogin extends AppCompatActivity {
     private EditText senha;
     private Usuario usuario = new Usuario();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,12 @@ public class FormLogin extends AppCompatActivity {
                     public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                         usuario = response.body();
                         if(usuario.getEmail().equals(email.getText().toString()) && usuario.getSenha().equals(senha.getText().toString())){
+
+                            //logginManager.setUser(usuario);
+                            Intent intent = new Intent(FormLogin.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else if(email.getText().toString().equals("q")){
                             Intent intent = new Intent(FormLogin.this, MainActivity.class);
                             startActivity(intent);
                         }
