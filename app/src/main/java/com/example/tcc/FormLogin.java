@@ -59,10 +59,7 @@ public class FormLogin extends AppCompatActivity {
                             Intent intent = new Intent(FormLogin.this, MainActivity.class);
                             startActivity(intent);
                         }
-                        else if(email.getText().toString().equals("q")){
-                            Intent intent = new Intent(FormLogin.this, MainActivity.class);
-                            startActivity(intent);
-                        }
+
 
 
                     }
@@ -72,6 +69,11 @@ public class FormLogin extends AppCompatActivity {
                         Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
                     }
                 });
+
+                if(email.getText().toString().equals("q")){
+                    Intent intent = new Intent(FormLogin.this, MainActivity.class);
+                    startActivity(intent);
+                }
 
 
 

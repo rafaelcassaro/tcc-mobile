@@ -20,10 +20,13 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-
+    private String testMain = "aloualoau";
     private ActivityMainBinding binding;
 
 
+    public String getStringTeste(){
+        return this.testMain;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

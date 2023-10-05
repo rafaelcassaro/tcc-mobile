@@ -1,6 +1,10 @@
 package com.example.tcc.network.entities;
 
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 
 public class Post {
     private Long id;
@@ -10,6 +14,9 @@ public class Post {
     private String estado;
     private Date dataPost;
     private Integer cep;
+    private SimpleDateFormat x = new SimpleDateFormat("dd MMM yyyy");
+
+    private Usuario usuario;
 
     public Post() {
     }
@@ -32,6 +39,8 @@ public class Post {
         this.dataPost = dataPost;
         this.cep = cep;
     }
+
+
 
     public Long getId() {
         return id;
@@ -73,8 +82,8 @@ public class Post {
         this.estado = estado;
     }
 
-    public Date getDataPost() {
-        return dataPost;
+    public String getDataPost() {
+        return x.format(dataPost);
     }
 
     public void setDataPost(Date dataPost) {
@@ -89,6 +98,16 @@ public class Post {
         this.cep = cep;
     }
 
+
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -99,6 +118,7 @@ public class Post {
                 ", estado='" + estado + '\'' +
                 ", dataPost=" + dataPost +
                 ", cep=" + cep +
+                ", usuario=" + usuario +
                 '}';
     }
 }

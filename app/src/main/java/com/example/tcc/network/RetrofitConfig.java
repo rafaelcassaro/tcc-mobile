@@ -12,7 +12,7 @@ public class RetrofitConfig {
 
     private final Retrofit retrofit;
 
-    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
+    Gson gson = new GsonBuilder().setDateFormat("dd MMM yyyy").create();
 
     public RetrofitConfig() {
         this.retrofit = new Retrofit.Builder()
