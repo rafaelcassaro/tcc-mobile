@@ -29,9 +29,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
+    
 
     public PostAdapter(Context context) {
-
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -45,6 +45,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.MyViewHolder holder, int position) {
         //Post item = db.get(position);
+
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));
         holder.dataTv.setText(String.valueOf(db.get(position).getDataPost()));
@@ -56,11 +57,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         }
 
         Log.e("ADAPTER", "item:" + db.toString());
-
-        //holder.nomeTv.setText(String.valueOf(PostDb.myDataset.get(position).getNome()));
-        //holder.cidadeTv.setText(String.valueOf(PostDb.myDataset.get(position).getCidade()));
-        //holder.comentarioTv.setText(String.valueOf(PostDb.myDataset.get(position).getComentario()));
-        //holder.celularTv.setText(String.valueOf(PostDb.myDataset.get(position).getCelular()));
 
     }
 

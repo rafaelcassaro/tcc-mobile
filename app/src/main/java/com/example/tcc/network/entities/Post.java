@@ -1,12 +1,13 @@
 package com.example.tcc.network.entities;
 
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 
-public class Post {
+public class Post implements Serializable {
     private Long id;
     private Integer qntdDenuncia;
     private String comentario;
@@ -25,15 +26,6 @@ public class Post {
 
     public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, String cep) {
         this.id = id;
-        this.qntdDenuncia = qntdDenuncia;
-        this.comentario = comentario;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.dataPost = dataPost;
-        this.cep = cep;
-    }
-
-    public Post(Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, String cep) {
         this.qntdDenuncia = qntdDenuncia;
         this.comentario = comentario;
         this.cidade = cidade;

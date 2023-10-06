@@ -78,7 +78,7 @@
 
 
             app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/activity_anuncio_layout" />
+            tools:listitem="@layout/activity_moradia_layout" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

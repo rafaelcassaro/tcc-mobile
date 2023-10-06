@@ -1,6 +1,8 @@
 package com.example.tcc.network.entities;
 
-public class DetalhesMoradia {
+import java.io.Serializable;
+
+public class Detalhes implements Serializable {
 
     private Long id;
     private String quarto;
@@ -9,10 +11,10 @@ public class DetalhesMoradia {
     private String pets;
     private String generoMoradia;
 
-    public DetalhesMoradia() {
+    public Detalhes() {
     }
 
-    public DetalhesMoradia(Long id, String quarto, String garagem, Integer moradores, String pets, String generoMoradia) {
+    public Detalhes(Long id, String quarto, String garagem, Integer moradores, String pets, String generoMoradia) {
         this.id = id;
         this.quarto = quarto;
         this.garagem = garagem;

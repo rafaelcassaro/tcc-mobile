@@ -52,15 +52,10 @@ public class NovaPostagemFragment extends Fragment {
                 Post post = new Post();
                 post.setComentario(binding.etComentario.getText().toString());
 
-
-                Date dataPost = new Date();
-
-
-                post.setDataPost(dataPost);
                 post.setCidade("jefte");
 
                 Call<Void> call = new RetrofitConfig().getPostService().createPost(post);
-                Call<Post> callGet = new RetrofitConfig().getPostService().getPost("2");
+                //Call<Post> callGet = new RetrofitConfig().getPostService().getPost("2");
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -83,7 +78,7 @@ public class NovaPostagemFragment extends Fragment {
 
                 });
 
-                callGet.enqueue(new Callback<Post>() {
+                /*callGet.enqueue(new Callback<Post>() {
                     @Override
                     public void onResponse(Call<Post> call, Response<Post> response) {
                         Post postTeste = response.body();
@@ -95,7 +90,7 @@ public class NovaPostagemFragment extends Fragment {
                         Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
 
                     }
-                });
+                });*/
 
             }
         });

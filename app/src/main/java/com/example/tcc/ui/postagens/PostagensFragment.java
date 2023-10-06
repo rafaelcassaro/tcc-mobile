@@ -56,7 +56,6 @@ public class PostagensFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         GalleryViewModel galleryViewModel =
                 new ViewModelProvider(this).get(GalleryViewModel.class);
-
         binding = FragmentPostagensBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 

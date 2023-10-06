@@ -11,11 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
 import com.example.tcc.db.MoradiasDb;
+import com.example.tcc.network.entities.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyViewHolder> {
 
-
+    private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
     private OnItemClickListener listener;
 
@@ -30,33 +34,37 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
     @Override
     public MoradiasAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //View itemList = inflater.inflate(R.layout.activity_anuncio_layout, parent, false);
-        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_anuncio_layout,parent,false);
+        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_moradia_layout,parent,false);
         return new MyViewHolder(itemList);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MoradiasAdapter.MyViewHolder holder, int position) {
-        holder.tipoMoradiaTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getTipoMoradia()));
-        holder.cidadeTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getCidade()));
-        holder.ruaTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getRua()));
-        holder.numCasaTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getNumCasa()));
-        holder.moradoresTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getMoradores()));
-        holder.quartoTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getQuarto()));
-        holder.garagemTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getGaragem()));
-        holder.petTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getPet()));
-        holder.valorTv.setText(String.valueOf(MoradiasDb.myDataset.get(position).getValor()));
+        holder.tipoMoradiaTv.setText(String.valueOf(db.get(position).getPostMoradia().getTipoResidencia()));
+        holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
+        holder.ruaTv.setText(String.valueOf(db.get(position).getPostMoradia().getEndereco()));
+        holder.numCasaTv.setText(String.valueOf(db.get(position).getPostMoradia().getNumCasa()));
+        holder.moradoresTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getMoradores()));
+        holder.quartoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getQuarto()));
+        holder.garagemTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getGaragem()));
+        holder.petTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getPets()));
+        holder.valorTv.setText(String.valueOf(db.get(position).getPostMoradia().getValorAluguel()));
+        holder.estadoTv.setText(String.valueOf(db.get(position).getEstado()));
+        holder.generoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getGeneroMoradia()));
 
     }
 
     @Override
     public int getItemCount() {
-        return MoradiasDb.myDataset.size();
+        return db.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView tipoMoradiaTv;
         public TextView cidadeTv;
+        public TextView estadoTv;
+        public TextView generoTv;
         public TextView ruaTv;
         public TextView numCasaTv;
         public TextView moradoresTv;
@@ -69,6 +77,8 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
             super(itemView);
             tipoMoradiaTv = itemView.findViewById(R.id.tv_tipo_moradia);
             cidadeTv = itemView.findViewById(R.id.tv_cidade);
+            estadoTv = itemView.findViewById(R.id.tv_estado);
+            generoTv = itemView.findViewById(R.id.tv_genero_moradia);
             ruaTv = itemView.findViewById(R.id.tv_rua);
             numCasaTv = itemView.findViewById(R.id.tv_num_casa);
             moradoresTv = itemView.findViewById(R.id.tv_ic_moradores);
@@ -87,5 +97,10 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    public void setPostagens(List<Post> db){
+        this.db = db;
+        notifyDataSetChanged();
     }
 }
