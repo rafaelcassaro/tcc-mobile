@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -44,23 +45,12 @@ import retrofit2.Response;
 
 public class PostagensFragment extends Fragment {
 
-
     private FragmentPostagensBinding binding;
     private RecyclerView.Adapter adapter;
-
-    //private PostDb db = new PostDb();
+    private PostAdapter postAdapter;
     private List<Post> db = new ArrayList<>();
     public static final String EXTRA_SHOW = "EXTRA_SHOW";
 
-
-    /*ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode() == Activity.RESULT_OK){
-                adapter.notifyDataSetChanged();
-            }
-        }
-    });*/
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -70,16 +60,13 @@ public class PostagensFragment extends Fragment {
         binding = FragmentPostagensBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
         // --------- recycler view  --------
-        //uploadDbMockado(container);
+        configAdapert(container);
         getDbBack(container);
-
 
         Log.e("fim do codigo", "fim do codigo:" + db.size());
         return root;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -88,32 +75,10 @@ public class PostagensFragment extends Fragment {
     }
 
 
-    private void uploadDbMockado(ViewGroup container){
-        //adapter2 = new PostagemAdapter(getContext(), new PostagemDb());
-        //binding.rvPostagens.setAdapter(adapter2);
-
-       /* adapter2.setOnItemClickListener(new PostagemAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-
-
-                // Inicie a atividade desejada ao clicar em um item
-                Intent intent = new Intent(getContext(), TesteActivity.class);
-                intent.putExtra("EXTRA_SHOW", PostagemDb.myDataset.get(position)); // Passe os dados necessários para a próxima atividade
-                mStartForResult.launch(intent);
-            }
-        });*/
-
-        binding.rvPostagens.setHasFixedSize(true);
-        adapter = new PostagemAdapter(container.getContext(), new PostagemDb());
-        binding.rvPostagens.setAdapter(adapter);
-
-    }
-
     private void configAdapert(ViewGroup container){
-        //binding.rvPostagens.set;
-        adapter = new PostAdapter(container.getContext(),db);
-        binding.rvPostagens.setAdapter(adapter);
+
+        postAdapter = new PostAdapter(container.getContext());
+        binding.rvPostagens.setAdapter(postAdapter);
         Log.e("rv", "dados db:" + db.toString());
     }
 
@@ -124,27 +89,32 @@ public class PostagensFragment extends Fragment {
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                db = response.body();
+                if (response.isSuccessful()){
+                    db = response.body();
+                    Log.e("Response body", "dados db local:" + db.toString());
+                    postAdapter.setPostagens(db);
+                    Log.e("Response body", "dados ResponseBody:" + response.body());
 
-
-                configAdapert(container);
-
-                //adapter = new PostAdapter(container.getContext(),db);
-                //binding.rvPostagens.setAdapter(adapter);
-                Log.e("Response body", "dados:" + response.body());
-                Log.e("Response body", "dados db:" + db.toString());
-                Log.e("Response body", "celular user:" + db.get(0).getUsuario().getCelular());
+                }
+                else{
+                    mostrarErro(container);
+                }
 
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
+                mostrarErro(container);
                 Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
-
             }
         });
 
     }
+
+    private void mostrarErro(ViewGroup container){
+        Toast.makeText(container.getContext(), "deu ruim !",Toast.LENGTH_SHORT).show();
+    }
+
 
 
 }

@@ -25,13 +25,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
 
-    private List<Post> db;
+    private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
 
-    public PostAdapter(Context context, List<Post> db) {
-        this.db = db;
+    public PostAdapter(Context context) {
+
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -50,7 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         holder.dataTv.setText(String.valueOf(db.get(position).getDataPost()));
         holder.estadoTv.setText(String.valueOf(db.get(position).getEstado()));
 
-        if(db.get(position).getUsuario()!= null){
+        if (db.get(position).getUsuario() != null) {
             holder.celularTv.setText(String.valueOf(db.get(position).getUsuario().getCelular()));
             holder.nomeTv.setText(String.valueOf(db.get(position).getUsuario().getNome()));
         }
@@ -70,7 +70,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nomeTv;
         public TextView cidadeTv;
@@ -78,7 +78,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         public TextView celularTv;
         public TextView dataTv;
         public TextView estadoTv;
-
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -90,7 +89,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             estadoTv = itemView.findViewById(R.id.tv_estado);
             dataTv = itemView.findViewById(R.id.tv_data);
 
+        }
+
     }
-}
+
+    public void setPostagens(List<Post> db){
+        this.db = db;
+        notifyDataSetChanged();
+    }
+
 }
 

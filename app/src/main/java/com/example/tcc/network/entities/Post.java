@@ -13,15 +13,17 @@ public class Post {
     private String cidade;
     private String estado;
     private Date dataPost;
-    private Integer cep;
+    private String cep;
     private SimpleDateFormat x = new SimpleDateFormat("dd MMM yyyy");
 
     private Usuario usuario;
 
+    private PostMoradia postMoradia;
+
     public Post() {
     }
 
-    public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, Integer cep) {
+    public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, String cep) {
         this.id = id;
         this.qntdDenuncia = qntdDenuncia;
         this.comentario = comentario;
@@ -31,7 +33,7 @@ public class Post {
         this.cep = cep;
     }
 
-    public Post(Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, Integer cep) {
+    public Post(Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, String cep) {
         this.qntdDenuncia = qntdDenuncia;
         this.comentario = comentario;
         this.cidade = cidade;
@@ -90,11 +92,11 @@ public class Post {
         this.dataPost = dataPost;
     }
 
-    public Integer getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(Integer cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 
@@ -108,6 +110,14 @@ public class Post {
         this.usuario = usuario;
     }
 
+    public PostMoradia getPostMoradia() {
+        return postMoradia;
+    }
+
+    public void setPostMoradia(PostMoradia postMoradia) {
+        this.postMoradia = postMoradia;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -117,8 +127,10 @@ public class Post {
                 ", cidade='" + cidade + '\'' +
                 ", estado='" + estado + '\'' +
                 ", dataPost=" + dataPost +
-                ", cep=" + cep +
+                ", cep='" + cep + '\'' +
+                ", x=" + x +
                 ", usuario=" + usuario +
+                ", postMoradia=" + postMoradia +
                 '}';
     }
 }
