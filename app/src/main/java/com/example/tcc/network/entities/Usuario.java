@@ -1,5 +1,7 @@
 package com.example.tcc.network.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
@@ -11,6 +13,9 @@ public class Usuario implements Serializable {
     private String link1;
     private String link2;
     private String link3;
+
+    @SerializedName("token")
+    private String token;
 
     public Usuario(){}
 
@@ -87,6 +92,14 @@ public class Usuario implements Serializable {
 
     public void setLink3(String link3) {
         this.link3 = link3;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

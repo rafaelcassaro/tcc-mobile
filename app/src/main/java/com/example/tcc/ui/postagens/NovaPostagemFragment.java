@@ -14,6 +14,7 @@ import com.example.tcc.databinding.FragmentNovaPostagemBinding;
 import com.example.tcc.network.SessaoManager;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.services.PostService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,6 +56,7 @@ public class NovaPostagemFragment extends Fragment {
                 post.setCidade("jefte");
 
                 Call<Void> call = new RetrofitConfig().getPostService().createPost(post);
+                //Call<Void> call = new RetrofitConfig().getService(PostService.class).createPost(post);
                 //Call<Post> callGet = new RetrofitConfig().getPostService().getPost("2");
                 call.enqueue(new Callback<Void>() {
                     @Override

@@ -29,7 +29,9 @@ import com.example.tcc.db.PostDb;
 import com.example.tcc.db.PostagemDb;
 import com.example.tcc.db.models.Postagem;
 import com.example.tcc.network.RetrofitConfig;
+import com.example.tcc.network.RetrofitConfigToken;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.adapter.PostAdapter;
 import com.example.tcc.ui.adapter.PostagemAdapter;
@@ -82,8 +84,11 @@ public class PostagensFragment extends Fragment {
     }
 
     private void getDbBack(ViewGroup container){
+        SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
+        RetrofitConfigToken retrofitConfigToken = new RetrofitConfigToken();
+        retrofitConfigToken.setToken(securityPreferences.getAuthToken());
 
-        Call<List<Post>> call = new RetrofitConfig().getPostService().getAllPost();
+        Call<List<Post>> call = retrofitConfigToken.getPostService().getAllPost();
 
         call.enqueue(new Callback<List<Post>>() {
             @Override

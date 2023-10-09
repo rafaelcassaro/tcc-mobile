@@ -29,7 +29,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
-    
+
 
     public PostAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);

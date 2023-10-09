@@ -1,11 +1,13 @@
 package com.example.tcc;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 
 import com.example.tcc.databinding.ActivityMainBinding;
 import com.example.tcc.network.SessaoManager;
+import com.example.tcc.network.repositories.SecurityPreferences;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
