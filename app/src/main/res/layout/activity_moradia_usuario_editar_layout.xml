@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.moradias.NovoAnuncioFragment"
+    tools:context=".ui.moradias.MoradiaUsuarioEditar"
     android:background="@drawable/background_color"
     >
-
 
     <View
         android:id="@+id/ContainerComponents_anuncio"
@@ -50,7 +49,7 @@
         android:textSize="16sp"
 
         app:layout_constraintTop_toTopOf="@+id/ContainerComponents_anuncio"
-        app:layout_constraintStart_toStartOf="@+id/tv_estado_usuario"
+        app:layout_constraintStart_toEndOf="@+id/tv_estado_usuario"
         app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_anuncio"
         app:layout_constraintBottom_toTopOf="@id/chip_ap"
         />
@@ -356,7 +355,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_editar"
+        android:id="@+id/bt_publicar_edicao"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
@@ -391,6 +390,7 @@
         >
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_ap_apart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -399,6 +399,7 @@
             />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_ap_casa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -427,6 +428,7 @@
         >
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_pet_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -435,6 +437,7 @@
             />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_pet_nao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -464,6 +467,7 @@
         >
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_garagem_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -472,6 +476,7 @@
             />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_garagem_nao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -496,6 +501,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_genero_masc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
@@ -503,6 +509,7 @@
             app:chipBackgroundColor="@drawable/chip_selecao" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_genero_fem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
@@ -510,6 +517,7 @@
             app:chipBackgroundColor="@drawable/chip_selecao" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_genero_misto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"

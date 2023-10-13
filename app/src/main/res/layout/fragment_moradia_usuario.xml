@@ -19,6 +19,6 @@
 
 
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/activity_moradia_layout" />
+        tools:listitem="@layout/activity_moradia_usuario_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

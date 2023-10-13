@@ -5,16 +5,16 @@ import java.io.Serializable;
 public class Detalhes implements Serializable {
 
     private Long id;
-    private String quarto;
-    private String garagem;
+    private boolean quarto;
+    private boolean garagem;
     private Integer moradores;
-    private String pets;
+    private boolean pets;
     private String generoMoradia;
 
     public Detalhes() {
     }
 
-    public Detalhes(Long id, String quarto, String garagem, Integer moradores, String pets, String generoMoradia) {
+    public Detalhes(Long id, boolean quarto, boolean garagem, Integer moradores, boolean pets, String generoMoradia) {
         this.id = id;
         this.quarto = quarto;
         this.garagem = garagem;
@@ -31,19 +31,19 @@ public class Detalhes implements Serializable {
         this.id = id;
     }
 
-    public String getQuarto() {
+    public boolean isQuarto() {
         return quarto;
     }
 
-    public void setQuarto(String quarto) {
+    public void setQuarto(boolean quarto) {
         this.quarto = quarto;
     }
 
-    public String getGaragem() {
+    public boolean isGaragem() {
         return garagem;
     }
 
-    public void setGaragem(String garagem) {
+    public void setGaragem(boolean garagem) {
         this.garagem = garagem;
     }
 
@@ -55,11 +55,11 @@ public class Detalhes implements Serializable {
         this.moradores = moradores;
     }
 
-    public String getPets() {
+    public boolean isPets() {
         return pets;
     }
 
-    public void setPets(String pets) {
+    public void setPets(boolean pets) {
         this.pets = pets;
     }
 

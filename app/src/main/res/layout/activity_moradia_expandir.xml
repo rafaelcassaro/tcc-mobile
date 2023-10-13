@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario"
         />
 
     <TextView
@@ -47,7 +47,7 @@
         android:textColor="@color/black"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
         app:layout_constraintTop_toBottomOf="@+id/tv_tipo_moradia"
         />
@@ -91,7 +91,7 @@
         />
 
     <TextView
-        android:id="@+id/tv_cidade"
+        android:id="@+id/tv_cidade_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -103,11 +103,11 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_tipo_moradia"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario"
         />
 
     <TextView
-        android:id="@+id/tv_estado"
+        android:id="@+id/tv_estado_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -118,8 +118,8 @@
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
-        app:layout_constraintStart_toEndOf="@+id/tv_cidade"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos"
+        app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario"
         />
 
     <TextView
@@ -136,11 +136,11 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_estado"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos" />
+        app:layout_constraintStart_toEndOf="@+id/tv_estado_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario" />
 
     <ImageView
-        android:id="@+id/iv_fotos"
+        android:id="@+id/iv_fotos_usuario"
         android:layout_width="370dp"
         android:layout_height="200dp"
         android:layout_marginTop="5dp"
@@ -162,15 +162,32 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="15dp"
-        android:text="12 moradores"
+        android:text="12"
         android:textSize="15sp"
         android:textColor="@color/Grey"
         android:drawableLeft="@drawable/ic_user"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
-        app:layout_constraintHorizontal_bias="0.089"
+        app:layout_constraintHorizontal_bias="0.060"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comentario" />
+
+    <TextView
+        android:id="@+id/tv_ic_moradores_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="15dp"
+        android:text="@string/ic_moradores"
+        android:textSize="15sp"
+        android:textColor="@color/Grey"
+
+
+        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toEndOf="@+id/tv_ic_moradores"
         app:layout_constraintTop_toBottomOf="@+id/tv_comentario" />
 
     <TextView
@@ -187,7 +204,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
         app:layout_constraintHorizontal_bias="0.089"
-        app:layout_constraintStart_toEndOf="@+id/tv_ic_moradores"
+        app:layout_constraintStart_toEndOf="@+id/tv_ic_moradores_text"
         app:layout_constraintTop_toBottomOf="@+id/tv_comentario" />
 
     <TextView

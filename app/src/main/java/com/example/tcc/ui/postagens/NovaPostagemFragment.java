@@ -14,7 +14,9 @@ import com.example.tcc.databinding.FragmentNovaPostagemBinding;
 import com.example.tcc.network.SessaoManager;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.network.services.PostService;
+import com.example.tcc.ui.constants.TaskConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +39,10 @@ public class NovaPostagemFragment extends Fragment {
         binding = FragmentNovaPostagemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
+        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
 
         SessaoManager sessaoManager = SessaoManager.getInstance();
         if(sessaoManager.isLoggedIn()){
@@ -55,9 +61,15 @@ public class NovaPostagemFragment extends Fragment {
 
                 post.setCidade("jefte");
 
-                Call<Void> call = new RetrofitConfig().getPostService().createPost(post);
+
+                Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
+                Call<Void> call = retrofitConfig.getPostService().createPost(post, id);
+
+
                 //Call<Void> call = new RetrofitConfig().getService(PostService.class).createPost(post);
-                //Call<Post> callGet = new RetrofitConfig().getPostService().getPost("2");
+               // Call<Post> callGet = new RetrofitConfig(new SecurityPreferences(getContext()).getAuthToken(TaskConstants.SHARED.TOKEN_KEY))
+                //        .getPostService().getPost("2");
+
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -80,19 +92,7 @@ public class NovaPostagemFragment extends Fragment {
 
                 });
 
-                /*callGet.enqueue(new Callback<Post>() {
-                    @Override
-                    public void onResponse(Call<Post> call, Response<Post> response) {
-                        Post postTeste = response.body();
-                        Log.e("CEPService   ", postTeste.toString());
-                    }
 
-                    @Override
-                    public void onFailure(Call<Post> call, Throwable t) {
-                        Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
-
-                    }
-                });*/
 
             }
         });

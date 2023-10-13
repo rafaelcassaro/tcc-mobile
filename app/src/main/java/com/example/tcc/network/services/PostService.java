@@ -13,14 +13,17 @@ import retrofit2.http.Path;
 
 public interface PostService {
 
-    @GET("posts/{id}")
-    Call<Post> getPost(@Path("id") String id);
+    @GET("posts/userPosts/{id}")
+    Call<List<Post>> getPostByUserId(@Path("id") Long id);
 
     @GET("posts")
     Call<List<Post>> getAllPost();
 
-    @POST("posts")
-    Call<Void> createPost(@Body Post post);
+    @POST("posts/{idUser}")
+    Call<Void> createPost(@Body Post post, @Path("idUser")Long idUser);
+
+    @POST("posts/edit/{idUser}/{idPostMoradia}")
+    Call<Void> updatePost(@Body Post post, @Path("idUser")Long idUser, @Path("idPostMoradia")Long idPostMoradia);
 
 
 }

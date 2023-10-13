@@ -8,8 +8,11 @@ import android.view.Menu;
 import com.example.tcc.databinding.ActivityMainBinding;
 import com.example.tcc.network.SessaoManager;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.ui.moradias.MoradiasUsuarioFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -58,6 +61,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        String fragmentTag = getIntent().getStringExtra("fragment_tag");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        if ("SeuFragmentTag".equals(fragmentTag)) {
+            MoradiasUsuarioFragment seuFragment = new MoradiasUsuarioFragment();
+            transaction.replace(R.id.nav_anuncio_usuario, seuFragment);
+            transaction.addToBackStack(null); // Opcional para permitir a navegação de volta
+        }
+
+        transaction.commit();
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

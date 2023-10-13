@@ -35,6 +35,7 @@ import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.adapter.PostAdapter;
 import com.example.tcc.ui.adapter.PostagemAdapter;
+import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.moradias.MoradiaExpandir;
 import com.example.tcc.ui.moradias.TesteActivity;
 
@@ -48,10 +49,8 @@ import retrofit2.Response;
 public class PostagensFragment extends Fragment {
 
     private FragmentPostagensBinding binding;
-    private RecyclerView.Adapter adapter;
     private PostAdapter postAdapter;
     private List<Post> db = new ArrayList<>();
-    public static final String EXTRA_SHOW = "EXTRA_SHOW";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -86,7 +85,7 @@ public class PostagensFragment extends Fragment {
     private void getDbBack(ViewGroup container){
         SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
         RetrofitConfigToken retrofitConfigToken = new RetrofitConfigToken();
-        retrofitConfigToken.setToken(securityPreferences.getAuthToken());
+        retrofitConfigToken.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
         Call<List<Post>> call = retrofitConfigToken.getPostService().getAllPost();
 

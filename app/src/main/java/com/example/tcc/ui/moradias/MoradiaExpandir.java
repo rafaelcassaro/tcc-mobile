@@ -1,21 +1,15 @@
 package com.example.tcc.ui.moradias;
 
-import static com.example.tcc.ui.moradias.MoradiasFragment.EXTRA_SHOW;
+//import static com.example.tcc.ui.moradias.MoradiasFragment.EXTRA_SHOW;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.tcc.R;
-import com.example.tcc.databinding.ActivityMoradiaExpandirBinding;
 import com.example.tcc.network.entities.Post;
-import com.example.tcc.ui.postagens.GalleryViewModel;
+import com.example.tcc.ui.constants.TaskConstants;
 
 public class MoradiaExpandir extends AppCompatActivity {
 
@@ -39,18 +33,43 @@ public class MoradiaExpandir extends AppCompatActivity {
         setContentView(R.layout.activity_moradia_expandir);
         iniciarViews();
         comentarioTv = findViewById(R.id.tv_comentario);
-        final Post post = (Post) getIntent().getSerializableExtra(EXTRA_SHOW);
+        final Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
 
 
         comentarioTv.setText(post.getComentario());
-        tipoMoradiaTv.setText(post.getPostMoradia().getTipoResidencia());
+
         cidadeTv.setText(post.getCidade());
         ruaTv.setText(post.getPostMoradia().getEndereco());
         numCasaTv.setText(String.valueOf(post.getPostMoradia().getNumCasa()));
         moradoresTv.setText(String.valueOf(post.getPostMoradia().getDetalhesMoradia().getMoradores()));
-        quartoTv.setText(post.getPostMoradia().getDetalhesMoradia().getQuarto());
-        garagemTv.setText(post.getPostMoradia().getDetalhesMoradia().getGaragem());
-        petTv.setText(post.getPostMoradia().getDetalhesMoradia().getPets());
+
+
+        if(post.getPostMoradia().isTipoResidencia()){
+            tipoMoradiaTv.setText(" Casa");
+        }
+        else{
+            tipoMoradiaTv.setText(" Apartamento");
+        }
+        if(post.getPostMoradia().getDetalhesMoradia().isGaragem()){
+            garagemTv.setText(" possui");
+        }
+        else{
+            garagemTv.setText(" não possui");
+        }
+        if(post.getPostMoradia().getDetalhesMoradia().isPets()){
+            petTv.setText(" possui");
+        }
+        else{
+            petTv.setText(" não possui");
+        }
+
+        if(post.getPostMoradia().getDetalhesMoradia().isQuarto()){
+            quartoTv.setText(" individual");
+        }
+        else{
+            quartoTv.setText(" compartilhado");
+        }
+
         valorTv.setText(String.valueOf(post.getPostMoradia().getValorAluguel()));
         estadoTv.setText(post.getEstado());
         generoTv.setText(post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia());
@@ -61,8 +80,8 @@ public class MoradiaExpandir extends AppCompatActivity {
 
     private void iniciarViews(){
         tipoMoradiaTv = findViewById(R.id.tv_tipo_moradia);
-        cidadeTv = findViewById(R.id.tv_cidade);
-        estadoTv = findViewById(R.id.tv_estado);
+        cidadeTv = findViewById(R.id.tv_cidade_usuario);
+        estadoTv = findViewById(R.id.tv_estado_usuario);
         generoTv = findViewById(R.id.tv_genero_moradia);
         ruaTv = findViewById(R.id.tv_rua);
         numCasaTv = findViewById(R.id.tv_num_casa);

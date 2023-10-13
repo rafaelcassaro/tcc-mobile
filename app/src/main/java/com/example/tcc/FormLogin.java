@@ -30,77 +30,20 @@ public class FormLogin extends AppCompatActivity {
     private Button login_button;
     private EditText email;
     private EditText senha;
-    private Usuario usuario = new Usuario();
-
+    private SecurityPreferences securityPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_login);
         Context context = this;
-        SecurityPreferences securityPreferences = new SecurityPreferences(context);
-
-        //getSupportActionBar().hide();
+        securityPreferences = new SecurityPreferences(context);
+        Log.e("token valor", securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         IniciarComponentes();
-
-        text_tela_cadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FormLogin.this, FormCadastro.class);
-                startActivity(intent);
-            }
-        });
-
-        login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Usuario tempUsuario = new Usuario();
-                tempUsuario.setEmail(email.getText().toString());
-                tempUsuario.setSenha(senha.getText().toString());
-
-
-                Call<Usuario> call = new RetrofitConfig().getUserService().login(tempUsuario);
-                Log.e("TOKEN", TaskConstants.SHARED.TOKEN_KEY);
-                call.enqueue(new Callback<Usuario>() {
-                    @Override
-                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                        if (response.code() == TaskConstants.HTTP.SUCCESS) {
-                            Usuario user = response.body();
-                            securityPreferences.store(user.getToken());
-                            Log.e("TOKEN", securityPreferences.getAuthToken());
-                            RetrofitConfig retrofitConfig = new RetrofitConfig();
-
-                            //securityPreferences.store(TaskConstants.SHARED.PERSON_NAME,user.getNome());
-
-
-                            //Log.e("login user", "deu bao: " + user.getToken());
-                            //Log.e("TOKEN", retrofitConfig.getTokene());
-                            Intent intent = new Intent(FormLogin.this, MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            //mostrarErro(FormLogin.this, "Usuario ou senha inválida");
-
-                        }
-
-                        Log.e("login user", "deu bao: " + response);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Usuario> call, Throwable t) {
-                        String s = "";
-                        Log.e("login user", "deu ruim" + t);
-                    }
-                });
-
-
-            }
-        });
-
+        btnCadastro();
+        btnLogin();
     }
 
-    private void mostrarErro(FormLogin x, String mensagem) {
-        Toast.makeText(x, mensagem, Toast.LENGTH_SHORT).show();
-    }
 
 
     private void IniciarComponentes() {
@@ -110,28 +53,68 @@ public class FormLogin extends AppCompatActivity {
         senha = findViewById(R.id.edit_senha);
     }
 
+    private void mostrarErro(FormLogin x, String mensagem) {
+        Toast.makeText(x, mensagem, Toast.LENGTH_SHORT).show();
+    }
 
-    /*login_button.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Call<Usuario> call = new RetrofitConfig().getUserService().getUser("1");
+    public void btnCadastro(){
+        text_tela_cadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FormLogin.this, FormCadastro.class);
+                startActivity(intent);
+            }
+        });
+    }
 
-            call.enqueue(new Callback<Usuario>() {
-                @Override
-                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                    usuario = response.body();
-                    if(usuario.getEmail().equals(email.getText().toString()) && usuario.getSenha().equals(senha.getText().toString())){
+    public void btnLogin(){
 
-                        //logginManager.setUser(usuario);
-                        Intent intent = new Intent(FormLogin.this, MainActivity.class);
-                        startActivity(intent);
+        login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Usuario tempUsuario = new Usuario();
+                tempUsuario.setEmail(email.getText().toString());
+                tempUsuario.setSenha(senha.getText().toString());
+
+                Call<Usuario> call = new RetrofitConfig("").getUserService().login(tempUsuario);
+                Log.e("TOKEN", TaskConstants.SHARED.TOKEN_KEY);
+                call.enqueue(new Callback<Usuario>() {
+                    @Override
+                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                        if (response.code() == TaskConstants.HTTP.SUCCESS) {
+                            salvarDadosLogin(response);
+
+                            Intent intent = new Intent(FormLogin.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            mostrarErro(FormLogin.this, "Usuario ou senha inválida");
+                            // Log.e("login user", "deu ruim: " + response);
+                        }
                     }
 
-                }
+                    @Override
+                    public void onFailure(Call<Usuario> call, Throwable t) {
+                        String s = "";
+                        Log.e("login user", "deu ruim" + t);
+                    }
+                });
 
-                @Override
-                public void onFailure(Call<Usuario> call, Throwable t) {
-                    Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
-                }
-            });*/
+                //Intent intent = new Intent(FormLogin.this, MainActivity.class);
+                //startActivity(intent);
+
+
+            }
+        });
+
+    }
+
+    public void salvarDadosLogin(Response<Usuario> response){
+        Usuario user = response.body();
+        securityPreferences.store(TaskConstants.SHARED.TOKEN_KEY,user.getToken());
+        securityPreferences.store(TaskConstants.SHARED.PERSON_KEY, String.valueOf(user.getId()));
+
+        Log.e("TOKEN", securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        Log.e("ID USER", securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
+    }
+
 }

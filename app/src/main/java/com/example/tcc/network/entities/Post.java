@@ -13,9 +13,9 @@ public class Post implements Serializable {
     private String comentario;
     private String cidade;
     private String estado;
-    private Date dataPost;
+    private String dataPost;
     private String cep;
-    private SimpleDateFormat x = new SimpleDateFormat("dd MMM yyyy");
+    protected SimpleDateFormat x = new SimpleDateFormat("dd MMM yyyy");
 
     private Usuario usuario;
 
@@ -24,7 +24,7 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, Date dataPost, String cep) {
+    public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, String dataPost, String cep) {
         this.id = id;
         this.qntdDenuncia = qntdDenuncia;
         this.comentario = comentario;
@@ -77,11 +77,11 @@ public class Post implements Serializable {
     }
 
     public String getDataPost() {
-        return x.format(dataPost);
+        return dataPost;
     }
 
     public void setDataPost(Date dataPost) {
-        this.dataPost = dataPost;
+        this.dataPost =  x.format(dataPost);
     }
 
     public String getCep() {
@@ -91,8 +91,6 @@ public class Post implements Serializable {
     public void setCep(String cep) {
         this.cep = cep;
     }
-
-
 
     public Usuario getUsuario() {
         return usuario;
@@ -120,7 +118,7 @@ public class Post implements Serializable {
                 ", estado='" + estado + '\'' +
                 ", dataPost=" + dataPost +
                 ", cep='" + cep + '\'' +
-                ", x=" + x +
+
                 ", usuario=" + usuario +
                 ", postMoradia=" + postMoradia +
                 '}';

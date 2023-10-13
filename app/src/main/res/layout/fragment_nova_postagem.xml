@@ -64,7 +64,7 @@
         />
 
     <TextView
-        android:id="@+id/tv_cidade"
+        android:id="@+id/tv_cidade_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -80,7 +80,7 @@
         />
 
     <TextView
-        android:id="@+id/tv_estado"
+        android:id="@+id/tv_estado_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
@@ -90,12 +90,12 @@
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
         app:layout_constraintHorizontal_bias="0.03"
-        app:layout_constraintStart_toEndOf="@+id/tv_cidade"
+        app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario"
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         />
 
     <EditText
-        android:id="@+id/et_cep"
+        android:id="@+id/et_cep_usuario"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/edit_text_login"
@@ -111,7 +111,7 @@
 
         app:layout_constraintStart_toStartOf="@id/ContainerComponents_postagem"
         app:layout_constraintEnd_toEndOf="@id/ContainerComponents_postagem"
-        app:layout_constraintTop_toTopOf="@id/tv_cidade"
+        app:layout_constraintTop_toTopOf="@id/tv_cidade_usuario"
 
         />
 
@@ -132,7 +132,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/ContainerComponents_postagem"
         app:layout_constraintEnd_toEndOf="@id/ContainerComponents_postagem"
-        app:layout_constraintTop_toBottomOf="@id/et_cep"
+        app:layout_constraintTop_toBottomOf="@id/et_cep_usuario"
         />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -145,7 +145,7 @@
         android:layout_marginRight="50dp"
 
         android:background="@drawable/button_grey"
-        android:text="Enviar"
+        android:text="Publicar"
 
         android:textAllCaps="false"
         android:textSize="20sp"

@@ -6,22 +6,24 @@ import android.content.SharedPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
 
 public class SecurityPreferences {
-    private static final String PREF_NAME = "SecurityPreferences";
+
     private SharedPreferences.Editor editor;
     private final SharedPreferences preferences;
 
     public SecurityPreferences(Context context) {
-        preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(TaskConstants.SECURITY.PREF_NAME  , Context.MODE_PRIVATE);
     }
 
-    public void store(String authToken) {
+    public void store(String key, String authToken) {
         editor = preferences.edit();
-        editor.putString(TaskConstants.SHARED.TOKEN_KEY, authToken);
+        editor.putString(key, authToken);
         editor.apply();
     }
 
-    public String getAuthToken() {
-        return preferences.getString(TaskConstants.SHARED.TOKEN_KEY, null);
+
+
+    public String getAuthToken(String data) {
+        return preferences.getString(data, null);
     }
 
     public void clearAuthToken() {

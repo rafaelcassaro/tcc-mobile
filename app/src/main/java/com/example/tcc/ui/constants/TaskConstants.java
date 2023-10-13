@@ -12,13 +12,16 @@ public class TaskConstants {
         public final static String PERSON_KEY = "personkey";
         public final static String TOKEN_KEY = "tokenkey";
         public final static String PERSON_NAME = "personname";
+        public static final String EXTRA_SHOW = "EXTRA_SHOW";
 
     }
 
+    public static class SECURITY {
+        public final static String PREF_NAME = "SecurityPreferences";
+    }
+
     public static class HEADER {
-
         public final static String TOKEN_KEY = "token";
-
 
     }
 

@@ -65,7 +65,7 @@ public class PostagemAdapter  extends RecyclerView.Adapter<PostagemAdapter.MyVie
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             nomeTv = itemView.findViewById(R.id.tv_name);
-            cidadeTv = itemView.findViewById(R.id.tv_cidade);
+            cidadeTv = itemView.findViewById(R.id.tv_cidade_usuario);
             comentarioTv = itemView.findViewById(R.id.tv_comment);
             celularTv = itemView.findViewById(R.id.tv_celular_numero);
 

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class PostMoradia implements Serializable {
 
     private Long id;
-    private String tipoResidencia;
+    private boolean tipoResidencia;
     private String endereco;
     private Integer numCasa;
     private Double valorAluguel;
@@ -14,12 +14,13 @@ public class PostMoradia implements Serializable {
     public PostMoradia() {
     }
 
-    public PostMoradia(Long id, String tipoResidencia, String endereco, Integer numCasa, Double valorAluguel) {
+    public PostMoradia(Long id, boolean tipoResidencia, String endereco, Integer numCasa, Double valorAluguel, Detalhes detalhes) {
         this.id = id;
         this.tipoResidencia = tipoResidencia;
         this.endereco = endereco;
         this.numCasa = numCasa;
         this.valorAluguel = valorAluguel;
+        this.detalhes = detalhes;
     }
 
     public Long getId() {
@@ -30,11 +31,11 @@ public class PostMoradia implements Serializable {
         this.id = id;
     }
 
-    public String getTipoResidencia() {
+    public boolean isTipoResidencia() {
         return tipoResidencia;
     }
 
-    public void setTipoResidencia(String tipoResidencia) {
+    public void setTipoResidencia(boolean tipoResidencia) {
         this.tipoResidencia = tipoResidencia;
     }
 

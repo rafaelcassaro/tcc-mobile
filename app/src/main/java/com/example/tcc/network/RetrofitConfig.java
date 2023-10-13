@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -23,25 +24,59 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitConfig {
 
     private final Retrofit retrofit;
-
     private String token = "";
-
+    private OkHttpClient okHttpClient;
 
     Gson gson = new GsonBuilder().setDateFormat("dd MMM yyyy").create();
 
-    public RetrofitConfig() {
+    public RetrofitConfig(String tokenValue) {
 
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
+        if (tokenValue.equals("")){
+            okHttpClient = new OkHttpClient().newBuilder().build();
+        }
+        else{
+            okHttpClient = new OkHttpClient().newBuilder().addInterceptor(new Interceptor() {
+
+                @NonNull
+                @Override
+                public Response intercept(@NonNull Chain chain) throws IOException {
+
+                    Request request = chain.request()
+                            .newBuilder()
+                            .addHeader("Authorization", token)
+                            .build();
+
+                    return chain.proceed(request);
+                }
+            }).build();
+        }
 
         this.retrofit = new Retrofit.Builder()
+                //.baseUrl("http://10.0.2.2:8080/") para o emulador
                 .baseUrl("http://192.168.1.107:8080/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 
-    public String getTokene(){
+
+
+    public Retrofit getRetrofit() {
+        return retrofit;
+    }
+
+
+
+    public void setHttpClient(){
+
+    }
+
+    public String getToken(){
         return token;
+    }
+
+    public void setToken(String theToken){
+        token = theToken;
     }
 
     public void addHeader(String tokenValue){

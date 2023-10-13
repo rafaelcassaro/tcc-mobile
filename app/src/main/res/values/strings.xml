@@ -10,7 +10,7 @@
     <string name="menu_moradias">Moradias</string>
     <string name="menu_postagens">Postagens</string>
     <string name="menu_perfil">Editar Perfil</string>
-    <string name="menu_anuncio_usuario">Meus anúncios</string>
+    <string name="menu_anuncio_usuario">Minhas moradias</string>
     <string name="menu_postagem_usuario">Minhas postagens</string>
     <string name="menu_nova_moradia">Anúnciar Imovel</string>
     <string name="menu_nova_postagem">Fazer postagem</string>
@@ -24,6 +24,10 @@
     <string name="esquceu_senha">Esqueceu a senha?</string>
     <string name="redes_cadastro">Redes Sociais</string>
     <string name="foto_cadastro">Foto de perfil</string>
+    <string name="bt_moradia_cadastro_editar">Editar</string>
+    <string name="ic_moradores">moradores</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

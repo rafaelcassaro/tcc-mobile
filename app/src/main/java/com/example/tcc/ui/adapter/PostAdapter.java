@@ -11,19 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
-import com.example.tcc.db.PostDb;
-import com.example.tcc.db.PostagemDb;
-import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
 
@@ -79,10 +70,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             nomeTv = itemView.findViewById(R.id.tv_name);
-            cidadeTv = itemView.findViewById(R.id.tv_cidade);
+            cidadeTv = itemView.findViewById(R.id.tv_cidade_usuario);
             comentarioTv = itemView.findViewById(R.id.tv_comment);
             celularTv = itemView.findViewById(R.id.tv_celular_numero);
-            estadoTv = itemView.findViewById(R.id.tv_estado);
+            estadoTv = itemView.findViewById(R.id.tv_estado_usuario);
             dataTv = itemView.findViewById(R.id.tv_data);
 
         }

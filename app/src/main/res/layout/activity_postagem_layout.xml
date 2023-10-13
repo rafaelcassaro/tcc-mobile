@@ -60,7 +60,7 @@
 
 
     <TextView
-        android:id="@+id/tv_cidade"
+        android:id="@+id/tv_cidade_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -95,7 +95,7 @@
 
 
     <TextView
-        android:id="@+id/tv_estado"
+        android:id="@+id/tv_estado_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -105,7 +105,7 @@
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.03"
-        app:layout_constraintStart_toEndOf="@+id/tv_cidade"
+        app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario"
         app:layout_constraintTop_toBottomOf="@+id/ContainerUserImage"
         />
 
@@ -129,7 +129,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
 
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
-        app:layout_constraintTop_toBottomOf="@+id/tv_cidade" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_cidade_usuario" />
 
 
     <TextView
