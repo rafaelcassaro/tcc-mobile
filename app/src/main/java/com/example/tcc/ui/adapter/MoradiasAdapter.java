@@ -102,7 +102,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tipoMoradiaTv = itemView.findViewById(R.id.tv_tipo_moradia);
-            cidadeTv = itemView.findViewById(R.id.tv_cidade_usuario);
+            cidadeTv = itemView.findViewById(R.id.tv_cidade_usuario_post);
             estadoTv = itemView.findViewById(R.id.tv_estado_usuario);
             generoTv = itemView.findViewById(R.id.tv_genero_moradia);
             ruaTv = itemView.findViewById(R.id.tv_rua);

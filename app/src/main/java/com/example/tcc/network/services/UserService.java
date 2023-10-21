@@ -18,4 +18,7 @@ public interface UserService {
     @POST("auth/login")
     Call<Usuario> login(@Body Usuario usuario);
 
+    @GET("usuarios/{id}")
+    Call<Usuario> findById(@Path("id")Long id);
+
 }

@@ -9,6 +9,7 @@ import com.example.tcc.databinding.ActivityMainBinding;
 import com.example.tcc.network.SessaoManager;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.moradias.MoradiasUsuarioFragment;
+import com.example.tcc.ui.postagens.PostagensUsuarioFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.fragment.app.FragmentManager;
@@ -43,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar.toolbar);
         SessaoManager sessaoManager = SessaoManager.getInstance();
         sessaoManager.setLoggedIn(true);
+
+
+        if(getIntent().hasExtra("editar_post_tag")){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.nav_host_fragment_content_main, new PostagensUsuarioFragment())
+                    .commit();
+        }
 
 
         DrawerLayout drawer = binding.drawerLayout;

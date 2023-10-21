@@ -20,7 +20,7 @@
 
 
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/activity_postagem_layout" />
+        tools:listitem="@layout/activity_postagem_usuario_layout" />
 
 
 

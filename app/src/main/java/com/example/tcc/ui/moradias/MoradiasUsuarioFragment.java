@@ -67,6 +67,9 @@ public class MoradiasUsuarioFragment extends Fragment {
     }
 
     private void configAdapter(ViewGroup container){
+
+
+
         moradiasAdapter = new MoradiasUsuarioAdapter(container.getContext(), new MoradiasUsuarioAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -104,8 +107,17 @@ public class MoradiasUsuarioFragment extends Fragment {
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
 
+                    List<Post> tempDb = new ArrayList<>();
                     db = response.body();
-                    moradiasAdapter.setPostagens(db);
+                    Log.e("Response body", "dados db local:" + db.toString());
+                    for (int i = 0; db.size()> i; i++){
+                        if(db.get(i).getPostMoradia() != null){
+                            tempDb.add(db.get(i));
+                        }
+                    }
+
+
+                    moradiasAdapter.setPostagens(tempDb);
                     Log.e("UserMoradiasResponseBody", "dados db local:" + db.toString());
                     Log.e("UserMoradiasResponseBody", "dados ResponseBody:" + response.body());
                     Log.e("UserMoradiasResponseBody", "dados ResponseBody:" + db.get(0).getPostMoradia());

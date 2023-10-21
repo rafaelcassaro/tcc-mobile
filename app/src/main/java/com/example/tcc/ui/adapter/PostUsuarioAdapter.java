@@ -16,26 +16,29 @@ import com.example.tcc.network.entities.Post;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
+public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.MyViewHolder> {
 
     private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
 
+    private OnItemClickListener listener;
 
-    public PostAdapter(Context context) {
+
+    public PostUsuarioAdapter(Context context, OnItemClickListener listener) {
+        this.listener = listener;
         this.inflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemList = inflater.inflate(R.layout.activity_postagem_layout, parent, false);
+    public PostUsuarioAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_postagem_usuario_layout, parent, false);
         return new MyViewHolder(itemList);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostAdapter.MyViewHolder holder, int position) {
-        //Post item = db.get(position);
+    public void onBindViewHolder(@NonNull PostUsuarioAdapter.MyViewHolder holder, int position) {
+        Post item = db.get(position);
 
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));
@@ -57,7 +60,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView nomeTv;
         public TextView cidadeTv;
@@ -75,9 +78,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             celularTv = itemView.findViewById(R.id.tv_celular_numero);
             estadoTv = itemView.findViewById(R.id.tv_estado_usuario);
             dataTv = itemView.findViewById(R.id.tv_data_usuario_post);
+            itemView.setOnClickListener(this);
 
         }
 
+        @Override
+        public void onClick(View v) {
+            listener.onItemClick(getAdapterPosition());
+        }
+
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 
     public void setPostagens(List<Post> db){

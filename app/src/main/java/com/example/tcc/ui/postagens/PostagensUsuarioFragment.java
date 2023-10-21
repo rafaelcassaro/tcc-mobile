@@ -1,7 +1,13 @@
 package com.example.tcc.ui.postagens;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,15 +19,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.tcc.R;
-import com.example.tcc.databinding.FragmentMoradiasBinding;
+
 import com.example.tcc.databinding.FragmentPostagensUsuarioBinding;
 import com.example.tcc.db.PostagemDb;
 import com.example.tcc.network.RetrofitConfigToken;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+
 import com.example.tcc.ui.adapter.PostAdapter;
+import com.example.tcc.ui.adapter.PostUsuarioAdapter;
 import com.example.tcc.ui.adapter.PostagemAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +42,8 @@ import retrofit2.Response;
 public class PostagensUsuarioFragment extends Fragment {
 
     private FragmentPostagensUsuarioBinding binding;
-    private PostAdapter postAdapter;
+    private RecyclerView.Adapter adapter;
+    private PostUsuarioAdapter postAdapter;
     private List<Post> db = new ArrayList<>();
 
     @Override
@@ -59,9 +69,34 @@ public class PostagensUsuarioFragment extends Fragment {
 
 
     private void configAdapter(ViewGroup container){
-        postAdapter = new PostAdapter(container.getContext());
+
+
+        postAdapter = new PostUsuarioAdapter(container.getContext(), new PostUsuarioAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(getContext(), PostagensUsuarioEditar.class);
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                mStartForResult.launch(intent);
+            }
+        });
+
+
+        //postAdapter = new PostAdapter(container.getContext());
         binding.rvPostagensUsuario.setAdapter(postAdapter);
     }
+
+
+    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode() == Activity.RESULT_OK){
+                adapter.notifyDataSetChanged();
+            }
+        }
+    });
+
+
 
     private void getPostsByUserId(ViewGroup container){
         SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
@@ -75,7 +110,14 @@ public class PostagensUsuarioFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()){
-                    db = response.body();
+                    List<Post> tempDb ;
+                    tempDb = response.body();
+
+                    for (Post post:tempDb) {
+                        if(post.getPostMoradia() == null){
+                            db.add(post);
+                        }
+                    }
                     Log.e("Response body", "dados db local:" + db.toString());
                     postAdapter.setPostagens(db);
                     Log.e("Response body", "dados ResponseBody:" + response.body());

@@ -16,7 +16,9 @@
         android:theme="@style/TemaDoido"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ui.postagens.PostagensUsuarioEditar"
+            android:exported="false" />
         <activity
             android:name=".ui.moradias.MoradiaUsuarioEditar"
             android:exported="false" />

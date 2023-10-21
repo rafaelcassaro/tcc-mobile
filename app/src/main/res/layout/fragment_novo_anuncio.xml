@@ -24,7 +24,7 @@
         />
 
     <TextView
-        android:id="@+id/tv_cidade_usuario"
+        android:id="@+id/tv_cidade_usuario_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -66,7 +66,7 @@
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_anuncio"
         app:layout_constraintHorizontal_bias="0.03"
-        app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario"
+        app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario_post"
         app:layout_constraintTop_toTopOf="@+id/ContainerComponents_anuncio"
         />
 
@@ -95,7 +95,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
 
-        app:layout_constraintTop_toTopOf="@id/tv_cidade_usuario"
+        app:layout_constraintTop_toTopOf="@id/tv_cidade_usuario_post"
         />
 
 
@@ -356,7 +356,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_editar"
+        android:id="@+id/bt_publicar"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
@@ -391,6 +391,7 @@
         >
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_ap_apart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -399,6 +400,7 @@
             />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_ap_casa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -427,6 +429,7 @@
         >
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_pet_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -435,6 +438,7 @@
             />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_pet_nao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -464,6 +468,7 @@
         >
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_garagem_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -472,6 +477,7 @@
             />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_garagem_nao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipBackgroundColor="@drawable/chip_selecao"
@@ -496,6 +502,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_genero_masc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
@@ -503,6 +510,7 @@
             app:chipBackgroundColor="@drawable/chip_selecao" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_genero_fem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
@@ -510,6 +518,7 @@
             app:chipBackgroundColor="@drawable/chip_selecao" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chips_genero_misto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"

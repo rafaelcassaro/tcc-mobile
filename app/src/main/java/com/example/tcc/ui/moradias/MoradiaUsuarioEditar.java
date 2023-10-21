@@ -1,8 +1,6 @@
 package com.example.tcc.ui.moradias;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,18 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.tcc.FormLogin;
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.login.FormCadastro;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,8 +34,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     private ChipGroup chipGaragem;
     private ChipGroup chipGeneroRep;
     private Button botaoEditar;
-
-    private Post postagemEviar;
+    //private Post postagemEviar;
 
 
     @Override
@@ -49,13 +42,16 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moradia_usuario_editar_layout);
 
+        //Pegar dados do post clicado com a constante EXTRA_SHOW
         Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
 
         iniciarViews();
+        //PEGAR O TOKEN SALVO E APLICAR NA CONEXAO COM O END-POINT "retrofitConfig"
         SecurityPreferences securityPreferences = new SecurityPreferences(getApplicationContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
+        //TRANSFERIR OS VALORES INT E DOUBLE DO POST PARA OS ET DA VIEW
         int numMoradores = Integer.valueOf(post.getPostMoradia().getDetalhesMoradia().getMoradores());
         int numCasa = Integer.valueOf(post.getPostMoradia().getNumCasa());
         double valorAluguel = Double.valueOf(post.getPostMoradia().getValorAluguel());
@@ -81,7 +77,8 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
                 Long idMoradia = post.getPostMoradia().getId();
 
-                Call<Void> call=retrofitConfig.getPostService().updatePost(post, id, idMoradia);
+                //DAR UPDATE NO POST SELECIONADO
+                Call<Void> call=retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
                 //Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getPostMoradia().getId());
                 call.enqueue(new Callback<Void>() {
                     @Override
@@ -190,19 +187,31 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     private int verificarChip(ChipGroup chip, int opcao1, int opcao2)  {
         int escolha= 0;
+        //Log.e("CHIPS", "OPCAO1 ID"+ opcao1);
+        //Log.e("CHIPS", "OPCAO2 ID"+ opcao2);
+
         ChipGroup chipGroup = chip;
         int selectedChipId = chipGroup.getCheckedChipId(); // Obtém o ID do Chip selecionado
+        Log.e("CHIPS", "OPCAO2 ID"+ chip);
+        Log.e("CHIPS", "OPCAO2 ID"+ selectedChipId);
+        Log.e("CHIPS", "OPCAO2 ID"+ chip.getCheckedChipId());
+
         if (selectedChipId != View.NO_ID) {
             Chip selectedChip = findViewById(selectedChipId); // Obtém a referência ao Chip selecionado
+           // Log.e("CHIPS", "CHIPGROUP: "+ findViewById(selectedChipId));
             // Verifica qual Chip foi selecionado com base no ID
             if (selectedChip.getId() == opcao1) {
                 escolha = 1;
+             //   Log.e("CHIPS", "ESCOLHAOP1: "+ selectedChip.getId());
             } else if (selectedChip.getId() == opcao2) {
                 escolha = 2;
+              //  Log.e("CHIPS", "ESCOLHAOP2: "+ selectedChip.getId());
             }
         } else {
             escolha = 0;
         }
+        //Log.e("CHIPS", "ESCOLHA FINAL: "+ selectedChipId);
+       // Log.e("CHIPS", "ESCOLHA FINAL: "+ escolha);
         return escolha;
     }
 

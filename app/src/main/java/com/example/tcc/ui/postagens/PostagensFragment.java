@@ -93,7 +93,15 @@ public class PostagensFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()){
-                    db = response.body();
+                    List<Post> tempDb ;
+                    tempDb = response.body();
+
+                    for (Post post:tempDb) {
+                        if(post.getPostMoradia() == null){
+                            db.add(post);
+                        }
+                    }
+
                     Log.e("Response body", "dados db local:" + db.toString());
                     postAdapter.setPostagens(db);
                     Log.e("Response body", "dados ResponseBody:" + response.body());

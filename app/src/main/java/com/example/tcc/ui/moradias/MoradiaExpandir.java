@@ -80,7 +80,7 @@ public class MoradiaExpandir extends AppCompatActivity {
 
     private void iniciarViews(){
         tipoMoradiaTv = findViewById(R.id.tv_tipo_moradia);
-        cidadeTv = findViewById(R.id.tv_cidade_usuario);
+        cidadeTv = findViewById(R.id.tv_cidade_usuario_post);
         estadoTv = findViewById(R.id.tv_estado_usuario);
         generoTv = findViewById(R.id.tv_genero_moradia);
         ruaTv = findViewById(R.id.tv_rua);

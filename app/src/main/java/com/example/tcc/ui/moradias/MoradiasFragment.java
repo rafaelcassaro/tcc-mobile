@@ -100,10 +100,15 @@ public class MoradiasFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
-
+                    List<Post> tempDb = new ArrayList<>();
                     db = response.body();
                     Log.e("Response body", "dados db local:" + db.toString());
-                    moradiasAdapter.setPostagens(db);
+                    for (int i = 0; db.size()> i; i++){
+                        if(db.get(i).getPostMoradia() != null){
+                            tempDb.add(db.get(i));
+                        }
+                    }
+                    moradiasAdapter.setPostagens(tempDb);
                     Log.e("Response body", "dados ResponseBody:" + response.body());
                     Log.e("Response body", "dados ResponseBody:" + db.get(0).getPostMoradia());
 

@@ -1,5 +1,6 @@
 package com.example.tcc.ui.postagens;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tcc.databinding.FragmentNovaPostagemBinding;
+import com.example.tcc.network.RetrofitConfigCepApi;
+import com.example.tcc.network.RetrofitConfigToken;
 import com.example.tcc.network.SessaoManager;
 import com.example.tcc.network.RetrofitConfig;
+import com.example.tcc.network.entities.CepApi;
+import com.example.tcc.network.entities.Detalhes;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.entities.PostMoradia;
+import com.example.tcc.network.entities.Usuario;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.constants.TaskConstants;
@@ -31,6 +38,10 @@ import retrofit2.Response;
 public class NovaPostagemFragment extends Fragment {
 
     private FragmentNovaPostagemBinding binding;
+    private Post post = new Post();
+    private CepApi cepApiDados = new CepApi();
+    private RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -38,10 +49,6 @@ public class NovaPostagemFragment extends Fragment {
 
         binding = FragmentNovaPostagemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
 
         SessaoManager sessaoManager = SessaoManager.getInstance();
@@ -55,44 +62,30 @@ public class NovaPostagemFragment extends Fragment {
         binding.btPostar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer cep = Integer.valueOf(binding.etCepUsuario.getText().toString());
 
-                Post post = new Post();
-                post.setComentario(binding.etComentario.getText().toString());
-
-                post.setCidade("jefte");
-
-
-                Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
-                Call<Void> call = retrofitConfig.getPostService().createPost(post, id);
-
-
-                //Call<Void> call = new RetrofitConfig().getService(PostService.class).createPost(post);
-               // Call<Post> callGet = new RetrofitConfig(new SecurityPreferences(getContext()).getAuthToken(TaskConstants.SHARED.TOKEN_KEY))
-                //        .getPostService().getPost("2");
-
-                call.enqueue(new Callback<Void>() {
+                Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+                callApi.enqueue(new Callback<CepApi>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if(response.isSuccessful()){
-                            Log.e("msg", "deu bom");
-                        }
-                        else{
-                            Log.e("msg", "deu bom ruim");
-                        }
+                    public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                        if (response.isSuccessful()){
+                            cepApiDados = response.body();
+                            post.setCidade(cepApiDados.getCity());
+                            post.setEstado(cepApiDados.getState());
 
+                            salvarViaApi();
 
+                        }
+                        else {
+
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.e("msg", "deu ruim");
+                    public void onFailure(Call<CepApi> call, Throwable t) {
+
                     }
-
-
-
                 });
-
-
 
             }
         });
@@ -104,5 +97,43 @@ public class NovaPostagemFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void salvarViaApi(){
+        SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
+        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+        Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
+
+        post.setComentario(binding.etComentario.getText().toString());
+        post.setCep(binding.etCepUsuario.getText().toString());
+        post.setQntdDenuncia(0);
+
+        //post.setPostMoradia(new PostMoradia());
+        //post.getPostMoradia().setDetalhesMoradia(new Detalhes());
+
+        Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id);
+        callSave.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Log.e("msg", "deu bom");
+                    //Intent intent = new Intent(getContext(), PostagensUsuarioFragment.class);
+                    //intent.putExtra("fragment_tag", "SeuFragmentTag");
+                    //startActivity(intent);
+                }
+                else{
+                    Log.e("msg", "deu bom ruim");
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("msg", "deu ruim");
+            }
+        });
     }
 }

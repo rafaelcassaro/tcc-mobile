@@ -1,7 +1,6 @@
 package com.example.tcc.network.services;
 
 import com.example.tcc.network.entities.Post;
-import com.example.tcc.network.entities.Usuario;
 
 import java.util.List;
 
@@ -23,7 +22,10 @@ public interface PostService {
     Call<Void> createPost(@Body Post post, @Path("idUser")Long idUser);
 
     @POST("posts/edit/{idUser}/{idPostMoradia}")
-    Call<Void> updatePost(@Body Post post, @Path("idUser")Long idUser, @Path("idPostMoradia")Long idPostMoradia);
+    Call<Void> updatePostMoradia(@Body Post post, @Path("idUser")Long idUser, @Path("idPostMoradia")Long idPostMoradia);
+
+    @POST("posts/edit/{idUser}")
+    Call<Void> updatePost(@Body Post post, @Path("idUser")Long idUser);
 
 
 }
