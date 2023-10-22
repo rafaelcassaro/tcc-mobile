@@ -63,9 +63,7 @@ public class PostMoradia implements Serializable {
         this.valorAluguel = valorAluguel;
     }
 
-    public Detalhes getDetalhesMoradia() {
-        return detalhes;
-    }
+    public Detalhes getDetalhesMoradia() { return detalhes; }
 
     public void setDetalhesMoradia(Detalhes detalhes) {
         this.detalhes = detalhes;

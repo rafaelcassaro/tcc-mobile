@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="Rua Hipólito José da Costa"
         android:textSize="15sp"
         android:textColor="@color/black"
@@ -162,12 +163,13 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
         android:text="12"
         android:textSize="15sp"
         android:textColor="@color/Grey"
         android:drawableLeft="@drawable/ic_user"
 
-        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+        app:layout_constraintEnd_toEndOf="@+id/tv_ic_moradores_text"
 
         app:layout_constraintHorizontal_bias="0.060"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
@@ -184,7 +186,7 @@
         android:textColor="@color/Grey"
 
 
-        app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+        app:layout_constraintEnd_toEndOf="@+id/tv_ic_quarto"
 
         app:layout_constraintHorizontal_bias="0.015"
         app:layout_constraintStart_toEndOf="@+id/tv_ic_moradores"
@@ -218,7 +220,7 @@
         android:textColor="@color/Grey"
 
         android:textSize="15sp"
-        android:drawableLeft="@drawable/ic_garagem"
+        android:drawableLeft="@drawable/ic_garage"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 

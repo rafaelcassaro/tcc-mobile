@@ -80,6 +80,7 @@ public class MoradiasFragment extends Fragment {
             public void onItemClick(int position) {
                 Intent intent = new Intent(getContext(), MoradiaExpandir.class);
                 intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                Log.e("INTENT INICIADO", ":" + db.get(position).toString());
                 mStartForResult.launch(intent);
 
             }
@@ -100,21 +101,22 @@ public class MoradiasFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
-                    List<Post> tempDb = new ArrayList<>();
-                    db = response.body();
+                    List<Post> tempDb = response.body();
+
                     Log.e("Response body", "dados db local:" + db.toString());
-                    for (int i = 0; db.size()> i; i++){
-                        if(db.get(i).getPostMoradia() != null){
-                            tempDb.add(db.get(i));
+                    for (int i = 0; tempDb.size()> i; i++){
+                        if(tempDb.get(i).getPostMoradia() != null){
+                            db.add(tempDb.get(i));
                         }
                     }
-                    moradiasAdapter.setPostagens(tempDb);
+                    moradiasAdapter.setPostagens(db);
                     Log.e("Response body", "dados ResponseBody:" + response.body());
                     Log.e("Response body", "dados ResponseBody:" + db.get(0).getPostMoradia());
 
                 } else {
                     mostrarErro(container);
                 }
+
 
             }
 

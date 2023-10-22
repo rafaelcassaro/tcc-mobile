@@ -41,18 +41,47 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
 
     @Override
     public void onBindViewHolder(@NonNull MoradiasUsuarioAdapter.MyViewHolder holder, int position) {
-        holder.tipoMoradiaTv.setText(String.valueOf(db.get(position).getPostMoradia().isTipoResidencia()));
+        //holder.tipoMoradiaTv.setText(String.valueOf(db.get(position).getPostMoradia().isTipoResidencia()));
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.ruaTv.setText(String.valueOf(db.get(position).getPostMoradia().getEndereco()));
         holder.numCasaTv.setText(String.valueOf(db.get(position).getPostMoradia().getNumCasa()));
         holder.moradoresTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getMoradores()));
-        holder.quartoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isQuarto()));
-        holder.garagemTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isGaragem()));
-        holder.petTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isPets()));
+        //holder.quartoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isQuarto()));
+        //holder.garagemTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isGaragem()));
+        //holder.petTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isPets()));
         holder.valorTv.setText(String.valueOf(db.get(position).getPostMoradia().getValorAluguel()));
         holder.estadoTv.setText(String.valueOf(db.get(position).getEstado()));
         holder.generoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getGeneroMoradia()));
         holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));
+
+
+        if(db.get(position).getPostMoradia().isTipoResidencia()){
+            holder.tipoMoradiaTv.setText(" Casa");
+        }
+        else{
+            holder.tipoMoradiaTv.setText(" Apartamento");
+        }
+        if(db.get(position).getPostMoradia().getDetalhesMoradia().isGaragem()){
+            holder.garagemTv.setText(" possui");
+        }
+        else{
+            holder.garagemTv.setText(" não possui");
+        }
+        if(db.get(position).getPostMoradia().getDetalhesMoradia().isPets()){
+            holder.petTv.setText(" possui");
+        }
+        else{
+            holder.petTv.setText(" não possui");
+        }
+
+        if(db.get(position).getPostMoradia().getDetalhesMoradia().isQuarto()){
+            holder.quartoTv.setText(" individual");
+        }
+        else{
+            holder.quartoTv.setText(" compartilhado");
+        }
+
+
 
         holder.editarBt.setOnClickListener(new View.OnClickListener() {
             @Override

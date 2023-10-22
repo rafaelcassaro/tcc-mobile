@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         android:text="@string/title_cadastro"
 
-        android:textSize="50sp"
+        android:textSize="40sp"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:layout_margin="25dp"
+        android:layout_margin="20dp"
+
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,19 +28,21 @@
         android:id="@+id/containerComponents_cadastro"
         style="@style/ContainerComponents"
         android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_height="545dp"
         app:layout_constraintBottom_toBottomOf="@id/bt_cadastrar"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintVertical_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/containerComponents_cadastro" />
+        app:layout_constraintTop_toTopOf="@id/title_cadastrese_tv" />
 
     <EditText
         android:id="@+id/et_nome"
         style="@style/Edit_Text_Login"
         android:hint="nome"
         android:drawableRight="@drawable/ic_user"
+        android:textColor="@color/black"
         android:textColorHint="@color/Grey"
         android:inputType="text"
         app:layout_constraintTop_toTopOf="@+id/containerComponents_cadastro"
@@ -52,6 +55,7 @@
         android:id="@+id/et_email"
         style="@style/Edit_Text_Login"
         android:hint="Email"
+        android:textColor="@color/black"
         android:textColorHint="@color/Grey"
         android:inputType="textEmailAddress"
         android:drawableRight="@drawable/ic_email"
@@ -63,6 +67,7 @@
         android:id="@+id/et_senha"
         style="@style/Edit_Text_Login"
         android:hint="Senha"
+        android:textColor="@color/black"
         android:textColorHint="@color/Grey"
         android:inputType="textPassword"
         android:drawableRight="@drawable/ic_eye"
@@ -75,6 +80,7 @@
         android:id="@+id/et_celular"
         style="@style/Edit_Text_Login"
         android:hint="Celular"
+        android:textColor="@color/black"
         android:textColorHint="@color/Grey"
         android:inputType="phone"
         android:drawableRight="@drawable/ic_celular"
@@ -102,6 +108,8 @@
         android:id="@+id/et_link1"
         style="@style/Edit_Text_Login"
         android:hint="Link"
+
+        android:textColor="@color/black"
         android:textColorHint="@color/Grey"
         android:inputType="textUri"
         android:drawableRight="@drawable/ic_link"
@@ -115,9 +123,23 @@
         style="@style/Edit_Text_Login"
         android:hint="Link"
         android:textColorHint="@color/Grey"
+        android:textColor="@color/black"
         android:inputType="textUri"
         android:drawableRight="@drawable/ic_link"
         app:layout_constraintTop_toBottomOf="@+id/et_link1"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        />
+
+    <EditText
+        android:id="@+id/et_link3"
+        style="@style/Edit_Text_Login"
+        android:hint="Link"
+        android:textColor="@color/black"
+        android:textColorHint="@color/Grey"
+        android:inputType="textUri"
+        android:drawableRight="@drawable/ic_link"
+        app:layout_constraintTop_toBottomOf="@+id/et_link2"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
         app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         />

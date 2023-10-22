@@ -12,6 +12,7 @@ import com.example.tcc.ui.moradias.MoradiasUsuarioFragment;
 import com.example.tcc.ui.postagens.PostagensUsuarioFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -40,21 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.appBarMain.toolbar.toolbar);
         SessaoManager sessaoManager = SessaoManager.getInstance();
         sessaoManager.setLoggedIn(true);
 
 
-        if(getIntent().hasExtra("editar_post_tag")){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, new PostagensUsuarioFragment())
-                    .commit();
-        }
-
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -67,24 +63,18 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
-
-    }
-
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        String fragmentTag = getIntent().getStringExtra("fragment_tag");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        if ("SeuFragmentTag".equals(fragmentTag)) {
-            MoradiasUsuarioFragment seuFragment = new MoradiasUsuarioFragment();
-            transaction.replace(R.id.nav_anuncio_usuario, seuFragment);
-            transaction.addToBackStack(null); // Opcional para permitir a navegação de volta
+        if(getIntent().hasExtra("editar_post_tag")){
+            navigationView.getMenu().performIdentifierAction(R.id.nav_postagens_usuario, 0);
+        } else if (getIntent().hasExtra("editar_postMoradia_tag")) {
+            navigationView.getMenu().performIdentifierAction(R.id.nav_anuncio_usuario, 0);
+        } else if (getIntent().hasExtra("novo_post_tag")) {
+        navigationView.getMenu().performIdentifierAction(R.id.nav_postagens_usuario, 0);
+        }else if (getIntent().hasExtra("novo_postMoradia_tag")) {
+            navigationView.getMenu().performIdentifierAction(R.id.nav_anuncio_usuario, 0);
         }
 
-        transaction.commit();
-    }*/
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

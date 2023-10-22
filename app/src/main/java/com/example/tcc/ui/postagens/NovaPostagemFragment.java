@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tcc.MainActivity;
 import com.example.tcc.databinding.FragmentNovaPostagemBinding;
 import com.example.tcc.network.RetrofitConfigCepApi;
 import com.example.tcc.network.RetrofitConfigToken;
@@ -38,9 +39,9 @@ import retrofit2.Response;
 public class NovaPostagemFragment extends Fragment {
 
     private FragmentNovaPostagemBinding binding;
-    private Post post = new Post();
-    private CepApi cepApiDados = new CepApi();
-    private RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
+
+
+
 
 
     @Override
@@ -50,6 +51,8 @@ public class NovaPostagemFragment extends Fragment {
         binding = FragmentNovaPostagemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
+        Post post = new Post();
 
         SessaoManager sessaoManager = SessaoManager.getInstance();
         if(sessaoManager.isLoggedIn()){
@@ -69,16 +72,18 @@ public class NovaPostagemFragment extends Fragment {
                     @Override
                     public void onResponse(Call<CepApi> call, Response<CepApi> response) {
                         if (response.isSuccessful()){
-                            cepApiDados = response.body();
+                            CepApi cepApiDados = response.body();
+
                             post.setCidade(cepApiDados.getCity());
                             post.setEstado(cepApiDados.getState());
 
-                            salvarViaApi();
+                            salvarViaApi(post);
 
                         }
                         else {
 
                         }
+
                     }
 
                     @Override
@@ -99,7 +104,7 @@ public class NovaPostagemFragment extends Fragment {
         binding = null;
     }
 
-    private void salvarViaApi(){
+    private void salvarViaApi(Post post){
         SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
@@ -119,13 +124,14 @@ public class NovaPostagemFragment extends Fragment {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
                     Log.e("msg", "deu bom");
-                    //Intent intent = new Intent(getContext(), PostagensUsuarioFragment.class);
-                    //intent.putExtra("fragment_tag", "SeuFragmentTag");
-                    //startActivity(intent);
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("novo_post_tag", "editPostTag");
+                    startActivity(intent);
                 }
                 else{
                     Log.e("msg", "deu bom ruim");
                 }
+
 
 
             }

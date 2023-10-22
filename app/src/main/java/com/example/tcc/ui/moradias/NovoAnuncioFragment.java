@@ -1,5 +1,6 @@
 package com.example.tcc.ui.moradias;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentNovoAnuncioBinding;
 import com.example.tcc.databinding.FragmentPostagensUsuarioBinding;
 import com.example.tcc.network.RetrofitConfig;
+import com.example.tcc.network.RetrofitConfigCepApi;
+import com.example.tcc.network.entities.CepApi;
 import com.example.tcc.network.entities.Detalhes;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
@@ -31,7 +35,8 @@ import retrofit2.Response;
 public class NovoAnuncioFragment extends Fragment {
 
     private FragmentNovoAnuncioBinding binding;
-    //private Post post = new Post();
+
+
 
 
     @Override
@@ -43,10 +48,7 @@ public class NovoAnuncioFragment extends Fragment {
         View root = binding.getRoot();
        // iniciarViews();
         //Post post = new Post();
-        SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
+        RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
 
         Post post = new Post();
         PostMoradia moradia = new PostMoradia();
@@ -70,30 +72,41 @@ public class NovoAnuncioFragment extends Fragment {
 
 
                 setarDados(post, root);
+
+                Integer cep = Integer.valueOf(binding.etCepUsuario.getText().toString());
+                Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+                callApi.enqueue(new Callback<CepApi>() {
+                    @Override
+                    public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                        if (response.isSuccessful()){
+                            CepApi cepApiDados = response.body();
+
+                            Log.e("VERIFICAR POST ", "deu bom "+ cepApiDados.toString());
+                            post.setCidade(cepApiDados.getCity());
+                            post.setEstado(cepApiDados.getState());
+                            post.setCep(cepApiDados.getCep());
+                            post.setQntdDenuncia(0);
+                            salvarViaApi(post);
+
+                        }
+                        else {
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CepApi> call, Throwable t) {
+
+                    }
+                });
+
                 //ChipGroup chipGroup = root.findViewById(R.id.chip_ap);
 
                // post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MASCULINA");
                // Long idMoradia = post.getPostMoradia().getId();
 
-                Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id);
-                callSave.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if(response.isSuccessful()){
-                            Log.e("msg", "deu bom");
-                        }
-                        else{
-                            Log.e("msg", "deu bom ruim");
-                        }
 
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.e("msg", "deu ruim");
-                    }
-                });
 
 
             }
@@ -106,11 +119,47 @@ public class NovoAnuncioFragment extends Fragment {
         return root;
     }
 
+    private void salvarViaApi(Post post) {
+        SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
+        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
+
+        Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id);
+        callSave.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Log.e("msg", "deu bom");
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("novo_postMoradia_tag", "editPostTag");
+                    startActivity(intent);
+                }
+                else{
+                    Log.e("msg", "deu bom ruim");
+                }
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("msg", "deu ruim");
+            }
+        });
+
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
+
+
+
 
     private void setarDados(Post post,View root){
         post.getPostMoradia().setEndereco(binding.etRuaUsuario.getText().toString());

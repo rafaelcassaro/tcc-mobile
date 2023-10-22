@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_color"
-    tools:context=".ui.perfil.PerfilFragment">
+    tools:context=".ui.perfil.EditarPerfilFragment">
 
     <View
         android:id="@+id/userImageContainer"
@@ -33,14 +33,13 @@
         android:id="@+id/containerComponents_cadastro"
         style="@style/ContainerComponents"
         android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_height="545dp"
 
 
-
+        app:layout_constraintBottom_toTopOf="@id/bt_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userImageContainer"
-        />
+        app:layout_constraintTop_toBottomOf="@id/userImageContainer" />
 
     <EditText
         android:id="@+id/et_nome"
@@ -48,6 +47,7 @@
         android:hint="nome"
         android:drawableRight="@drawable/ic_user"
         android:textColorHint="@color/Grey"
+        android:textColor="@color/black"
         android:inputType="text"
         app:layout_constraintTop_toTopOf="@+id/containerComponents_cadastro"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
@@ -60,6 +60,7 @@
         style="@style/Edit_Text_Login"
         android:hint="Email"
         android:textColorHint="@color/Grey"
+        android:textColor="@color/black"
         android:inputType="textEmailAddress"
         android:drawableRight="@drawable/ic_email"
         app:layout_constraintTop_toBottomOf="@+id/et_nome"
@@ -71,6 +72,7 @@
         style="@style/Edit_Text_Login"
         android:hint="Senha"
         android:textColorHint="@color/Grey"
+        android:textColor="@color/black"
         android:inputType="textPassword"
         android:drawableRight="@drawable/ic_eye"
         app:layout_constraintTop_toBottomOf="@+id/et_email"
@@ -84,6 +86,7 @@
         android:hint="Celular"
         android:textColorHint="@color/Grey"
         android:inputType="phone"
+        android:textColor="@color/black"
         android:drawableRight="@drawable/ic_celular"
         app:layout_constraintTop_toBottomOf="@+id/et_senha"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
@@ -111,6 +114,7 @@
         android:hint="Link"
         android:textColorHint="@color/Grey"
         android:inputType="textUri"
+        android:textColor="@color/black"
         android:drawableRight="@drawable/ic_link"
         app:layout_constraintTop_toBottomOf="@+id/tv_redes"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
@@ -123,8 +127,23 @@
         android:hint="Link"
         android:textColorHint="@color/Grey"
         android:inputType="textUri"
+        android:textColor="@color/black"
         android:drawableRight="@drawable/ic_link"
         app:layout_constraintTop_toBottomOf="@+id/et_link1"
+        app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
+        app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
+        />
+
+    <EditText
+        android:id="@+id/et_link3"
+        style="@style/Edit_Text_Login"
+        android:hint="Link"
+        android:textColor="@color/black"
+        android:textColorHint="@color/Grey"
+        android:inputType="textUri"
+
+        android:drawableRight="@drawable/ic_link"
+        app:layout_constraintTop_toBottomOf="@+id/et_link2"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
         app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         />
@@ -135,7 +154,7 @@
         android:id="@+id/bt_post"
         style="@style/ButtonGrey"
 
-        android:layout_margin="30dp"
+
         android:text="Salvar"
 
         app:layout_constraintTop_toBottomOf="@+id/containerComponents_cadastro"

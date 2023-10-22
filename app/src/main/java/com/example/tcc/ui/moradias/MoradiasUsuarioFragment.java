@@ -10,26 +10,21 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 
 import com.example.tcc.databinding.FragmentMoradiaUsuarioBinding;
-import com.example.tcc.db.MoradiasDb;
 import com.example.tcc.network.RetrofitConfigToken;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
-import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.adapter.MoradiasUsuarioAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.login.FormCadastro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +40,7 @@ public class MoradiasUsuarioFragment extends Fragment {
     private MoradiasUsuarioAdapter moradiasAdapter;
     private List<Post> db = new ArrayList<>();
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //HomeViewModel homeViewModel =  new ViewModelProvider(this).get(HomeViewModel.class);
@@ -54,8 +50,9 @@ public class MoradiasUsuarioFragment extends Fragment {
 
 
         //-------------rv
-        configAdapter(container);
+
         getMoradiasUsuario(container);
+        configAdapter(container);
 
         return root;
     }
@@ -69,12 +66,12 @@ public class MoradiasUsuarioFragment extends Fragment {
     private void configAdapter(ViewGroup container){
 
 
-
         moradiasAdapter = new MoradiasUsuarioAdapter(container.getContext(), new MoradiasUsuarioAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(getContext(), MoradiaUsuarioEditar.class);
-                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                 intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+               // Log.e("INTENT INICIADO", ":" + db.get(position).toString());
                 mStartForResult.launch(intent);
 
             }
@@ -92,6 +89,7 @@ public class MoradiasUsuarioFragment extends Fragment {
     });
 
     private void getMoradiasUsuario(ViewGroup container){
+
         //PEGAR TOKEN
         SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
         RetrofitConfigToken retrofitConfigToken = new RetrofitConfigToken();
@@ -107,24 +105,30 @@ public class MoradiasUsuarioFragment extends Fragment {
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
 
-                    List<Post> tempDb = new ArrayList<>();
-                    db = response.body();
-                    Log.e("Response body", "dados db local:" + db.toString());
-                    for (int i = 0; db.size()> i; i++){
-                        if(db.get(i).getPostMoradia() != null){
-                            tempDb.add(db.get(i));
+                    List<Post> tempDb = response.body();
+                    Log.e("TAMANHOOO", ": " + tempDb.size());
+                    //if(tempDb.size() != 0){
+                    Log.e("Response body", "dados db local:" + tempDb.toString());
+                    for (int i = 0; tempDb.size()> i; i++){
+                        Log.e("CHEGADO", ": " + tempDb.get(i));
+                        if(tempDb.get(i).getPostMoradia() != null){
+                            db.add(tempDb.get(i));
+                            Log.e("ADICIONADO", ": " + tempDb.get(i));
                         }
                     }
 
 
-                    moradiasAdapter.setPostagens(tempDb);
-                    Log.e("UserMoradiasResponseBody", "dados db local:" + db.toString());
-                    Log.e("UserMoradiasResponseBody", "dados ResponseBody:" + response.body());
-                    Log.e("UserMoradiasResponseBody", "dados ResponseBody:" + db.get(0).getPostMoradia());
+                        moradiasAdapter.setPostagens(db);
+                    //}
+
+                  //  Log.e("UserMoradiasResponseBody", "dados db local:" + db.size());
+                  //  Log.e("UserMoradiasResponseBody", "dados ResponseBody:" + response.body());
+                  //  Log.e("UserMoradiasResponseBody", "dados ResponseBody:" + db.get(0).getPostMoradia());
 
                 } else {
                     mostrarErro(container);
                 }
+
 
             }
 

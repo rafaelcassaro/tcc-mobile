@@ -50,7 +50,7 @@ public class PostagensFragment extends Fragment {
 
     private FragmentPostagensBinding binding;
     private PostAdapter postAdapter;
-    private List<Post> db = new ArrayList<>();
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,7 +64,7 @@ public class PostagensFragment extends Fragment {
         configAdapert(container);
         getDbBack(container);
 
-        Log.e("fim do codigo", "fim do codigo:" + db.size());
+
         return root;
     }
 
@@ -79,7 +79,7 @@ public class PostagensFragment extends Fragment {
 
         postAdapter = new PostAdapter(container.getContext());
         binding.rvPostagens.setAdapter(postAdapter);
-        Log.e("rv", "dados db:" + db.toString());
+       // Log.e("rv", "dados db:" + db.toString());
     }
 
     private void getDbBack(ViewGroup container){
@@ -93,6 +93,7 @@ public class PostagensFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()){
+                    List<Post> db = new ArrayList<>();
                     List<Post> tempDb ;
                     tempDb = response.body();
 
@@ -110,6 +111,7 @@ public class PostagensFragment extends Fragment {
                 else{
                     mostrarErro(container);
                 }
+
 
             }
 

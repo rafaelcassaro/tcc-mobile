@@ -36,9 +36,6 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
     private EditText cepEt;
     private EditText comentarioEt;
     private Button botaoEditar;
-    private List<Post> db = new ArrayList<>();
-    private CepApi cepApiDados = new CepApi();
-    private RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
 
 
     @Override
@@ -48,7 +45,7 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
 
         Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
         iniciarViews();
-
+        RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
 
         Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getCidade());
         Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getEstado());
@@ -68,13 +65,12 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
                 setarDados(post);
 
                 Integer cep = Integer.valueOf(cepEt.getText().toString());
-
                 Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
                 callApi.enqueue(new Callback<CepApi>() {
                     @Override
                     public void onResponse(Call<CepApi> call, Response<CepApi> response) {
                         if (response.isSuccessful()){
-                            cepApiDados = response.body();
+                            CepApi cepApiDados = response.body();
                             post.setCidade(cepApiDados.getCity());
                             post.setEstado(cepApiDados.getState());
 
@@ -84,6 +80,7 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
                         else {
 
                         }
+
                     }
 
                     @Override
@@ -111,7 +108,7 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
         Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
         //Long idPost = post.getPostMoradia().getId();
 
-        Integer cep = Integer.valueOf(cepEt.getText().toString());
+
 
         Call<Void> call=retrofitConfig.getPostService().updatePost(post, id);
 
@@ -129,6 +126,7 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
                 else {
                     Log.e("EDITAR POSTMORADIA", "deu ruim"+ post.getDataPost());
                 }
+
 
             }
 

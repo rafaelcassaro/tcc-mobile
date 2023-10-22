@@ -110,6 +110,7 @@ public class PostagensUsuarioFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()){
+
                     List<Post> tempDb ;
                     tempDb = response.body();
 
@@ -118,14 +119,15 @@ public class PostagensUsuarioFragment extends Fragment {
                             db.add(post);
                         }
                     }
-                    Log.e("Response body", "dados db local:" + db.toString());
+                   // Log.e("Response body", "dados db local:" + db.toString());
                     postAdapter.setPostagens(db);
-                    Log.e("Response body", "dados ResponseBody:" + response.body());
+                   // Log.e("Response body", "dados ResponseBody:" + response.body());
 
                 }
                 else{
                     mostrarErro(container);
                 }
+
 
             }
 

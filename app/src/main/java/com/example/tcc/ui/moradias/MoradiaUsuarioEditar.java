@@ -12,9 +12,12 @@ import android.widget.EditText;
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
+import com.example.tcc.network.RetrofitConfigCepApi;
+import com.example.tcc.network.entities.CepApi;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.example.tcc.ui.postagens.PostagensUsuarioEditar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -24,6 +27,7 @@ import retrofit2.Response;
 
 public class MoradiaUsuarioEditar extends AppCompatActivity {
 
+    private EditText cepEt;
     private EditText ruaEt;
     private EditText numCasaEt;
     private EditText comentarioEt;
@@ -34,7 +38,6 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     private ChipGroup chipGaragem;
     private ChipGroup chipGeneroRep;
     private Button botaoEditar;
-    //private Post postagemEviar;
 
 
     @Override
@@ -44,23 +47,25 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
         //Pegar dados do post clicado com a constante EXTRA_SHOW
         Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
+        final RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
 
         iniciarViews();
         //PEGAR O TOKEN SALVO E APLICAR NA CONEXAO COM O END-POINT "retrofitConfig"
-        SecurityPreferences securityPreferences = new SecurityPreferences(getApplicationContext());
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
 
         //TRANSFERIR OS VALORES INT E DOUBLE DO POST PARA OS ET DA VIEW
         int numMoradores = Integer.valueOf(post.getPostMoradia().getDetalhesMoradia().getMoradores());
         int numCasa = Integer.valueOf(post.getPostMoradia().getNumCasa());
         double valorAluguel = Double.valueOf(post.getPostMoradia().getValorAluguel());
 
+
         comentarioEt.setText(post.getComentario());
         ruaEt.setText(post.getPostMoradia().getEndereco());
         numMoradoresEt.setText(String.valueOf(numMoradores));
         numCasaEt.setText(String.valueOf(numCasa));
         aluguelEt.setText(String.valueOf(valorAluguel));
+        cepEt.setText(String.valueOf(post.getCep()));
+
         selecionarChips(post);
 
 
@@ -72,39 +77,97 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 setarDados(post);
 
 
-                //Call<Void> call= new RetrofitConfig(new SecurityPreferences(getApplicationContext()).getAuthToken(TaskConstants.SHARED.TOKEN_KEY))
-                //        .getPostService().updatePost(editPost,editPost.getUsuario().getId(), editPost.getPostMoradia().getId());
-                Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
-                Long idMoradia = post.getPostMoradia().getId();
-
-                //DAR UPDATE NO POST SELECIONADO
-                Call<Void> call=retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
-                //Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getPostMoradia().getId());
-                call.enqueue(new Callback<Void>() {
+                Integer cep = Integer.valueOf(cepEt.getText().toString());
+                Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+                callApi.enqueue(new Callback<CepApi>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if(response.isSuccessful()){
-                            // Crie uma instância do seu Fragment
-                            Intent intent = new Intent(MoradiaUsuarioEditar.this, MainActivity.class);
-                            //intent.putExtra("fragment_tag", "SeuFragmentTag");
-                            startActivity(intent);
+                    public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                        if (response.isSuccessful()){
+                            CepApi cepApiDados = response.body();
+                            post.setCidade(cepApiDados.getCity());
+                            post.setEstado(cepApiDados.getState());
+                            post.setCep(cepApiDados.getCep());
+                            salvarViaApi(post);
 
-                            Log.e("EDITAR POSTMORADIA", "deu bom");
+
                         }
-                        else{
-                            Log.e("EDITAR POSTMORADIA", "deu ruim"+ post.getDataPost());
+                        else {
+
                         }
+
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.e("EDITAR POSTMORADIA", "deu erro:"+ t);
+                    public void onFailure(Call<CepApi> call, Throwable t) {
 
                     }
                 });
 
+                //Call<Void> call= new RetrofitConfig(new SecurityPreferences(getApplicationContext()).getAuthToken(TaskConstants.SHARED.TOKEN_KEY))
+                //        .getPostService().updatePost(editPost,editPost.getUsuario().getId(), editPost.getPostMoradia().getId());
+
+
             }
         });
+    }
+
+    private void salvarViaApi(Post post) {
+        SecurityPreferences securityPreferences = new SecurityPreferences(getApplicationContext());
+        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+        Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
+        Long idMoradia = post.getPostMoradia().getId();
+
+        //DAR UPDATE NO POST SELECIONADO
+        Call<Void> call=retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
+        //Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getPostMoradia().getId());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    // Crie uma instância do seu Fragment
+                    Intent intent = new Intent(MoradiaUsuarioEditar.this, MainActivity.class);
+                    intent.putExtra("editar_postMoradia_tag", "editPostTag");
+                    startActivity(intent);
+
+                    Log.e("EDITAR POSTMORADIA", "deu bom");
+                }
+                else{
+                    Log.e("EDITAR POSTMORADIA", "deu ruim"+ post.getDataPost());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("EDITAR POSTMORADIA", "deu erro:"+ t);
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //retrofitConfigCepApi = null;
+        //securityPreferences = null;
+        //retrofitConfig = null;
+
+    }
+
+    private void iniciarViews(){
+        cepEt = findViewById(R.id.et_cep_usuario);
+        ruaEt = findViewById(R.id.et_rua_usuario) ;
+        numCasaEt = findViewById(R.id.et_num_casa_usuario);
+        comentarioEt= findViewById(R.id.et_comentario_anuncio) ;
+        numMoradoresEt= findViewById(R.id.et_num_moradores_usuario) ;
+        aluguelEt= findViewById(R.id.et_aluguel_usuario) ;
+        chipAp = findViewById(R.id.chip_ap) ;
+        chipPet = findViewById(R.id.chips_pet) ;
+        chipGaragem = findViewById(R.id.chips_garagem) ;
+        chipGeneroRep = findViewById(R.id.chips_genero) ;
+        botaoEditar = findViewById(R.id.bt_publicar_edicao);
     }
 
 
@@ -218,18 +281,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     //verificarChip(chipAp,  R.id.chip_ap_apart, R.id.chip_ap_casa)
 
 
-    private void iniciarViews(){
-        ruaEt = findViewById(R.id.et_rua_usuario) ;
-        numCasaEt = findViewById(R.id.et_num_casa_usuario);
-        comentarioEt= findViewById(R.id.et_comentario_anuncio) ;
-        numMoradoresEt= findViewById(R.id.et_num_moradores_usuario) ;
-        aluguelEt= findViewById(R.id.et_aluguel_usuario) ;
-        chipAp = findViewById(R.id.chip_ap) ;
-        chipPet = findViewById(R.id.chips_pet) ;
-        chipGaragem = findViewById(R.id.chips_garagem) ;
-        chipGeneroRep = findViewById(R.id.chips_genero) ;
-        botaoEditar = findViewById(R.id.bt_publicar_edicao);
-    }
+
 
     private void selecionarChips(Post post){
         //tipo da residencia

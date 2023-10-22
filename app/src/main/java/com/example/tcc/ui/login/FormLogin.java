@@ -1,24 +1,23 @@
-package com.example.tcc;
+package com.example.tcc.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tcc.MainActivity;
+import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Usuario;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.login.FormCadastro;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -90,6 +89,7 @@ public class FormLogin extends AppCompatActivity {
                             mostrarErro(FormLogin.this, "Usuario ou senha inválida");
                             // Log.e("login user", "deu ruim: " + response);
                         }
+
                     }
 
                     @Override
