@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.ImageService;
 import com.example.tcc.network.services.PostService;
 import com.example.tcc.network.services.UserService;
 import com.example.tcc.ui.constants.TaskConstants;
@@ -94,6 +95,7 @@ public class RetrofitConfig {
     }
 
     public PostService getPostService(){return this.retrofit.create(PostService.class);}
+    public ImageService getImageService(){return this.retrofit.create(ImageService.class);}
 
 
 

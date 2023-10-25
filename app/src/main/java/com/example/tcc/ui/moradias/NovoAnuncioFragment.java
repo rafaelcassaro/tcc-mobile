@@ -1,16 +1,29 @@
 package com.example.tcc.ui.moradias;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
@@ -20,13 +33,27 @@ import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.RetrofitConfigCepApi;
 import com.example.tcc.network.entities.CepApi;
 import com.example.tcc.network.entities.Detalhes;
+import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestHandler;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,8 +63,9 @@ public class NovoAnuncioFragment extends Fragment {
 
     private FragmentNovoAnuncioBinding binding;
 
-
-
+    private ActivityResultLauncher<Intent> resultLauncher;
+    private ImageView imageView;
+    private Uri imageUri;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -55,6 +83,78 @@ public class NovoAnuncioFragment extends Fragment {
         Detalhes detalhesMoradia = new Detalhes();
         post.setPostMoradia(moradia);
         post.getPostMoradia().setDetalhesMoradia(detalhesMoradia);
+
+        //Log.e("IMG", ": " + imageUri.toString());
+        registerResult();
+
+    /*    if(imageUri != null){
+            Log.e("IMG depois", ": " + imageUri.toString());
+        }
+
+        binding.btAddImg.setOnClickListener(view -> pickImage());
+        //acima e salvar a img no back pelo metodo pickImage q chama o registerResult
+
+
+
+
+        //mostrar na tela a img pega do back pelo picasso
+        binding.btRemoveImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
+                Picasso picasso = new Picasso.Builder(getContext())
+                        .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
+                        .build();
+
+// Use o Picasso configurado para carregar a imagem
+                picasso.load("http://192.168.1.107:8080/imagens/Imagem1.jpg") // URL da imagem obtida do JSON
+                        .into(binding.ivFotosUsuario);
+            }
+        });
+
+
+
+
+
+
+
+
+
+        /*binding.btAddImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
+                RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+                File imageFile = new File(getRealPathFromUri(getContext(), imageUri));
+
+                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+                RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
+                MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
+
+                // Enviar a imagem usando Retrofit
+                Call<String> call = retrofitConfig.getImageService().uploadImage(imagemPart);
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        // Lidar com a resposta do servidor, se houver
+                        if (response.isSuccessful()) {
+                            String resposta = response.body();
+                            // Faça algo com a resposta do servidor, se necessário
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        // Lidar com erros na requisição
+                    }
+                });
+
+
+            }
+        });*/
+
 
 
         binding.btPublicar.setOnClickListener(new View.OnClickListener() {
@@ -119,24 +219,123 @@ public class NovoAnuncioFragment extends Fragment {
         return root;
     }
 
+    private OkHttpClient getOkHttpClientWithAuthorization(final String token) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(new Interceptor() {
+            @NonNull
+            @Override
+            public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+                okhttp3.Request original = chain.request();
+                Request request = original
+                        .newBuilder()
+                        .addHeader("Authorization", token)
+                        .method(original.method(), original.body())
+                        .build();
+
+                return chain.proceed(request);
+            }
+        });
+        return httpClient.build();
+
+    }
+
+    public String getRealPathFromUri(Context context, Uri uri) {
+        String realPath = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            if (cursor.moveToFirst()) {
+                realPath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+        }
+
+        return realPath;
+    }
+
+    private void pickImage(){
+        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        resultLauncher.launch(intent);
+    }
+
+    private void registerResult(){
+        resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                try {
+                    imageUri = result.getData().getData();
+                    Log.e("IMG", ": " + imageUri.toString());
+                    binding.ivFotosUsuario.setImageURI(imageUri);
+
+                    SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
+                    RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                    retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+                    File imageFile = new File(getRealPathFromUri(getContext(), imageUri));
+
+                   // RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+                    RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
+                    MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
+
+                    // Enviar a imagem usando Retrofit
+                    Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagemPart, 1L);
+                    call.enqueue(new Callback<Fotos>() {
+                        @Override
+                        public void onResponse(Call<Fotos> call, Response<Fotos> response) {
+                            // Lidar com a resposta do servidor, se houver
+                            if (response.isSuccessful()) {
+                                Fotos resposta = response.body();
+                                // Faça algo com a resposta do servidor, se necessário
+                                Log.e("json bom", ": " + resposta);
+                            }
+                            else {
+                                Log.e("json rum", ": " + response.body());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Fotos> call, Throwable t) {
+                            // Lidar com erros na requisição
+                            Log.e("JSON ERRO", ": " + t.getMessage());
+                        }
+                    });
+
+
+
+
+
+
+                }catch (Exception e){
+                    Log.e("sem img", "sem");
+                }
+
+            }
+        });
+    }
+
     private void salvarViaApi(Post post) {
         SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
-
-        Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id);
-        callSave.enqueue(new Callback<Void>() {
+        post.getPostMoradia().setFotos(new ArrayList<>());
+        Call<Post> callSave = retrofitConfig.getPostService().createPost(post, id);
+        callSave.enqueue(new Callback<Post>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Post> call, Response<Post> response) {
                 if(response.isSuccessful()){
-                    Log.e("msg", "deu bom");
+                    Log.e("NovoAnuncio", "deu bom" + response.body().toString());
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.putExtra("novo_postMoradia_tag", "editPostTag");
                     startActivity(intent);
                 }
                 else{
-                    Log.e("msg", "deu bom ruim");
+                    Log.e("NovoAnuncio", "deu bom ruim");
                 }
 
 
@@ -144,8 +343,8 @@ public class NovoAnuncioFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("msg", "deu ruim");
+            public void onFailure(Call<Post> call, Throwable t) {
+                Log.e("NovoAnuncio", "deu ruim");
             }
         });
 

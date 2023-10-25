@@ -29,6 +29,7 @@ import com.example.tcc.ui.constants.TaskConstants;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -118,7 +119,7 @@ public class NovaPostagemFragment extends Fragment {
         //post.setPostMoradia(new PostMoradia());
         //post.getPostMoradia().setDetalhesMoradia(new Detalhes());
 
-        Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id);
+        /*Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id );
         callSave.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -140,6 +141,6 @@ public class NovaPostagemFragment extends Fragment {
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("msg", "deu ruim");
             }
-        });
+        });*/
     }
 }

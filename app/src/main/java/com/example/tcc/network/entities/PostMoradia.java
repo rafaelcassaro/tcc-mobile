@@ -1,6 +1,8 @@
 package com.example.tcc.network.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostMoradia implements Serializable {
 
@@ -10,6 +12,7 @@ public class PostMoradia implements Serializable {
     private Integer numCasa;
     private Double valorAluguel;
     private Detalhes detalhes;
+    private List<Fotos> fotos;
 
     public PostMoradia() {
     }
@@ -21,6 +24,7 @@ public class PostMoradia implements Serializable {
         this.numCasa = numCasa;
         this.valorAluguel = valorAluguel;
         this.detalhes = detalhes;
+        fotos = new ArrayList<>();
     }
 
     public Long getId() {
@@ -69,4 +73,19 @@ public class PostMoradia implements Serializable {
         this.detalhes = detalhes;
     }
 
+    public Detalhes getDetalhes() {
+        return detalhes;
+    }
+
+    public void setDetalhes(Detalhes detalhes) {
+        this.detalhes = detalhes;
+    }
+
+    public List<Fotos> getFotos() {
+        return fotos;
+    }
+
+    public void setFotos(List<Fotos> fotos) {
+        this.fotos = fotos;
+    }
 }
