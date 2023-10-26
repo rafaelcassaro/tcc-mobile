@@ -121,7 +121,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
         //DAR UPDATE NO POST SELECIONADO
         Call<Void> call=retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
-        //Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getPostMoradia().getId());
+        Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getPostMoradia().getId());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

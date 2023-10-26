@@ -19,6 +19,7 @@ import com.example.tcc.network.SessaoManager;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.CepApi;
 import com.example.tcc.network.entities.Detalhes;
+import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
 import com.example.tcc.network.entities.Usuario;
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,13 +118,15 @@ public class NovaPostagemFragment extends Fragment {
         post.setCep(binding.etCepUsuario.getText().toString());
         post.setQntdDenuncia(0);
 
-        //post.setPostMoradia(new PostMoradia());
-        //post.getPostMoradia().setDetalhesMoradia(new Detalhes());
+       // List<Fotos> fotos = new ArrayList<>();
+       // post.setPostMoradia(new PostMoradia());
+       // post.getPostMoradia().setDetalhesMoradia(new Detalhes());
+       // post.getPostMoradia().setFotos(fotos);
 
-        /*Call<Void> callSave = retrofitConfig.getPostService().createPost(post, id );
-        callSave.enqueue(new Callback<Void>() {
+        Call<Post> callSave = retrofitConfig.getPostService().createPost(post, id );
+        callSave.enqueue(new Callback<Post>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Post> call, Response<Post> response) {
                 if(response.isSuccessful()){
                     Log.e("msg", "deu bom");
                     Intent intent = new Intent(getContext(), MainActivity.class);
@@ -130,7 +134,7 @@ public class NovaPostagemFragment extends Fragment {
                     startActivity(intent);
                 }
                 else{
-                    Log.e("msg", "deu bom ruim");
+                    //Log.e("msg", "deu bom ruim"+ response.errorBody());
                 }
 
 
@@ -138,9 +142,9 @@ public class NovaPostagemFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Post> call, Throwable t) {
                 Log.e("msg", "deu ruim");
             }
-        });*/
+        });
     }
 }

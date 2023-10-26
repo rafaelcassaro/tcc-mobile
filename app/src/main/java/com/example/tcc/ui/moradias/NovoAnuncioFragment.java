@@ -47,6 +47,7 @@ import com.squareup.picasso.RequestHandler;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -62,10 +63,10 @@ import retrofit2.Response;
 public class NovoAnuncioFragment extends Fragment {
 
     private FragmentNovoAnuncioBinding binding;
-
     private ActivityResultLauncher<Intent> resultLauncher;
     private ImageView imageView;
     private Uri imageUri;
+    private List<MultipartBody.Part> imagemLista = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -83,11 +84,12 @@ public class NovoAnuncioFragment extends Fragment {
         Detalhes detalhesMoradia = new Detalhes();
         post.setPostMoradia(moradia);
         post.getPostMoradia().setDetalhesMoradia(detalhesMoradia);
+        post.getPostMoradia().setFotos(new ArrayList<>());
 
         //Log.e("IMG", ": " + imageUri.toString());
         registerResult();
 
-    /*    if(imageUri != null){
+       if(imageUri != null){
             Log.e("IMG depois", ": " + imageUri.toString());
         }
 
@@ -95,7 +97,7 @@ public class NovoAnuncioFragment extends Fragment {
         //acima e salvar a img no back pelo metodo pickImage q chama o registerResult
 
 
-
+/*
 
         //mostrar na tela a img pega do back pelo picasso
         binding.btRemoveImg.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +188,7 @@ public class NovoAnuncioFragment extends Fragment {
                             post.setEstado(cepApiDados.getState());
                             post.setCep(cepApiDados.getCep());
                             post.setQntdDenuncia(0);
+
                             salvarViaApi(post);
 
                         }
@@ -281,42 +284,51 @@ public class NovoAnuncioFragment extends Fragment {
                    // RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
                     RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
                     MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
-
+                    imagemLista.add(imagemPart);
                     // Enviar a imagem usando Retrofit
-                    Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagemPart, 1L);
-                    call.enqueue(new Callback<Fotos>() {
-                        @Override
-                        public void onResponse(Call<Fotos> call, Response<Fotos> response) {
-                            // Lidar com a resposta do servidor, se houver
-                            if (response.isSuccessful()) {
-                                Fotos resposta = response.body();
-                                // Faça algo com a resposta do servidor, se necessário
-                                Log.e("json bom", ": " + resposta);
-                            }
-                            else {
-                                Log.e("json rum", ": " + response.body());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Fotos> call, Throwable t) {
-                            // Lidar com erros na requisição
-                            Log.e("JSON ERRO", ": " + t.getMessage());
-                        }
-                    });
 
 
 
 
 
 
-                }catch (Exception e){
+
+                }
+                catch (Exception e){
                     Log.e("sem img", "sem");
                 }
 
             }
         });
     }
+
+
+    private void SalvarImagemViaApi(RetrofitConfig retrofitConfig,Long id, MultipartBody.Part imagem){
+
+        Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagem, id);
+        call.enqueue(new Callback<Fotos>() {
+            @Override
+            public void onResponse(Call<Fotos> call, Response<Fotos> response) {
+                // Lidar com a resposta do servidor, se houver
+                if (response.isSuccessful()) {
+                    Fotos resposta = response.body();
+                    // Faça algo com a resposta do servidor, se necessário
+                    Log.e("json bom", ": " + resposta);
+                }
+                else {
+                    Log.e("json rum", ": " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Fotos> call, Throwable t) {
+                // Lidar com erros na requisição
+                Log.e("JSON ERRO", ": " + t.getMessage());
+            }
+        });
+    }
+
+
 
     private void salvarViaApi(Post post) {
         SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
@@ -325,11 +337,24 @@ public class NovoAnuncioFragment extends Fragment {
         Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
         post.getPostMoradia().setFotos(new ArrayList<>());
         Call<Post> callSave = retrofitConfig.getPostService().createPost(post, id);
+
         callSave.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
                 if(response.isSuccessful()){
+                    Post tempoPost = response.body();
+                    Long idMoradia = tempoPost.getPostMoradia().getId();
                     Log.e("NovoAnuncio", "deu bom" + response.body().toString());
+                    Log.e("NovoAnuncio", "IDIDIDI" + id);
+
+
+
+                    for(int i = 0; i < imagemLista.size(); i++){
+                        SalvarImagemViaApi(retrofitConfig, idMoradia, imagemLista.get(i));
+                    }
+
+
+
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.putExtra("novo_postMoradia_tag", "editPostTag");
                     startActivity(intent);
@@ -346,6 +371,8 @@ public class NovoAnuncioFragment extends Fragment {
             public void onFailure(Call<Post> call, Throwable t) {
                 Log.e("NovoAnuncio", "deu ruim");
             }
+
+
         });
 
     }
@@ -353,6 +380,7 @@ public class NovoAnuncioFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
     }
 

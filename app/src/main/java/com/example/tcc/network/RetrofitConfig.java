@@ -53,7 +53,7 @@ public class RetrofitConfig {
         }
 
         this.retrofit = new Retrofit.Builder()
-                //.baseUrl("http://10.0.2.2:8080/") para o emulador
+                //.baseUrl("http://10.0.2.2:8080/") //para o emulador
                 .baseUrl("http://192.168.1.107:8080/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))

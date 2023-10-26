@@ -1,6 +1,8 @@
 package com.example.tcc.network.entities;
 
-public class Fotos {
+import java.io.Serializable;
+
+public class Fotos implements Serializable {
 
     private Long id;
     private String nomeFoto;
