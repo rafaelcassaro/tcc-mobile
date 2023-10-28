@@ -100,16 +100,6 @@ public class NovoAnuncioFragment extends Fragment {
             public void onClick(View v) {
 
 
-               /* if ( imageUriList.size() != 0) {
-                    if(imageUriList.get(binding.ivFotosUsuario.getSelectedPosition()) !=null){
-                        imageUriList.remove(binding.ivFotosUsuario.getSelectedPosition());
-                        configAdapter();
-                    }
-
-
-                }*/
-
-
                 if (!imageUriList.isEmpty() && binding.ivFotosUsuario.getSelectedPosition() >= 0 && binding.ivFotosUsuario.getSelectedPosition() < imageUriList.size()) {
 
                     imageUriList.remove(binding.ivFotosUsuario.getSelectedPosition());
@@ -121,8 +111,6 @@ public class NovoAnuncioFragment extends Fragment {
                     imagemAdapter.setImagem(imageUriList);
 
                 }
-
-
 
             }
         });

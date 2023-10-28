@@ -4,13 +4,19 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -22,21 +28,30 @@ import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.RetrofitConfigCepApi;
 import com.example.tcc.network.entities.CepApi;
+import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.ImagemAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.postagens.PostagensUsuarioEditar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,17 +76,19 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     private ActivityResultLauncher<Intent> resultLauncher;
     private Uri imageUri;
     private Uri imgNotFound;
+    private Uri imgPicasso;
     private CarouselRecyclerview recyclerview;
     private List<MultipartBody.Part> imagemLista = new ArrayList<>();
     private List<Uri> imageUriList = new ArrayList<>();
     private ImagemAdapter imagemAdapter;
+    private boolean carregarImgs = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moradia_usuario_editar_layout);
-
+        iniciarViews();
         //Pegar dados do post clicado com a constante EXTRA_SHOW
         Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
         final RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
@@ -82,8 +99,8 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         recyclerview.setInfinite(true);
         recyclerview.setFlat(true);
 
+        carregarImagemPost(post);
 
-        iniciarViews();
         //PEGAR O TOKEN SALVO E APLICAR NA CONEXAO COM O END-POINT "retrofitConfig"
 
 
@@ -101,13 +118,28 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         cepEt.setText(String.valueOf(post.getCep()));
 
         selecionarChips(post);
-
-
         registerResult();
-        imagemAdapter.setImagem(imageUriList);
+
 
         btAddImg.setOnClickListener(view -> pickImage());
 
+        btRemoveImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!imageUriList.isEmpty() && recyclerview.getSelectedPosition() >= 0 && recyclerview.getSelectedPosition() < imageUriList.size()) {
+
+                    imageUriList.remove(recyclerview.getSelectedPosition());
+                    if (imageUriList.isEmpty()){
+                        // imgNotFound = Uri.parse("android.resource://"+  getContext().getPackageName()  + "/" + R.drawable.img_not_found_little);
+                        imageUriList.add(imgNotFound);
+                        // imagemAdapter.setImagem(imageUriList);
+                    }
+                    imagemAdapter.setImagem(imageUriList);
+
+                }
+            }
+        });
 
         botaoEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,11 +158,12 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                             post.setCidade(cepApiDados.getCity());
                             post.setEstado(cepApiDados.getState());
                             post.setCep(cepApiDados.getCep());
-                            salvarViaApi(post);
-
+                            EditarPostViaApi(post);
+                            Log.e("BOTAO EDITAR CEP", "RETORNO BOM: "+ response.errorBody());
 
                         }
                         else {
+                            Log.e("BOTAO EDITAR CEP", "RETORNO ERROR: "+ response.errorBody());
 
                         }
 
@@ -138,6 +171,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<CepApi> call, Throwable t) {
+                        Log.e("BOTAO EDITAR CEP", "INTERNAL ERROR: "+ t.getMessage().toString());
 
                     }
                 });
@@ -151,7 +185,36 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     }
 
-    private void salvarViaApi(Post post) {
+
+    private File createImageFileFromBitmap(Bitmap bitmap) {
+        File imageFile = null;
+        FileOutputStream fos = null;
+
+        try {
+            // Crie um arquivo temporário no diretório de armazenamento externo
+            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            imageFile = File.createTempFile("image", ".jpg", storageDir);
+
+            // Salve o Bitmap como um arquivo JPEG
+            fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (IOException e) {
+            // Lidar com exceções, se ocorrerem
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return imageFile;
+    }
+
+    private void EditarPostViaApi(Post post) {
         SecurityPreferences securityPreferences = new SecurityPreferences(getApplicationContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
@@ -167,6 +230,13 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
                     // Crie uma instância do seu Fragment
+
+                    for(int i = 0; i < imagemLista.size(); i++){
+                        salvarImagemViaApi(retrofitConfig, idMoradia, imagemLista.get(i));
+                    }
+
+
+
                     Intent intent = new Intent(MoradiaUsuarioEditar.this, MainActivity.class);
                     intent.putExtra("editar_postMoradia_tag", "editPostTag");
                     startActivity(intent);
@@ -213,7 +283,6 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         recyclerview = findViewById(R.id.iv_fotos_usuario);
     }
 
-
     private void setarDados(Post post){
         post.getPostMoradia().setEndereco(ruaEt.getText().toString());
         post.getPostMoradia().setNumCasa(Integer.valueOf(numCasaEt.getText().toString()));
@@ -232,6 +301,77 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     }
 
     //---------------------LIDAR COM IMAGEM-----------------------------------
+
+    private void carregarImagemPost(Post post){
+
+
+        if(!carregarImgs) {
+            carregarImgs = true;
+            SecurityPreferences securityPreferences = new SecurityPreferences(MoradiaUsuarioEditar.this);
+            Picasso picasso = new Picasso.Builder(MoradiaUsuarioEditar.this)
+                    .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
+                    .build();
+
+            //  picasso.load("http://192.168.1.107:8080/imagens/Imagem1.jpg").into(target);
+            Log.e("IMG PICAASO", ": " + imgPicasso);
+
+            int numImagens = post.getPostMoradia().getFotos().size();
+
+            for (int i = 0; i < numImagens; i++) {
+                String nomeImg = post.getPostMoradia().getFotos().get(i).getNomeFoto();
+                picasso.load("http://192.168.1.107:8080/imagens/" + nomeImg).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        File imageFile = createImageFileFromBitmap(bitmap);
+
+                        if (imageFile != null) {
+                            imgPicasso = Uri.fromFile(imageFile);
+                            imageUriList.add(imgPicasso);
+                            imagemAdapter.setImagem(imageUriList);
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+            }
+        }
+    }
+
+    private void salvarImagemViaApi(RetrofitConfig retrofitConfig,Long id, MultipartBody.Part imagem){
+
+        Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagem, id);
+        call.enqueue(new Callback<Fotos>() {
+            @Override
+            public void onResponse(Call<Fotos> call, Response<Fotos> response) {
+                // Lidar com a resposta do servidor, se houver
+                if (response.isSuccessful()) {
+                    Fotos resposta = response.body();
+                    // Faça algo com a resposta do servidor, se necessário
+                    Log.e("json bom", ": " + resposta);
+                }
+                else {
+                    Log.e("json rum", ": " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Fotos> call, Throwable t) {
+                // Lidar com erros na requisição
+                Log.e("JSON ERRO", ": " + t.getMessage());
+            }
+        });
+    }
 
     private void pickImage(){
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
@@ -290,8 +430,26 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         return realPath;
     }
 
+    private OkHttpClient getOkHttpClientWithAuthorization(final String token) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
+        httpClient.addInterceptor(new Interceptor() {
+            @NonNull
+            @Override
+            public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+                okhttp3.Request original = chain.request();
+                Request request = original
+                        .newBuilder()
+                        .addHeader("Authorization", token)
+                        .method(original.method(), original.body())
+                        .build();
 
+                return chain.proceed(request);
+            }
+        });
+        return httpClient.build();
+
+    }
 
     //-------------------BOTOES------------------------------------------
 
