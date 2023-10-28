@@ -1,10 +1,9 @@
 package com.example.tcc.ui.moradias;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,7 +12,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -21,14 +19,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentNovoAnuncioBinding;
-import com.example.tcc.databinding.FragmentPostagensUsuarioBinding;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.RetrofitConfigCepApi;
 import com.example.tcc.network.entities.CepApi;
@@ -37,12 +33,10 @@ import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.ui.adapter.ImagemAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.squareup.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,14 +60,15 @@ public class NovoAnuncioFragment extends Fragment {
     private ActivityResultLauncher<Intent> resultLauncher;
     private ImageView imageView;
     private Uri imageUri;
+    private Uri imgNotFound;
     private List<MultipartBody.Part> imagemLista = new ArrayList<>();
+    private List<Uri> imageUriList = new ArrayList<>();
+    private ImagemAdapter imagemAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentNovoAnuncioBinding.inflate(inflater, container, false);
-
         View root = binding.getRoot();
        // iniciarViews();
         //Post post = new Post();
@@ -85,92 +80,56 @@ public class NovoAnuncioFragment extends Fragment {
         post.setPostMoradia(moradia);
         post.getPostMoradia().setDetalhesMoradia(detalhesMoradia);
         post.getPostMoradia().setFotos(new ArrayList<>());
+        imagemAdapter = new ImagemAdapter(container.getContext());
 
-        //Log.e("IMG", ": " + imageUri.toString());
+        imagemAdapter.setImagem(imageUriList);
+
+        binding.ivFotosUsuario.setAdapter(imagemAdapter);
+        binding.ivFotosUsuario.setInfinite(true);
+        // binding.ivFotosUsuario.set3DItem(true);
+        binding.ivFotosUsuario.setFlat(true);
+
+
         registerResult();
 
-       if(imageUri != null){
-            Log.e("IMG depois", ": " + imageUri.toString());
-        }
+        configAdapter();
+        binding.btAddImg.setOnClickListener(view -> pickImage());  //coloca uma imagem na lista uri e atualiza o rv das imgs
 
-        binding.btAddImg.setOnClickListener(view -> pickImage());
-        //acima e salvar a img no back pelo metodo pickImage q chama o registerResult
-
-
-/*
-
-        //mostrar na tela a img pega do back pelo picasso
         binding.btRemoveImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
-                Picasso picasso = new Picasso.Builder(getContext())
-                        .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
-                        .build();
-
-// Use o Picasso configurado para carregar a imagem
-                picasso.load("http://192.168.1.107:8080/imagens/Imagem1.jpg") // URL da imagem obtida do JSON
-                        .into(binding.ivFotosUsuario);
-            }
-        });
 
 
-
-
-
-
-
-
-
-        /*binding.btAddImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
-                RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-                retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-
-                File imageFile = new File(getRealPathFromUri(getContext(), imageUri));
-
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
-                RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
-                MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
-
-                // Enviar a imagem usando Retrofit
-                Call<String> call = retrofitConfig.getImageService().uploadImage(imagemPart);
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        // Lidar com a resposta do servidor, se houver
-                        if (response.isSuccessful()) {
-                            String resposta = response.body();
-                            // Faça algo com a resposta do servidor, se necessário
-                        }
+               /* if ( imageUriList.size() != 0) {
+                    if(imageUriList.get(binding.ivFotosUsuario.getSelectedPosition()) !=null){
+                        imageUriList.remove(binding.ivFotosUsuario.getSelectedPosition());
+                        configAdapter();
                     }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        // Lidar com erros na requisição
+
+                }*/
+
+
+                if (!imageUriList.isEmpty() && binding.ivFotosUsuario.getSelectedPosition() >= 0 && binding.ivFotosUsuario.getSelectedPosition() < imageUriList.size()) {
+
+                    imageUriList.remove(binding.ivFotosUsuario.getSelectedPosition());
+                    if (imageUriList.isEmpty()){
+                       // imgNotFound = Uri.parse("android.resource://"+  getContext().getPackageName()  + "/" + R.drawable.img_not_found_little);
+                        imageUriList.add(imgNotFound);
+                       // imagemAdapter.setImagem(imageUriList);
                     }
-                });
+                    imagemAdapter.setImagem(imageUriList);
+
+                }
+
 
 
             }
-        });*/
-
-
+        });
 
         binding.btPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*String endereco = binding.etRuaUsuario.getText().toString();
-                String teste = "fasdfasdf";
-                post.setCidade(binding.etRuaUsuario.getText().toString());
-               // post.getPostMoradia().setEndereco(endereco);
-                Log.e("VERIFICAR ", "deu bom "+ binding.etRuaUsuario.getText().toString());
-                Log.e("VERIFICAR POST ", "deu bom "+ post.toString());
-                Log.e("VERIFICAR POST ", "deu bom "+ post.toString());
-                Log.e("VERIFICAR string recebida ", "deu bom "+ endereco);*/
-
 
 
                 setarDados(post, root);
@@ -189,7 +148,7 @@ public class NovoAnuncioFragment extends Fragment {
                             post.setCep(cepApiDados.getCep());
                             post.setQntdDenuncia(0);
 
-                            salvarViaApi(post);
+                            salvarPostagemViaApi(post);
 
                         }
                         else {
@@ -204,22 +163,23 @@ public class NovoAnuncioFragment extends Fragment {
                     }
                 });
 
-                //ChipGroup chipGroup = root.findViewById(R.id.chip_ap);
-
-               // post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MASCULINA");
-               // Long idMoradia = post.getPostMoradia().getId();
-
-
-
-
             }
         });
 
 
-
-
         // Inflate the layout for this fragment
         return root;
+    }
+
+    private void configAdapter(){
+        imagemAdapter.setImagem(imageUriList);
+
+        Log.e("IMAGEM LISTA", ": "+imageUriList.toString());
+
+       // binding.ivFotosUsuario.setAdapter(imagemAdapter);
+       // binding.ivFotosUsuario.setInfinite(true);
+       // binding.ivFotosUsuario.set3DItem(true);
+       // binding.ivFotosUsuario.setFlat(true);
     }
 
     private OkHttpClient getOkHttpClientWithAuthorization(final String token) {
@@ -263,6 +223,7 @@ public class NovoAnuncioFragment extends Fragment {
     private void pickImage(){
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         resultLauncher.launch(intent);
+
     }
 
     private void registerResult(){
@@ -272,12 +233,15 @@ public class NovoAnuncioFragment extends Fragment {
             public void onActivityResult(ActivityResult result) {
                 try {
                     imageUri = result.getData().getData();
-                    Log.e("IMG", ": " + imageUri.toString());
-                    binding.ivFotosUsuario.setImageURI(imageUri);
+                    imageUriList.add(imageUri);
 
-                    SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
-                    RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-                    retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                    if(imageUriList.get(0) == imgNotFound){
+                        imageUriList.remove(0);
+                    }
+
+                    Log.e("IMG", ": " + imageUri.toString());
+                   // binding.ivFotosUsuario.setImageURI(imageUri);
+                    configAdapter();
 
                     File imageFile = new File(getRealPathFromUri(getContext(), imageUri));
 
@@ -287,12 +251,6 @@ public class NovoAnuncioFragment extends Fragment {
                     imagemLista.add(imagemPart);
                     // Enviar a imagem usando Retrofit
 
-
-
-
-
-
-
                 }
                 catch (Exception e){
                     Log.e("sem img", "sem");
@@ -301,7 +259,6 @@ public class NovoAnuncioFragment extends Fragment {
             }
         });
     }
-
 
     private void SalvarImagemViaApi(RetrofitConfig retrofitConfig,Long id, MultipartBody.Part imagem){
 
@@ -329,8 +286,7 @@ public class NovoAnuncioFragment extends Fragment {
     }
 
 
-
-    private void salvarViaApi(Post post) {
+    private void salvarPostagemViaApi(Post post) {
         SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
@@ -385,8 +341,7 @@ public class NovoAnuncioFragment extends Fragment {
     }
 
 
-
-
+    //-------------------BOTOES------------------------------------------
 
     private void setarDados(Post post,View root){
         post.getPostMoradia().setEndereco(binding.etRuaUsuario.getText().toString());

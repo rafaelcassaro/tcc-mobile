@@ -25,6 +25,7 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
     private OnItemClickListener listener;
 
 
+
     public MoradiasUsuarioAdapter(Context context, OnItemClickListener listener){
         inflater = LayoutInflater.from(context);
         this.listener = listener;

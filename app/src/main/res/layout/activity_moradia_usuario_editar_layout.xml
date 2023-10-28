@@ -148,15 +148,18 @@
         app:layout_constraintTop_toBottomOf="@id/et_cep_usuario"
         />
 
-    <ImageView
+    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
         android:id="@+id/iv_fotos_usuario"
         android:layout_width="230dp"
         android:layout_height="140dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/img_not_found"
-        app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-        app:layout_constraintHorizontal_bias="0.116"
 
+        android:layout_marginTop="10dp"
+
+        android:background="#B5B1B1"
+        android:fadingEdge="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+
+        app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
         app:layout_constraintTop_toBottomOf="@id/et_rua_usuario" />
 

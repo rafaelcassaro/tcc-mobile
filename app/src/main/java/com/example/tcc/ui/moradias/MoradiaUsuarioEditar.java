@@ -1,9 +1,17 @@
 package com.example.tcc.ui.moradias;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +24,20 @@ import com.example.tcc.network.RetrofitConfigCepApi;
 import com.example.tcc.network.entities.CepApi;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.ui.adapter.ImagemAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.postagens.PostagensUsuarioEditar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +55,16 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     private ChipGroup chipGaragem;
     private ChipGroup chipGeneroRep;
     private Button botaoEditar;
+    private Button btAddImg;
+    private Button btRemoveImg;
+
+    private ActivityResultLauncher<Intent> resultLauncher;
+    private Uri imageUri;
+    private Uri imgNotFound;
+    private CarouselRecyclerview recyclerview;
+    private List<MultipartBody.Part> imagemLista = new ArrayList<>();
+    private List<Uri> imageUriList = new ArrayList<>();
+    private ImagemAdapter imagemAdapter;
 
 
     @Override
@@ -48,6 +75,13 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         //Pegar dados do post clicado com a constante EXTRA_SHOW
         Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
         final RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
+
+        imagemAdapter = new ImagemAdapter(this);
+        imagemAdapter.setImagem(imageUriList);
+        recyclerview.setAdapter(imagemAdapter);
+        recyclerview.setInfinite(true);
+        recyclerview.setFlat(true);
+
 
         iniciarViews();
         //PEGAR O TOKEN SALVO E APLICAR NA CONEXAO COM O END-POINT "retrofitConfig"
@@ -68,6 +102,11 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
         selecionarChips(post);
 
+
+        registerResult();
+        imagemAdapter.setImagem(imageUriList);
+
+        btAddImg.setOnClickListener(view -> pickImage());
 
 
         botaoEditar.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +148,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void salvarViaApi(Post post) {
@@ -168,6 +208,9 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         chipGaragem = findViewById(R.id.chips_garagem) ;
         chipGeneroRep = findViewById(R.id.chips_genero) ;
         botaoEditar = findViewById(R.id.bt_publicar_edicao);
+        btAddImg = findViewById(R.id.bt_add_img);
+        btRemoveImg = findViewById(R.id.bt_remove_img);
+        recyclerview = findViewById(R.id.iv_fotos_usuario);
     }
 
 
@@ -187,6 +230,70 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         int escolhaGenero = verificarChip3Opcoes(chipGeneroRep, R.id.chips_genero_masc, R.id.chips_genero_fem, R.id.chips_genero_misto);
         adicionarGenero(post, escolhaGenero);
     }
+
+    //---------------------LIDAR COM IMAGEM-----------------------------------
+
+    private void pickImage(){
+        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        resultLauncher.launch(intent);
+
+    }
+
+    private void registerResult(){
+        resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        try {
+                            imageUri = result.getData().getData();
+                            imageUriList.add(imageUri);
+
+                            if(imageUriList.get(0) == imgNotFound){
+                                imageUriList.remove(0);
+                            }
+
+                            Log.e("IMG", ": " + imageUri.toString());
+                            // binding.ivFotosUsuario.setImageURI(imageUri);
+                            imagemAdapter.setImagem(imageUriList);
+
+                            File imageFile = new File(getRealPathFromUri(MoradiaUsuarioEditar.this, imageUri));
+
+                            // RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+                            RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
+                            MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
+                            imagemLista.add(imagemPart);
+                            // Enviar a imagem usando Retrofit
+
+                        }
+                        catch (Exception e){
+                            Log.e("sem img", "sem");
+                        }
+
+                    }
+                });
+    }
+
+    public String getRealPathFromUri(Context context, Uri uri) {
+        String realPath = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            if (cursor.moveToFirst()) {
+                realPath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+        }
+
+        return realPath;
+    }
+
+
+
+
+    //-------------------BOTOES------------------------------------------
 
     private void adicionarAp(Post post, int escolha){
         if(escolha == 1){
@@ -225,7 +332,6 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
             post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MISTA");
         }
     }
-
 
     private int verificarChip3Opcoes(ChipGroup chip, int opcao1, int opcao2,int opcao3)  {
         int escolha= 0;
@@ -277,11 +383,6 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
        // Log.e("CHIPS", "ESCOLHA FINAL: "+ escolha);
         return escolha;
     }
-
-    //verificarChip(chipAp,  R.id.chip_ap_apart, R.id.chip_ap_casa)
-
-
-
 
     private void selecionarChips(Post post){
         //tipo da residencia
