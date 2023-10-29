@@ -7,8 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,6 +18,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -40,7 +39,6 @@ import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -76,12 +74,20 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     private ActivityResultLauncher<Intent> resultLauncher;
     private Uri imageUri;
     private Uri imgNotFound;
-    private Uri imgPicasso;
+    //private Uri imgPicasso;
     private CarouselRecyclerview recyclerview;
     private List<MultipartBody.Part> imagemLista = new ArrayList<>();
     private List<Uri> imageUriList = new ArrayList<>();
     private ImagemAdapter imagemAdapter;
     private boolean carregarImgs = false;
+    private SecurityPreferences securityPreferences ;//= new SecurityPreferences(MoradiaUsuarioEditar.this);
+    private Picasso picasso ;//= new Picasso.Builder(MoradiaUsuarioEditar.this)
+            //.downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
+           // .build();
+    private RetrofitConfigCepApi retrofitConfigCepApi ;//= new RetrofitConfigCepApi();
+
+
+    //private Picasso picasso;
 
 
     @Override
@@ -91,15 +97,34 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         iniciarViews();
         //Pegar dados do post clicado com a constante EXTRA_SHOW
         Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
-        final RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
 
-        imagemAdapter = new ImagemAdapter(this);
-        imagemAdapter.setImagem(imageUriList);
-        recyclerview.setAdapter(imagemAdapter);
-        recyclerview.setInfinite(true);
-        recyclerview.setFlat(true);
+        securityPreferences = new SecurityPreferences(MoradiaUsuarioEditar.this);
+        picasso = new Picasso.Builder(MoradiaUsuarioEditar.this)
+                .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
+                .build();
+        retrofitConfigCepApi = new RetrofitConfigCepApi();
 
-        carregarImagemPost(post);
+        imagemLista.clear();
+        imageUriList.clear();
+
+        //imagemAdapter = new ImagemAdapter(this);
+      //  imagemAdapter.setImagem(imageUriList);
+       // recyclerview.setAdapter(imagemAdapter);
+       //  recyclerview.setInfinite(true);
+       // recyclerview.setFlat(true);
+
+
+
+
+
+
+        configAdapter(this);
+
+        carregarImagemPost(post, picasso);
+
+        //magemAdapter.setImagem(imageUriList);
+        //recyclerview.setAdapter(imagemAdapter);
+
 
         //PEGAR O TOKEN SALVO E APLICAR NA CONEXAO COM O END-POINT "retrofitConfig"
 
@@ -130,7 +155,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 if (!imageUriList.isEmpty() && recyclerview.getSelectedPosition() >= 0 && recyclerview.getSelectedPosition() < imageUriList.size()) {
 
                     imageUriList.remove(recyclerview.getSelectedPosition());
-                    if (imageUriList.isEmpty()){
+                    if (imageUriList.isEmpty()) {
                         // imgNotFound = Uri.parse("android.resource://"+  getContext().getPackageName()  + "/" + R.drawable.img_not_found_little);
                         imageUriList.add(imgNotFound);
                         // imagemAdapter.setImagem(imageUriList);
@@ -153,17 +178,16 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 callApi.enqueue(new Callback<CepApi>() {
                     @Override
                     public void onResponse(Call<CepApi> call, Response<CepApi> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             CepApi cepApiDados = response.body();
                             post.setCidade(cepApiDados.getCity());
                             post.setEstado(cepApiDados.getState());
                             post.setCep(cepApiDados.getCep());
                             EditarPostViaApi(post);
-                            Log.e("BOTAO EDITAR CEP", "RETORNO BOM: "+ response.errorBody());
+                            Log.e("BOTAO EDITAR CEP", "RETORNO BOM: " + response.errorBody());
 
-                        }
-                        else {
-                            Log.e("BOTAO EDITAR CEP", "RETORNO ERROR: "+ response.errorBody());
+                        } else {
+                            Log.e("BOTAO EDITAR CEP", "RETORNO ERROR: " + response.errorBody());
 
                         }
 
@@ -171,7 +195,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<CepApi> call, Throwable t) {
-                        Log.e("BOTAO EDITAR CEP", "INTERNAL ERROR: "+ t.getMessage().toString());
+                        Log.e("BOTAO EDITAR CEP", "INTERNAL ERROR: " + t.getMessage().toString());
 
                     }
                 });
@@ -185,6 +209,15 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     }
 
+    private void configAdapter(Context context){
+
+        imagemAdapter = new ImagemAdapter(context);
+        imagemAdapter.setImagem(imageUriList);
+        recyclerview.setAdapter(imagemAdapter);
+        recyclerview.setInfinite(true);
+        recyclerview.setFlat(true);
+
+    }
 
     private File createImageFileFromBitmap(Bitmap bitmap) {
         File imageFile = null;
@@ -223,18 +256,17 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         Long idMoradia = post.getPostMoradia().getId();
 
         //DAR UPDATE NO POST SELECIONADO
-        Call<Void> call=retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
-        Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getPostMoradia().getId());
+        Call<Void> call = retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
+        Log.e("VALOR ID POSTMORADA", "deu ruim" + post.getPostMoradia().getId());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     // Crie uma instância do seu Fragment
 
-                    for(int i = 0; i < imagemLista.size(); i++){
+                    for (int i = 0; i < imagemLista.size(); i++) {
                         salvarImagemViaApi(retrofitConfig, idMoradia, imagemLista.get(i));
                     }
-
 
 
                     Intent intent = new Intent(MoradiaUsuarioEditar.this, MainActivity.class);
@@ -242,16 +274,15 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                     startActivity(intent);
 
                     Log.e("EDITAR POSTMORADIA", "deu bom");
-                }
-                else{
-                    Log.e("EDITAR POSTMORADIA", "deu ruim"+ post.getDataPost());
+                } else {
+                    Log.e("EDITAR POSTMORADIA", "deu ruim" + post.getDataPost());
                 }
 
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("EDITAR POSTMORADIA", "deu erro:"+ t);
+                Log.e("EDITAR POSTMORADIA", "deu erro:" + t);
 
             }
         });
@@ -260,41 +291,47 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //retrofitConfigCepApi = null;
-        //securityPreferences = null;
-        //retrofitConfig = null;
+        imageUriList = null;
+        imagemLista = null;
+        imagemAdapter = null;
+        securityPreferences = null;
+        picasso = null;
+
+        retrofitConfigCepApi = null;
+
+       // retrofitConfig = null;
 
     }
 
-    private void iniciarViews(){
+    private void iniciarViews() {
         cepEt = findViewById(R.id.et_cep_usuario);
-        ruaEt = findViewById(R.id.et_rua_usuario) ;
+        ruaEt = findViewById(R.id.et_rua_usuario);
         numCasaEt = findViewById(R.id.et_num_casa_usuario);
-        comentarioEt= findViewById(R.id.et_comentario_anuncio) ;
-        numMoradoresEt= findViewById(R.id.et_num_moradores_usuario) ;
-        aluguelEt= findViewById(R.id.et_aluguel_usuario) ;
-        chipAp = findViewById(R.id.chip_ap) ;
-        chipPet = findViewById(R.id.chips_pet) ;
-        chipGaragem = findViewById(R.id.chips_garagem) ;
-        chipGeneroRep = findViewById(R.id.chips_genero) ;
+        comentarioEt = findViewById(R.id.et_comentario_anuncio);
+        numMoradoresEt = findViewById(R.id.et_num_moradores_usuario);
+        aluguelEt = findViewById(R.id.et_aluguel_usuario);
+        chipAp = findViewById(R.id.chip_ap);
+        chipPet = findViewById(R.id.chips_pet);
+        chipGaragem = findViewById(R.id.chips_garagem);
+        chipGeneroRep = findViewById(R.id.chips_genero);
         botaoEditar = findViewById(R.id.bt_publicar_edicao);
         btAddImg = findViewById(R.id.bt_add_img);
         btRemoveImg = findViewById(R.id.bt_remove_img);
-        recyclerview = findViewById(R.id.iv_fotos_usuario);
+        recyclerview = findViewById(R.id.crv_fotos_moradia);
     }
 
-    private void setarDados(Post post){
+    private void setarDados(Post post) {
         post.getPostMoradia().setEndereco(ruaEt.getText().toString());
         post.getPostMoradia().setNumCasa(Integer.valueOf(numCasaEt.getText().toString()));
         post.setComentario(comentarioEt.getText().toString());
         post.getPostMoradia().getDetalhesMoradia().setMoradores(Integer.valueOf(numMoradoresEt.getText().toString()));
         post.getPostMoradia().setValorAluguel(Double.valueOf(aluguelEt.getText().toString()));
 
-        int escolhaAp = verificarChip(chipAp,  R.id.chip_ap_apart, R.id.chip_ap_casa);
+        int escolhaAp = verificarChip(chipAp, R.id.chip_ap_apart, R.id.chip_ap_casa);
         adicionarAp(post, escolhaAp);
-        int escolhaPet = verificarChip(chipPet,  R.id.chips_pet_sim, R.id.chips_pet_nao);
+        int escolhaPet = verificarChip(chipPet, R.id.chips_pet_sim, R.id.chips_pet_nao);
         adicionarPet(post, escolhaPet);
-        int escolhaGaragem = verificarChip(chipGaragem,  R.id.chips_garagem_sim, R.id.chips_garagem_nao);
+        int escolhaGaragem = verificarChip(chipGaragem, R.id.chips_garagem_sim, R.id.chips_garagem_nao);
         adicionarGaragem(post, escolhaGaragem);
         int escolhaGenero = verificarChip3Opcoes(chipGeneroRep, R.id.chips_genero_masc, R.id.chips_genero_fem, R.id.chips_genero_misto);
         adicionarGenero(post, escolhaGenero);
@@ -302,32 +339,33 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     //---------------------LIDAR COM IMAGEM-----------------------------------
 
-    private void carregarImagemPost(Post post){
+    private void carregarImagemPost(Post post, Picasso picasso) {
 
 
-        if(!carregarImgs) {
+        if (!carregarImgs) {
             carregarImgs = true;
-            SecurityPreferences securityPreferences = new SecurityPreferences(MoradiaUsuarioEditar.this);
-            Picasso picasso = new Picasso.Builder(MoradiaUsuarioEditar.this)
-                    .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
-                    .build();
+
 
             //  picasso.load("http://192.168.1.107:8080/imagens/Imagem1.jpg").into(target);
-            Log.e("IMG PICAASO", ": " + imgPicasso);
+            //Log.e("IMG PICAASO", ": " + imgPicasso);
 
-            int numImagens = post.getPostMoradia().getFotos().size();
+            //int numImagens = post.getPostMoradia().getFotos().size();
 
-            for (int i = 0; i < numImagens; i++) {
-                String nomeImg = post.getPostMoradia().getFotos().get(i).getNomeFoto();
-                picasso.load("http://192.168.1.107:8080/imagens/" + nomeImg).into(new Target() {
+          //  List<Uri> tempUriList = new ArrayList<>();
+
+            for (int i = 0; i < post.getPostMoradia().getFotos().size(); i++) {
+               // String nomeImg = post.getPostMoradia().getFotos().get(i).getNomeFoto();
+                picasso.load("http://192.168.1.107:8080/imagens/" + post.getPostMoradia().getFotos().get(i).getNomeFoto()).into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         File imageFile = createImageFileFromBitmap(bitmap);
 
                         if (imageFile != null) {
-                            imgPicasso = Uri.fromFile(imageFile);
-                            imageUriList.add(imgPicasso);
-                            imagemAdapter.setImagem(imageUriList);
+                            //imgPicasso = Uri.fromFile(imageFile);
+                            //imageUriList.add(Uri.fromFile(imageFile));
+                            imageUriList.add(Uri.fromFile(imageFile));
+                            imagemAdapter.notifyItemInserted(imageUriList.size()-1);
+
 
                         } else {
 
@@ -345,10 +383,23 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                     }
                 });
             }
+            recyclerview.scrollToPosition(imageUriList.size()-1);
+            //imagemAdapter.setImagem(imageUriList);
+            //imagemAdapter.notifyDataSetChanged();
+            //recyclerview.setAdapter(imagemAdapter);
+
+          //  imagemAdapter = new ImagemAdapter(this);
+           // imagemAdapter.setImagem(imageUriList);
+          //  recyclerview.setAdapter(imagemAdapter);
+          //  recyclerview.setInfinite(true);
+          //  recyclerview.setFlat(true);
+            //imagemAdapter.setImagem(imageUriList);
+            //recyclerview.setAdapter(imagemAdapter);
+            //recyclerview.
         }
     }
 
-    private void salvarImagemViaApi(RetrofitConfig retrofitConfig,Long id, MultipartBody.Part imagem){
+    private void salvarImagemViaApi(RetrofitConfig retrofitConfig, Long id, MultipartBody.Part imagem) {
 
         Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagem, id);
         call.enqueue(new Callback<Fotos>() {
@@ -359,8 +410,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                     Fotos resposta = response.body();
                     // Faça algo com a resposta do servidor, se necessário
                     Log.e("json bom", ": " + resposta);
-                }
-                else {
+                } else {
                     Log.e("json rum", ": " + response.body());
                 }
             }
@@ -373,13 +423,13 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         });
     }
 
-    private void pickImage(){
+    private void pickImage() {
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         resultLauncher.launch(intent);
 
     }
 
-    private void registerResult(){
+    private void registerResult() {
         resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -388,7 +438,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                             imageUri = result.getData().getData();
                             imageUriList.add(imageUri);
 
-                            if(imageUriList.get(0) == imgNotFound){
+                            if (imageUriList.get(0) == imgNotFound) {
                                 imageUriList.remove(0);
                             }
 
@@ -404,8 +454,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                             imagemLista.add(imagemPart);
                             // Enviar a imagem usando Retrofit
 
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
                             Log.e("sem img", "sem");
                         }
 
@@ -453,46 +502,42 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     //-------------------BOTOES------------------------------------------
 
-    private void adicionarAp(Post post, int escolha){
-        if(escolha == 1){
+    private void adicionarAp(Post post, int escolha) {
+        if (escolha == 1) {
             post.getPostMoradia().setTipoResidencia(false);
-        }
-        else if (escolha == 2){
+        } else if (escolha == 2) {
             post.getPostMoradia().setTipoResidencia(true);
         }
     }
 
-    private void adicionarPet(Post post, int escolha){
-        if(escolha == 1){
+    private void adicionarPet(Post post, int escolha) {
+        if (escolha == 1) {
             post.getPostMoradia().getDetalhesMoradia().setPets(true);
-        }
-        else if (escolha == 2){
+        } else if (escolha == 2) {
             post.getPostMoradia().getDetalhesMoradia().setPets(false);
         }
     }
 
-    private void adicionarGaragem(Post post, int escolha){
-        if(escolha == 1){
+    private void adicionarGaragem(Post post, int escolha) {
+        if (escolha == 1) {
             post.getPostMoradia().getDetalhesMoradia().setGaragem(true);
-        }
-        else if (escolha == 2){
+        } else if (escolha == 2) {
             post.getPostMoradia().getDetalhesMoradia().setGaragem(false);
         }
     }
-    private void adicionarGenero(Post post, int escolha){
-        if(escolha == 1){
+
+    private void adicionarGenero(Post post, int escolha) {
+        if (escolha == 1) {
             post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MASCULINA");
-        }
-        else if (escolha == 2){
+        } else if (escolha == 2) {
             post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("FEMININA");
-        }
-        else if (escolha == 3){
+        } else if (escolha == 3) {
             post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MISTA");
         }
     }
 
-    private int verificarChip3Opcoes(ChipGroup chip, int opcao1, int opcao2,int opcao3)  {
-        int escolha= 0;
+    private int verificarChip3Opcoes(ChipGroup chip, int opcao1, int opcao2, int opcao3) {
+        int escolha = 0;
         ChipGroup chipGroup = chip;
         int selectedChipId = chipGroup.getCheckedChipId(); // Obtém o ID do Chip selecionado
         if (selectedChipId != View.NO_ID) {
@@ -502,84 +547,78 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 escolha = 1;
             } else if (selectedChip.getId() == opcao2) {
                 escolha = 2;
-            }
-            else if (selectedChip.getId() == opcao3) {
+            } else if (selectedChip.getId() == opcao3) {
                 escolha = 3;
-        }
+            }
         } else {
             escolha = 0;
         }
         return escolha;
     }
 
-    private int verificarChip(ChipGroup chip, int opcao1, int opcao2)  {
-        int escolha= 0;
+    private int verificarChip(ChipGroup chip, int opcao1, int opcao2) {
+        int escolha = 0;
         //Log.e("CHIPS", "OPCAO1 ID"+ opcao1);
         //Log.e("CHIPS", "OPCAO2 ID"+ opcao2);
 
         ChipGroup chipGroup = chip;
         int selectedChipId = chipGroup.getCheckedChipId(); // Obtém o ID do Chip selecionado
-        Log.e("CHIPS", "OPCAO2 ID"+ chip);
-        Log.e("CHIPS", "OPCAO2 ID"+ selectedChipId);
-        Log.e("CHIPS", "OPCAO2 ID"+ chip.getCheckedChipId());
+        Log.e("CHIPS", "OPCAO2 ID" + chip);
+        Log.e("CHIPS", "OPCAO2 ID" + selectedChipId);
+        Log.e("CHIPS", "OPCAO2 ID" + chip.getCheckedChipId());
 
         if (selectedChipId != View.NO_ID) {
             Chip selectedChip = findViewById(selectedChipId); // Obtém a referência ao Chip selecionado
-           // Log.e("CHIPS", "CHIPGROUP: "+ findViewById(selectedChipId));
+            // Log.e("CHIPS", "CHIPGROUP: "+ findViewById(selectedChipId));
             // Verifica qual Chip foi selecionado com base no ID
             if (selectedChip.getId() == opcao1) {
                 escolha = 1;
-             //   Log.e("CHIPS", "ESCOLHAOP1: "+ selectedChip.getId());
+                //   Log.e("CHIPS", "ESCOLHAOP1: "+ selectedChip.getId());
             } else if (selectedChip.getId() == opcao2) {
                 escolha = 2;
-              //  Log.e("CHIPS", "ESCOLHAOP2: "+ selectedChip.getId());
+                //  Log.e("CHIPS", "ESCOLHAOP2: "+ selectedChip.getId());
             }
         } else {
             escolha = 0;
         }
         //Log.e("CHIPS", "ESCOLHA FINAL: "+ selectedChipId);
-       // Log.e("CHIPS", "ESCOLHA FINAL: "+ escolha);
+        // Log.e("CHIPS", "ESCOLHA FINAL: "+ escolha);
         return escolha;
     }
 
-    private void selecionarChips(Post post){
+    private void selecionarChips(Post post) {
         //tipo da residencia
-        if(post.getPostMoradia().isTipoResidencia()){
+        if (post.getPostMoradia().isTipoResidencia()) {
             Chip chipSelecionado = (Chip) chipAp.getChildAt(1);
             chipSelecionado.setChecked(true);
-        }
-        else{
+        } else {
             Chip chipSelecionado = (Chip) chipAp.getChildAt(0);
             chipSelecionado.setChecked(true);
         }
         //pets
-        if(post.getPostMoradia().getDetalhesMoradia().isPets() == true){
+        if (post.getPostMoradia().getDetalhesMoradia().isPets() == true) {
             Chip chipSelecionado = (Chip) chipPet.getChildAt(0);
             chipSelecionado.setChecked(true);
-        }
-        else{
+        } else {
             Chip chipSelecionado = (Chip) chipPet.getChildAt(1);
             chipSelecionado.setChecked(true);
         }
         //garagem
-        if(post.getPostMoradia().getDetalhesMoradia().isGaragem() == true){
+        if (post.getPostMoradia().getDetalhesMoradia().isGaragem() == true) {
             Chip chipSelecionado = (Chip) chipGaragem.getChildAt(0);
             chipSelecionado.setChecked(true);
-        }
-        else{
+        } else {
             Chip chipSelecionado = (Chip) chipGaragem.getChildAt(1);
             chipSelecionado.setChecked(true);
         }
         //genero
-        if(post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("MASCULINA")){
+        if (post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("MASCULINA")) {
             Chip chipSelecionado = (Chip) chipGeneroRep.getChildAt(0);
             chipSelecionado.setChecked(true);
-        }
-        else if(post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("FEMININA")){
+        } else if (post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("FEMININA")) {
             Chip chipSelecionado = (Chip) chipGeneroRep.getChildAt(1);
             chipSelecionado.setChecked(true);
-        }
-        else{
+        } else {
             Chip chipSelecionado = (Chip) chipGeneroRep.getChildAt(2);
             chipSelecionado.setChecked(true);
         }

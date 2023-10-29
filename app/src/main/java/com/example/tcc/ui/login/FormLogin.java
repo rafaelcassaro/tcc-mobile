@@ -18,6 +18,7 @@ import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Usuario;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +32,7 @@ public class FormLogin extends AppCompatActivity {
     private EditText senha;
     private SecurityPreferences securityPreferences;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class FormLogin extends AppCompatActivity {
         IniciarComponentes();
         btnCadastro();
         btnLogin();
+
     }
 
 
@@ -50,6 +53,7 @@ public class FormLogin extends AppCompatActivity {
         login_button = findViewById(R.id.bt_login);
         email = findViewById(R.id.edit_email);
         senha = findViewById(R.id.edit_senha);
+
     }
 
     private void mostrarErro(FormLogin x, String mensagem) {

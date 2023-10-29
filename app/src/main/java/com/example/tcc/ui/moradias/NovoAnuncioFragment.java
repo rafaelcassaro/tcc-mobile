@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentNovoAnuncioBinding;
@@ -84,10 +84,10 @@ public class NovoAnuncioFragment extends Fragment {
 
         imagemAdapter.setImagem(imageUriList);
 
-        binding.ivFotosUsuario.setAdapter(imagemAdapter);
-        binding.ivFotosUsuario.setInfinite(true);
+        binding.crvFotosMoradia.setAdapter(imagemAdapter);
+        binding.crvFotosMoradia.setInfinite(true);
         // binding.ivFotosUsuario.set3DItem(true);
-        binding.ivFotosUsuario.setFlat(true);
+        binding.crvFotosMoradia.setFlat(true);
 
 
         registerResult();
@@ -100,11 +100,11 @@ public class NovoAnuncioFragment extends Fragment {
             public void onClick(View v) {
 
 
-                if (!imageUriList.isEmpty() && binding.ivFotosUsuario.getSelectedPosition() >= 0 && binding.ivFotosUsuario.getSelectedPosition() < imageUriList.size()) {
+                if (!imageUriList.isEmpty() && binding.crvFotosMoradia.getSelectedPosition() >= 0 && binding.crvFotosMoradia.getSelectedPosition() < imageUriList.size()) {
 
-                    imageUriList.remove(binding.ivFotosUsuario.getSelectedPosition());
+                    imageUriList.remove(binding.crvFotosMoradia.getSelectedPosition());
                     if (imageUriList.isEmpty()){
-                       // imgNotFound = Uri.parse("android.resource://"+  getContext().getPackageName()  + "/" + R.drawable.img_not_found_little);
+                        imgNotFound = Uri.parse("android.resource://"+  getContext().getPackageName()  + "/" + R.drawable.img_not_found_little);
                         imageUriList.add(imgNotFound);
                        // imagemAdapter.setImagem(imageUriList);
                     }

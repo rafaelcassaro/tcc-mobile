@@ -149,7 +149,7 @@
         />
 
     <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-        android:id="@+id/iv_fotos_usuario"
+        android:id="@+id/crv_fotos_moradia"
         android:layout_width="230dp"
         android:layout_height="140dp"
 
@@ -179,7 +179,7 @@
 
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-        app:layout_constraintStart_toEndOf="@id/iv_fotos_usuario"
+        app:layout_constraintStart_toEndOf="@id/crv_fotos_moradia"
         app:layout_constraintTop_toBottomOf="@+id/et_num_casa_usuario" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -196,7 +196,7 @@
         android:drawableLeft="@drawable/ic_delete"
 
         app:layout_constraintTop_toBottomOf="@+id/bt_add_img"
-        app:layout_constraintStart_toEndOf="@id/iv_fotos_usuario"
+        app:layout_constraintStart_toEndOf="@id/crv_fotos_moradia"
         app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
         />
 
@@ -216,7 +216,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
         app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-        app:layout_constraintTop_toBottomOf="@id/iv_fotos_usuario"
+        app:layout_constraintTop_toBottomOf="@id/crv_fotos_moradia"
         />
 
 

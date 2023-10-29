@@ -25,6 +25,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+
+
+
     }
     buildFeatures {
         viewBinding = true
@@ -51,10 +54,22 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.8")
 
     implementation ("com.github.sparrow007:carouselrecyclerview:1.2.6")
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+
+
+
+
+    implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.2")
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
+
+    implementation("com.facebook.fresco:fresco:3.1.3")
+    implementation("com.koushikdutta.ion:ion:3.1.0")
+
+
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

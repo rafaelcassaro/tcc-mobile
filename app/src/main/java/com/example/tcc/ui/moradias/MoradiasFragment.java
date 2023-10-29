@@ -22,6 +22,7 @@ import com.example.tcc.databinding.FragmentMoradiasBinding;
 import com.example.tcc.db.models.Moradias;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.RetrofitConfigToken;
+import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
@@ -48,11 +49,17 @@ public class MoradiasFragment extends Fragment {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentMoradiasBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        db.clear();
+
 
 
         //--------RV---------------
         configAdapter(container);
         getDbBack(container);
+
+
+
+
 
         return root;
     }
@@ -63,6 +70,17 @@ public class MoradiasFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -101,17 +119,29 @@ public class MoradiasFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
-                    List<Post> tempDb = response.body();
+                    List<Post> tempDb = new ArrayList<>();
+                    tempDb.clear();
+
+                    tempDb = response.body();
 
                     Log.e("Response body", "dados db local:" + db.toString());
                     for (int i = 0; tempDb.size()> i; i++){
                         if(tempDb.get(i).getPostMoradia() != null){
                             db.add(tempDb.get(i));
+
+                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
                         }
                     }
                     moradiasAdapter.setPostagens(db);
+
+                    //for(int i =0 ; i < db.size(); i++){
+                    //    //Fotos fotos = new Fotos();
+                   //     Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
+                   // }
+
+
                     Log.e("Response body", "dados ResponseBody:" + response.body());
-                    Log.e("Response body", "dados ResponseBody:" + db.get(0).getPostMoradia());
+
 
                 } else {
                     mostrarErro(container);

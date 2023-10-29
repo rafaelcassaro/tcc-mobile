@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia"
         />
 
     <TextView
@@ -103,7 +103,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_tipo_moradia"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia"
         />
 
     <TextView
@@ -119,7 +119,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario_post"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia"
         />
 
     <TextView
@@ -137,10 +137,10 @@
 
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tv_estado_usuario"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fotos_usuario" />
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia" />
 
     <ImageView
-        android:id="@+id/iv_fotos_usuario"
+        android:id="@+id/crv_fotos_moradia"
         android:layout_width="370dp"
         android:layout_height="200dp"
         android:layout_marginTop="5dp"
