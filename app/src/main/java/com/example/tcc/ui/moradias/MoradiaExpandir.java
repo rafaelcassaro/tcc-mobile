@@ -9,7 +9,11 @@ import android.widget.TextView;
 
 import com.example.tcc.R;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.ui.adapter.ImagemAdapter;
+import com.example.tcc.ui.adapter.MoradiasExpandirAdapter;
+import com.example.tcc.ui.adapter.MoradiasUsuarioAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
 public class MoradiaExpandir extends AppCompatActivity {
 
@@ -25,7 +29,8 @@ public class MoradiaExpandir extends AppCompatActivity {
     private TextView garagemTv;
     private TextView petTv;
     private TextView valorTv;
-
+    private CarouselRecyclerview recyclerview;
+    private ImagemAdapter adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,11 @@ public class MoradiaExpandir extends AppCompatActivity {
         estadoTv.setText(post.getEstado());
         generoTv.setText(post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia());
 
+        adapter = new ImagemAdapter(MoradiaExpandir.this);
+        adapter.setDbPost(post.getPostMoradia().getFotos());
+        recyclerview.setAdapter(adapter);
+
+
 
     }
 
@@ -90,6 +100,7 @@ public class MoradiaExpandir extends AppCompatActivity {
         garagemTv = findViewById(R.id.tv_ic_garagem);
         petTv = findViewById(R.id.tv_ic_pet);
         valorTv = findViewById(R.id.tv_valor);
+        recyclerview = findViewById(R.id.crv_fotos_moradia);
 
     }
 }

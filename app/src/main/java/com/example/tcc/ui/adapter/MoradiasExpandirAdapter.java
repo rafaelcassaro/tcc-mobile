@@ -19,33 +19,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuarioAdapter.MyViewHolder> {
+public class MoradiasExpandirAdapter extends RecyclerView.Adapter<MoradiasExpandirAdapter.MyViewHolder> {
 
     private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
-    private OnItemClickListener listener;
     private ImagemAdapter imagemAdapter;
     private Context context;
 
 
 
-    public MoradiasUsuarioAdapter(Context context, OnItemClickListener listener){
+    public MoradiasExpandirAdapter(Context context){
         inflater = LayoutInflater.from(context);
-        this.listener = listener;
         this.context = context;
     }
 
 
     @NonNull
     @Override
-    public MoradiasUsuarioAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MoradiasExpandirAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //View itemList = inflater.inflate(R.layout.activity_anuncio_layout, parent, false);
         View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_moradia_usuario_layout,parent,false);
         return new MyViewHolder(itemList);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MoradiasUsuarioAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MoradiasExpandirAdapter.MyViewHolder holder, int position) {
         //holder.tipoMoradiaTv.setText(String.valueOf(db.get(position).getPostMoradia().isTipoResidencia()));
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.ruaTv.setText(String.valueOf(db.get(position).getPostMoradia().getEndereco()));
@@ -112,7 +110,7 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
         return db.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView tipoMoradiaTv;
         public TextView cidadeTv;
@@ -146,18 +144,12 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
             comentarioTv = itemView.findViewById(R.id.tv_comentario_usuario);
             recyclerview = itemView.findViewById(R.id.crv_fotos_moradia);
 
-            itemView.setOnClickListener(this);
+
         }
 
-        @Override
-        public void onClick(View v) {
-            listener.onItemClick(getAdapterPosition());
-        }
+
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
 
     public void setPostagens(List<Post> db){
         this.db = db;

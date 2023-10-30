@@ -3,7 +3,6 @@ package com.example.tcc.ui.moradias;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,9 +33,11 @@ import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.ImagemAdapter;
+import com.example.tcc.ui.adapter.ImagemEditarMoradiaAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,9 +62,12 @@ public class NovoAnuncioFragment extends Fragment {
     private ImageView imageView;
     private Uri imageUri;
     private Uri imgNotFound;
-    private List<MultipartBody.Part> imagemLista = new ArrayList<>();
-    private List<Uri> imageUriList = new ArrayList<>();
-    private ImagemAdapter imagemAdapter;
+    private List<MultipartBody.Part> multiPartImgList = new ArrayList<>();
+   // private List<Uri> imageUriList = new ArrayList<>();
+
+    private ImagemEditarMoradiaAdapter imagemAdapter;
+    private Picasso picasso ;
+    private RetrofitConfigCepApi retrofitConfigCepApi;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -80,37 +84,35 @@ public class NovoAnuncioFragment extends Fragment {
         post.setPostMoradia(moradia);
         post.getPostMoradia().setDetalhesMoradia(detalhesMoradia);
         post.getPostMoradia().setFotos(new ArrayList<>());
-        imagemAdapter = new ImagemAdapter(container.getContext());
 
-        imagemAdapter.setImagem(imageUriList);
+        configAdapter(getContext());
+        multiPartImgList.clear();
 
-        binding.crvFotosMoradia.setAdapter(imagemAdapter);
-        binding.crvFotosMoradia.setInfinite(true);
+        //imagemAdapter.setImagem(imageUriList);
+
+        //binding.crvFotosMoradia.setAdapter(imagemAdapter);
+        //binding.crvFotosMoradia.setInfinite(true);
         // binding.ivFotosUsuario.set3DItem(true);
-        binding.crvFotosMoradia.setFlat(true);
+        //binding.crvFotosMoradia.setFlat(true);
 
 
         registerResult();
 
-        configAdapter();
+
         binding.btAddImg.setOnClickListener(view -> pickImage());  //coloca uma imagem na lista uri e atualiza o rv das imgs
 
         binding.btRemoveImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                imagemAdapter.removeImg(binding.crvFotosMoradia.getSelectedPosition());
 
-                if (!imageUriList.isEmpty() && binding.crvFotosMoradia.getSelectedPosition() >= 0 && binding.crvFotosMoradia.getSelectedPosition() < imageUriList.size()) {
-
-                    imageUriList.remove(binding.crvFotosMoradia.getSelectedPosition());
-                    if (imageUriList.isEmpty()){
-                        imgNotFound = Uri.parse("android.resource://"+  getContext().getPackageName()  + "/" + R.drawable.img_not_found_little);
-                        imageUriList.add(imgNotFound);
-                       // imagemAdapter.setImagem(imageUriList);
-                    }
-                    imagemAdapter.setImagem(imageUriList);
-
+                if(!multiPartImgList.isEmpty() && binding.crvFotosMoradia.getSelectedPosition() >= 0 && binding.crvFotosMoradia.getSelectedPosition() < multiPartImgList.size()) {
+                    multiPartImgList.remove(binding.crvFotosMoradia.getSelectedPosition());
                 }
+
+                imagemAdapter.addImgvazia();
+                binding.crvFotosMoradia.smoothScrollToPosition(0);
 
             }
         });
@@ -159,10 +161,15 @@ public class NovoAnuncioFragment extends Fragment {
         return root;
     }
 
-    private void configAdapter(){
-        imagemAdapter.setImagem(imageUriList);
+    private void configAdapter(Context context){
+        imagemAdapter = new ImagemEditarMoradiaAdapter(context);
+        //imagemAdapter.setImagem(imageUriList);
+        binding.crvFotosMoradia.setAdapter(imagemAdapter);
+        imagemAdapter.addImgvazia();
+        binding.crvFotosMoradia.setInfinite(true);
+        binding.crvFotosMoradia.setFlat(true);
 
-        Log.e("IMAGEM LISTA", ": "+imageUriList.toString());
+//        Log.e("IMAGEM LISTA", ": "+imageUriList.toString());
 
        // binding.ivFotosUsuario.setAdapter(imagemAdapter);
        // binding.ivFotosUsuario.setInfinite(true);
@@ -220,23 +227,16 @@ public class NovoAnuncioFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 try {
-                    imageUri = result.getData().getData();
-                    imageUriList.add(imageUri);
+                    //imageUri = result.getData().getData();
 
-                    if(imageUriList.get(0) == imgNotFound){
-                        imageUriList.remove(0);
-                    }
-
-                    Log.e("IMG", ": " + imageUri.toString());
                    // binding.ivFotosUsuario.setImageURI(imageUri);
-                    configAdapter();
 
-                    File imageFile = new File(getRealPathFromUri(getContext(), imageUri));
-
+                    File imageFile = new File(getRealPathFromUri(getContext(), result.getData().getData()));
                    // RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
                     RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
                     MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
-                    imagemLista.add(imagemPart);
+                    multiPartImgList.add(imagemPart);
+                    imagemAdapter.addImagem(result.getData().getData());
                     // Enviar a imagem usando Retrofit
 
                 }
@@ -278,10 +278,11 @@ public class NovoAnuncioFragment extends Fragment {
         SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
         Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
         post.getPostMoradia().setFotos(new ArrayList<>());
-        Call<Post> callSave = retrofitConfig.getPostService().createPost(post, id);
 
+        Call<Post> callSave = retrofitConfig.getPostService().createPost(post, id);
         callSave.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
@@ -293,8 +294,8 @@ public class NovoAnuncioFragment extends Fragment {
 
 
 
-                    for(int i = 0; i < imagemLista.size(); i++){
-                        SalvarImagemViaApi(retrofitConfig, idMoradia, imagemLista.get(i));
+                    for(int i = 0; i < multiPartImgList.size(); i++){
+                        SalvarImagemViaApi(retrofitConfig, idMoradia, multiPartImgList.get(i));
                     }
 
 

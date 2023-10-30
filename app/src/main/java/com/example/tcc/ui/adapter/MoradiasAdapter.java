@@ -56,7 +56,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
 
     //private List<Uri> imageUriList = new ArrayList<>();
     private Context context;
-    private Observable<List<Uri>> dataObservable;
+    //private Observable<List<Uri>> dataObservable;
 
 
     public MoradiasAdapter(Context context, OnItemClickListener listener) {
@@ -118,7 +118,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
 
 
         //if (db.get(position).getPostMoradia().getFotos().size() > 0) {
-        List<Uri> imageUriList = new ArrayList<>();
+      //  List<Uri> imageUriList = new ArrayList<>();
        // imageUriList = db.get(position).getPostMoradia().getFotos();
        // imageUriList.clear();
         imagemAdapter = new ImagemAdapter(context);
@@ -137,7 +137,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
 
         //carregarImagemPost(db.get(position), imageUriList, imagemAdapter, picasso);
 
-        Log.e("LISTA ADAPTER", ": "+ imageUriList);
+       // Log.e("LISTA ADAPTER", ": "+ imageUriList);
 
         //carregarImagemPostt(db.get(position), imageUriList, imagemAdapter, picasso);
        // String nomeImg = post.getPostMoradia().getFotos().get(i).getNomeFoto();
@@ -149,7 +149,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
 
 
 
-        Log.e("VALOR STRING", ": "+ imageUriList);
+      //  Log.e("VALOR STRING", ": "+ imageUriList);
 
 
       //  holder.recyclerview.scrollToPosition(imageUriList.size()-1);

@@ -140,22 +140,21 @@
         app:layout_constraintStart_toEndOf="@+id/tv_estado_usuario"
         app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia" />
 
-    <ImageView
+    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
         android:id="@+id/crv_fotos_moradia"
         android:layout_width="370dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="5dp"
-        android:scaleType="fitXY"
+        android:layout_height="250dp"
 
+        android:layout_marginTop="10dp"
 
-        android:src="@drawable/apartamento_foto2"
+        android:background="#B5B1B1"
 
+        android:fadingEdge="horizontal"
         app:layout_constraintHorizontal_bias="0.5"
 
         app:layout_constraintStart_toStartOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@id/ContainerMoradia"
-        app:layout_constraintTop_toTopOf="@id/ContainerMoradia"
-        />
+        app:layout_constraintTop_toTopOf="@id/ContainerMoradia" />
 
     <TextView
         android:id="@+id/tv_ic_moradores"

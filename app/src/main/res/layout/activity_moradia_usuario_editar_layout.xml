@@ -148,6 +148,8 @@
         app:layout_constraintTop_toBottomOf="@id/et_cep_usuario"
         />
 
+
+
     <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
         android:id="@+id/crv_fotos_moradia"
         android:layout_width="230dp"
