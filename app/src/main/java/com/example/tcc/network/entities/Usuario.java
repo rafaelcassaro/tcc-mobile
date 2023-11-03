@@ -13,6 +13,9 @@ public class Usuario implements Serializable {
     private String link1;
     private String link2;
     private String link3;
+    private String nomeFotoPerfil;
+    private String caminhoImagem;
+
 
     @SerializedName("token")
     private String token;
@@ -28,6 +31,19 @@ public class Usuario implements Serializable {
         this.link1 = link1;
         this.link2 = link2;
         this.link3 = link3;
+    }
+
+    public Usuario(Long id, String nome, String email, String celular, String senha, String link1, String link2, String link3, String nomeFotoPerfil, String caminhoImagem  ) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.celular = celular;
+        this.senha = senha;
+        this.link1 = link1;
+        this.link2 = link2;
+        this.link3 = link3;
+        this.nomeFotoPerfil = nomeFotoPerfil;
+        this.caminhoImagem = caminhoImagem;
     }
 
     public Long getId() {
@@ -102,17 +118,36 @@ public class Usuario implements Serializable {
         this.token = token;
     }
 
+    public String getNomeFotoPerfil() {
+        return nomeFotoPerfil;
+    }
+
+    public void setNomeFotoPerfil(String nomeFotoPerfil) {
+        this.nomeFotoPerfil = nomeFotoPerfil;
+    }
+
+    public String getCaminhoImagem() {
+        return caminhoImagem;
+    }
+
+    public void setCaminhoImagem(String caminhoImagem) {
+        this.caminhoImagem = caminhoImagem;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                ", celular=" + celular +
+                ", celular='" + celular + '\'' +
                 ", senha='" + senha + '\'' +
                 ", link1='" + link1 + '\'' +
                 ", link2='" + link2 + '\'' +
                 ", link3='" + link3 + '\'' +
+                ", nomeFotoPerfil='" + nomeFotoPerfil + '\'' +
+                ", caminhoImagem='" + caminhoImagem + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -14,10 +17,14 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentMoradiasBinding;
 import com.example.tcc.db.models.Moradias;
 import com.example.tcc.network.RetrofitConfig;
@@ -27,6 +34,7 @@ import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.ferfalk.simplesearchview.SimpleSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +56,24 @@ public class MoradiasFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentMoradiasBinding.inflate(inflater, container, false);
+
+        MenuHost menuHost = requireActivity();
+
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_search_posts, menu);
+
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                binding.editProcurar.showSearch();
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+
         View root = binding.getRoot();
         db.clear();
 
@@ -55,7 +81,41 @@ public class MoradiasFragment extends Fragment {
 
         //--------RV---------------
         configAdapter(container);
-        getDbBack(container);
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getDbBack(container);
+            }
+        }).start();
+
+       // Menu menu;
+
+        //        MenuInflater menuInflater = new MenuInflater(getContext());
+//        menuInflater.inflate(R.menu.menu_search_posts, menu);
+
+        binding.editProcurar.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(@NonNull String s) {
+                Log.d("SimpleSearchView", "Submit:" + s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(@NonNull String s) {
+                Log.d("SimpleSearchView", "Text changed:" + s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextCleared() {
+                Log.d("SimpleSearchView", "Text cleared");
+                return false;
+            }
+        });
+
+
 
 
 
@@ -70,15 +130,6 @@ public class MoradiasFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -129,7 +180,7 @@ public class MoradiasFragment extends Fragment {
                         if(tempDb.get(i).getPostMoradia() != null){
                             db.add(tempDb.get(i));
 
-                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
+//                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
                         }
                     }
                     moradiasAdapter.setPostagens(db);

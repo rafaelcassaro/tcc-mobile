@@ -22,29 +22,17 @@
 
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/Container_user_image_editar"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_perfil_post"
         android:layout_width="60dp"
         android:layout_height="60dp"
-
         android:layout_marginTop="24dp"
-        android:background="@drawable/container_user"
+        android:src="@drawable/ic_user"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
         app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="@+id/ContainerComponents_postagem"
         app:layout_constraintTop_toTopOf="@+id/ContainerComponents_postagem"
-
-        />
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_user"
-        app:layout_constraintStart_toStartOf="@+id/Container_user_image_editar"
-        app:layout_constraintEnd_toEndOf="@+id/Container_user_image_editar"
-        app:layout_constraintTop_toTopOf="@+id/Container_user_image_editar"
-        app:layout_constraintBottom_toBottomOf="@+id/Container_user_image_editar"
         />
 
     <TextView
@@ -55,7 +43,7 @@
         android:textColor="@color/black"
         android:text="Nome Sobrenome"
         app:layout_constraintTop_toTopOf="@+id/ContainerComponents_postagem"
-        app:layout_constraintStart_toEndOf="@+id/Container_user_image_editar"
+        app:layout_constraintStart_toEndOf="@+id/iv_perfil_post"
         app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
         app:layout_constraintHorizontal_bias="0.15"
 
@@ -73,7 +61,7 @@
         android:text="São Paulo"
         android:textSize="16sp"
 
-        app:layout_constraintTop_toBottomOf="@+id/Container_user_image_editar"
+        app:layout_constraintTop_toBottomOf="@+id/iv_perfil_post"
         app:layout_constraintStart_toStartOf="@+id/ContainerComponents_postagem"
         app:layout_constraintEnd_toEndOf="@+id/ContainerComponents_postagem"
         app:layout_constraintHorizontal_bias="0.05"

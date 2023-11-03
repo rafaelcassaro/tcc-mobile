@@ -27,6 +27,9 @@
     <string name="bt_moradia_cadastro_editar">Editar</string>
     <string name="ic_moradores">moradores</string>
 
+    <string name="bt_cadastro_add">Adicionar</string>
+    <string name="redes_sociais">Redes Sociais</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -54,21 +54,19 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.8")
 
     implementation ("com.github.sparrow007:carouselrecyclerview:1.2.6")
-
-
-
+    
 
     implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.2")
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.github.Ferfalk:SimpleSearchView:0.2.0")
 
 
     implementation("com.facebook.fresco:fresco:3.1.3")
     implementation("com.koushikdutta.ion:ion:3.1.0")
-
-
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
 
     testImplementation("junit:junit:4.13.2")

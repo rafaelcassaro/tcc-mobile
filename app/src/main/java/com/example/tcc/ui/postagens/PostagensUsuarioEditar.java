@@ -2,6 +2,7 @@ package com.example.tcc.ui.postagens;
 
 import static android.app.PendingIntent.getActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -20,10 +21,18 @@ import com.example.tcc.network.entities.CepApi;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +45,7 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
     private EditText cepEt;
     private EditText comentarioEt;
     private Button botaoEditar;
+    private CircleImageView imageView;
 
 
     @Override
@@ -47,17 +57,20 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
         iniciarViews();
         RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
 
-        Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getCidade());
-        Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getEstado());
-        Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getCep());
-        Log.e("VALOR ID POSTMORADA", "deu ruim"+ post.getComentario());
-        Log.e("VALOR ID POSTMORADA", "deu ruim"+ cidadeTv.getText().toString());
-
         cidadeTv.setText(post.getCidade());
         estadoTv.setText(post.getEstado());
         nomeTv.setText(post.getUsuario().getNome());
         cepEt.setText(post.getCep());
         comentarioEt.setText(post.getComentario());
+
+        SecurityPreferences securityPreferences = new SecurityPreferences(this);
+        Picasso picasso = new Picasso.Builder(this)
+                .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
+                .build();
+
+        picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + post.getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(imageView);
+
+
 
         botaoEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,13 +159,34 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
     }
 
     private void iniciarViews() {
-
         cidadeTv = findViewById(R.id.tv_cidade_usuario_post);
         estadoTv = findViewById(R.id.tv_estado_usuario);
         nomeTv = findViewById(R.id.tv_name_usuario_post);
         cepEt = findViewById(R.id.et_cep_usuario);
         comentarioEt = findViewById(R.id.et_comentario);
         botaoEditar = findViewById(R.id.bt_postar);
+        imageView = findViewById(R.id.iv_perfil_post);
+
+    }
+
+    private OkHttpClient getOkHttpClientWithAuthorization(final String token) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(new Interceptor() {
+            @NonNull
+            @Override
+            public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+                okhttp3.Request original = chain.request();
+                Request request = original
+                        .newBuilder()
+                        .addHeader("Authorization", token)
+                        .method(original.method(), original.body())
+                        .build();
+
+                return chain.proceed(request);
+            }
+        });
+        return httpClient.build();
 
     }
 

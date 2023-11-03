@@ -17,6 +17,7 @@ import com.example.tcc.R;
 import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -85,7 +86,7 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
                 //.animateIn(fadeInAnimation)
         //addImgvazia();
 
-        Picasso.get().load(db.get(position)).error(R.drawable.img_not_found_little).placeholder(R.drawable.img_not_found_little).into(holder.carouselImageView);
+        Picasso.get().load(db.get(position)).error(R.drawable.img_not_found_little).placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.carouselImageView);
 
 
 

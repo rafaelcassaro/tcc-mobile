@@ -292,6 +292,23 @@
 
         app:layout_constraintVertical_bias="0.806" />
 
+    <TextView
+        android:id="@+id/spiner"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+
+        android:textStyle="bold"
+        android:textColorHighlight="@color/cinza"
+        android:text="@string/redes_sociais"
+        android:textColor="@color/Blue"
+
+        app:layout_constraintBottom_toTopOf="@id/tv_valor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintStart_toStartOf="@id/ContainerMoradia"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
+        app:layout_constraintVertical_bias="0.532" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_wpp"
         android:layout_width="120dp"

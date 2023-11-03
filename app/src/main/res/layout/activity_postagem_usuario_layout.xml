@@ -16,30 +16,19 @@
 
         />
 
-    <View
-        android:id="@+id/Container_user_image_editar"
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_perfil_post"
         android:layout_width="50dp"
         android:layout_height="50dp"
-
         android:layout_marginTop="15dp"
-        android:background="@drawable/container_user"
+        android:src="@drawable/ic_user"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.1"
 
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
         app:layout_constraintTop_toTopOf="@+id/ContainerPostagem"
-
-        />
-
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_user"
-        app:layout_constraintStart_toStartOf="@+id/Container_user_image_editar"
-        app:layout_constraintEnd_toEndOf="@+id/Container_user_image_editar"
-        app:layout_constraintTop_toTopOf="@+id/Container_user_image_editar"
-        app:layout_constraintBottom_toBottomOf="@+id/Container_user_image_editar"
         />
 
     <TextView
@@ -53,7 +42,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toEndOf="@+id/Container_user_image_editar"
+        app:layout_constraintStart_toEndOf="@+id/iv_perfil_post"
 
         app:layout_constraintTop_toTopOf="@+id/ContainerPostagem" />
 
@@ -69,7 +58,7 @@
         android:text="São Paulo"
         android:textSize="14sp"
 
-        app:layout_constraintTop_toBottomOf="@+id/Container_user_image_editar"
+        app:layout_constraintTop_toBottomOf="@+id/iv_perfil_post"
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.05"
@@ -86,7 +75,7 @@
         android:textSize="14sp"
 
         app:layout_constraintTop_toBottomOf="@+id/tv_name_usuario_post"
-        app:layout_constraintStart_toEndOf="@+id/Container_user_image_editar"
+        app:layout_constraintStart_toEndOf="@+id/iv_perfil_post"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.05"
         />
@@ -106,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario_post"
-        app:layout_constraintTop_toBottomOf="@+id/Container_user_image_editar"
+        app:layout_constraintTop_toBottomOf="@+id/iv_perfil_post"
         />
 
     <TextView

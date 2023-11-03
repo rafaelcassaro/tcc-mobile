@@ -7,43 +7,39 @@
     android:background="@drawable/background_color"
     tools:context=".ui.perfil.EditarPerfilFragment">
 
-    <View
-        android:id="@+id/userImageContainer"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_edit_img_perfil"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
 
         android:layout_marginTop="15dp"
-        android:background="@drawable/container_user"
+        android:src="@drawable/ic_user"
+
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_user"
-        app:layout_constraintStart_toStartOf="@+id/userImageContainer"
-        app:layout_constraintEnd_toEndOf="@+id/userImageContainer"
-        app:layout_constraintTop_toTopOf="@+id/userImageContainer"
-        app:layout_constraintBottom_toBottomOf="@+id/userImageContainer"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <View
         android:id="@+id/containerComponents_cadastro"
         style="@style/ContainerComponents"
         android:layout_width="0dp"
-        android:layout_height="545dp"
+        android:layout_height="450dp"
 
 
         app:layout_constraintBottom_toTopOf="@id/bt_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userImageContainer" />
+        app:layout_constraintTop_toBottomOf="@id/iv_edit_img_perfil" />
 
     <EditText
         android:id="@+id/et_nome"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="nome"
         android:drawableRight="@drawable/ic_user"
         android:textColorHint="@color/Grey"
@@ -57,7 +53,7 @@
 
     <EditText
         android:id="@+id/et_email"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="Email"
         android:textColorHint="@color/Grey"
         android:textColor="@color/black"
@@ -69,7 +65,7 @@
         />
     <EditText
         android:id="@+id/et_senha"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="Senha"
         android:textColorHint="@color/Grey"
         android:textColor="@color/black"
@@ -82,7 +78,7 @@
 
     <EditText
         android:id="@+id/et_celular"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="Celular"
         android:textColorHint="@color/Grey"
         android:inputType="phone"
@@ -110,7 +106,7 @@
 
     <EditText
         android:id="@+id/et_link1"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="Link"
         android:textColorHint="@color/Grey"
         android:inputType="textUri"
@@ -123,7 +119,7 @@
 
     <EditText
         android:id="@+id/et_link2"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="Link"
         android:textColorHint="@color/Grey"
         android:inputType="textUri"
@@ -136,7 +132,7 @@
 
     <EditText
         android:id="@+id/et_link3"
-        style="@style/Edit_Text_Login"
+        style="@style/Edit_Text_Cadastro"
         android:hint="Link"
         android:textColor="@color/black"
         android:textColorHint="@color/Grey"

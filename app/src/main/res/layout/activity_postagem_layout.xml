@@ -16,30 +16,24 @@
 
         />
 
-    <View
-        android:id="@+id/Container_user_image_editar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
 
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_perfil_post"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/container_user"
 
+
+        android:src="@drawable/ic_user"
+
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.1"
 
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
         app:layout_constraintTop_toTopOf="@+id/ContainerPostagem"
-
-        />
-
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_user"
-        app:layout_constraintStart_toStartOf="@+id/Container_user_image_editar"
-        app:layout_constraintEnd_toEndOf="@+id/Container_user_image_editar"
-        app:layout_constraintTop_toTopOf="@+id/Container_user_image_editar"
-        app:layout_constraintBottom_toBottomOf="@+id/Container_user_image_editar"
         />
 
     <TextView
@@ -53,7 +47,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toEndOf="@+id/Container_user_image_editar"
+        app:layout_constraintStart_toEndOf="@+id/iv_perfil_post"
 
         app:layout_constraintTop_toTopOf="@+id/ContainerPostagem" />
 
@@ -69,7 +63,7 @@
         android:text="São Paulo"
         android:textSize="14sp"
 
-        app:layout_constraintTop_toBottomOf="@+id/Container_user_image_editar"
+        app:layout_constraintTop_toBottomOf="@+id/iv_perfil_post"
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.05"
@@ -86,7 +80,7 @@
         android:textSize="14sp"
 
         app:layout_constraintTop_toBottomOf="@+id/tv_name_usuario_post"
-        app:layout_constraintStart_toEndOf="@+id/Container_user_image_editar"
+        app:layout_constraintStart_toEndOf="@+id/iv_perfil_post"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.05"
         />
@@ -106,7 +100,7 @@
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
         app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario_post"
-        app:layout_constraintTop_toBottomOf="@+id/Container_user_image_editar"
+        app:layout_constraintTop_toBottomOf="@+id/iv_perfil_post"
         />
 
     <TextView
@@ -186,6 +180,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/ContainerPostagem"
         />
+
+    <TextView
+        android:id="@+id/tv_redes_sociais"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/Blue"
+        android:text="@string/redes_sociais"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="@id/ContainerPostagem"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.984"
+
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+
+        app:layout_constraintTop_toTopOf="@+id/ContainerPostagem"
+        app:layout_constraintVertical_bias="0.85" />
 
     <ImageButton
         android:id="@+id/ib_denunciar"

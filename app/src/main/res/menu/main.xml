@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/almostWhite"
+    >
 
     <item
-        android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_lupa"
-        android:title="Search"
-        app:actionViewClass="android.widget.SearchView" />
-    <item
+        android:id="@+id/menu_item_image2"
+        android:icon="@drawable/logo"
+        android:iconTint="@color/white"
+        app:showAsAction="always"
+        android:title="TODO"
         />
+
+    <item
+        android:id="@+id/menu_item_image1"
+        android:icon="@drawable/logo"
+        android:iconTint="@color/white"
+        app:showAsAction="always"
+        android:title="TODO"
+        >
+        <menu>
+
+            <item
+                android:id="@+id/menu_item_image9"
+                android:icon="@drawable/logo"
+                android:iconTint="@color/white"
+                app:showAsAction="always"
+                android:title="TODO"
+                />
+
+        </menu>
+    </item>
+
 
 
 

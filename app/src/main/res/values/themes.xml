@@ -21,4 +21,32 @@
 
     <style name="Theme.TCC.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.TCC.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Search_view_theme">
+        <item name="colorSecondary">#8A9399</item>
+        <item name="searchBackground">#1A2229</item>
+        <item name="android:inputType">text</item>
+        <item name="android:hint">@string/ic_moradores</item>
+        <item name="hintColor">#8A9399</item>
+        <item name="backIconTint">#8A9399</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconsTint">#8A9399</item>
+
+    </style>
+
+
+    <style name="Base_toolbarStyle">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="iconsTint">@style/Base_toolbarTheme</item>
+    </style>
+
+
+    <style name="Base_toolbarTheme">
+        <item name="android:textColorPrimary">#8A9399</item>
+        <item name="android:textColorSecondary">#8A9399</item>
+    </style>
+
+
+
 </resources>

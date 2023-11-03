@@ -28,6 +28,7 @@ import com.example.tcc.ui.constants.TaskConstants;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -51,6 +52,9 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
     private SecurityPreferences securityPreferences;
     private Picasso picasso;
     private Bitmap loadedBitMap;
+
+
+   // private Target target;
     //private Picasso picasso2;
     //private Uri imagem;
   //  private Uri imagem2;
@@ -94,15 +98,41 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
          //       .into(););
                 //.animateLoad(spinAnimation)
                 //.animateIn(fadeInAnimation)
+        final Target target= new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                //Bitmap bit = Bitmap.createScaledBitmap(bitmap, 200,200,true);
+                BitmapDrawable mBitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+
+                holder.carouselImageView.setImageDrawable(mBitmapDrawable);
+                // holder.carouselImageView.setImageBitmap();
+                Log.e("IMAGEMVIEW", "onBitmapLoaded: ");
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                Log.e("IMAGEMVIEW", "onBitmapFailed: "+e.toString());
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.e("IMAGEMVIEW", "onPrepareLoad: ");
+
+            }
+        };
 
 
+        picasso.load("http://192.168.1.107:8080/imagens/" + dbPost.get(position).getNomeFoto()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.carouselImageView);
 
-        picasso.load("http://192.168.1.107:8080/imagens/" + dbPost.get(position).getNomeFoto()).placeholder(R.drawable.img_not_found_little).into(new Target() {
+       /* picasso.load("http://192.168.1.107:8080/imagens/" + dbPost.get(position).getNomeFoto()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                // loadedBitMap = bitmap;
+                Bitmap bit = Bitmap.createScaledBitmap(bitmap, 200,200,true);
 
-                holder.carouselImageView.setImageBitmap(bitmap);
+                holder.carouselImageView.setImageBitmap(bit);
+
 
                 Log.e("IMAGEMVIEW", "onBitmapLoaded: ");
                 //notifyItemInserted(dbPost.size()-1);
@@ -123,7 +153,7 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
             Log.e("IMAGEMVIEW", "onPrepareLoad: ");
 
         }
-    });
+    });*/
 
         Log.e("IMAGEMVIEW", ": "+dbPost.get(position).getNomeFoto());
     }
