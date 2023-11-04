@@ -98,6 +98,16 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         configAdapter(this);
         multiPartImgList.clear();
 
+
+        ImageView backButton = findViewById(R.id.iv_voltar);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MoradiaUsuarioEditar.super.onBackPressed();
+            }
+        });
+
         //PEGAR O TOKEN SALVO E APLICAR NA CONEXAO COM O END-POINT "retrofitConfig"
 
 

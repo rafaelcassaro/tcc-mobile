@@ -67,6 +67,7 @@ dependencies {
     implementation("com.facebook.fresco:fresco:3.1.3")
     implementation("com.koushikdutta.ion:ion:3.1.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
 
 
     testImplementation("junit:junit:4.13.2")

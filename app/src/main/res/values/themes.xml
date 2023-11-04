@@ -26,6 +26,7 @@
         <item name="colorSecondary">#8A9399</item>
         <item name="searchBackground">#1A2229</item>
         <item name="android:inputType">text</item>
+
         <item name="android:hint">@string/ic_moradores</item>
         <item name="hintColor">#8A9399</item>
         <item name="backIconTint">#8A9399</item>

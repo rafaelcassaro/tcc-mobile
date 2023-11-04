@@ -10,6 +10,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.example.tcc.ui.adapter.MoradiasExpandirAdapter;
 import com.example.tcc.ui.adapter.MoradiasUsuarioAdapter;
 import com.example.tcc.ui.adapter.spinerAdapter.SocialsDropDownAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.example.tcc.ui.utils.SearchActivity;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class MoradiaExpandir extends AppCompatActivity {
         setContentView(R.layout.activity_moradia_expandir);
         iniciarViews();
         comentarioTv = findViewById(R.id.tv_comentario);
+        Log.e("MoradiaExpandir","EXTRA_SHOW: "+ TaskConstants.SHARED.EXTRA_SHOW);
         final Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
 
 
@@ -58,6 +61,16 @@ public class MoradiaExpandir extends AppCompatActivity {
         ruaTv.setText(post.getPostMoradia().getEndereco());
         numCasaTv.setText(String.valueOf(post.getPostMoradia().getNumCasa()));
         moradoresTv.setText(String.valueOf(post.getPostMoradia().getDetalhesMoradia().getMoradores()));
+
+
+        ImageView backButton = findViewById(R.id.iv_voltar);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MoradiaExpandir.super.onBackPressed();
+            }
+        });
 
 
         if(post.getPostMoradia().isTipoResidencia()){
@@ -97,7 +110,9 @@ public class MoradiaExpandir extends AppCompatActivity {
         zap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSocialMediaLink("https://www.instagram.com/julialaasdudfasdfasdfadfries");
+                String numeroTelefone = "+5521980302642";
+                openSocialMediaLink("https://wa.me/"+numeroTelefone);
+
             }
         });
 

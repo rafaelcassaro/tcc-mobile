@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
@@ -59,6 +60,14 @@ public class FormCadastro extends AppCompatActivity {
         registerResult();
         bt_perfil_add.setOnClickListener(view -> pickImage());
 
+        ImageView backButton = findViewById(R.id.iv_voltar);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FormCadastro.super.onBackPressed();
+            }
+        });
 
         bt_cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override

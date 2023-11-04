@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tcc.MainActivity;
@@ -62,6 +63,16 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
         nomeTv.setText(post.getUsuario().getNome());
         cepEt.setText(post.getCep());
         comentarioEt.setText(post.getComentario());
+
+        ImageView backButton = findViewById(R.id.iv_voltar);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostagensUsuarioEditar.super.onBackPressed();
+            }
+        });
+
 
         SecurityPreferences securityPreferences = new SecurityPreferences(this);
         Picasso picasso = new Picasso.Builder(this)

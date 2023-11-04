@@ -4,21 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.moradias.MoradiasFragment">
+    tools:context=".ui.utils.SearchActivity"
+    android:background="@android:color/transparent"
+    >
+
 
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
+
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toobar_pica"
@@ -30,39 +35,71 @@
                 android:background="@color/Blue"
                 />
 
-            <com.ferfalk.simplesearchview.SimpleSearchView
-                android:id="@+id/edit_procurar"
+            <ImageView
+                android:id="@+id/iv_voltar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_back"
+                android:layout_margin="7dp"
 
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/almostWhite"
-                android:theme="@style/Search_view_theme"
-                app:type="bar"
-                app:layout_constraintStart_toStartOf="@id/toobar_pica"
-                app:layout_constraintEnd_toStartOf="@id/bt_filtrar"
-                app:layout_constraintTop_toTopOf="@id/toobar_pica"
-                app:layout_constraintBottom_toBottomOf="@id/toobar_pica"
                 />
 
-        </FrameLayout>
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/edit_procurar"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/container_search"
+
+
+
+                android:theme="@style/Search_view_theme"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="5dp"
+
+                app:iconifiedByDefault="false"
+
+
+                />
+
+
+    </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_cidades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cidades disponíveis"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:paddingLeft="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toobar_pica"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_moradias"
+            android:id="@+id/rv_moradias_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+
 
             android:background="@color/almostWhite"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/toobar_pica"
-
-
             app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/activity_moradia_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_cidades"
+            tools:listitem="@layout/nome_cidades_layouts" />
+
 
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

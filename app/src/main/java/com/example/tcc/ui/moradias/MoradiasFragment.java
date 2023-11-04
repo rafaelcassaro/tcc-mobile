@@ -1,5 +1,7 @@
 package com.example.tcc.ui.moradias;
 
+import static android.content.Intent.getIntent;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
@@ -24,6 +28,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentMoradiasBinding;
 import com.example.tcc.db.models.Moradias;
@@ -34,6 +39,7 @@ import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.example.tcc.ui.utils.SearchActivity;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
 import java.util.ArrayList;
@@ -49,6 +55,7 @@ public class MoradiasFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private MoradiasAdapter moradiasAdapter;
     private List<Post> db = new ArrayList<>();
+    private String cidadeProcurada;
 
 
 
@@ -58,22 +65,24 @@ public class MoradiasFragment extends Fragment {
         binding = FragmentMoradiasBinding.inflate(inflater, container, false);
 
         MenuHost menuHost = requireActivity();
-
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_search_posts, menu);
 
+
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                binding.editProcurar.showSearch();
+              //  binding.editProcurar.showSearch();
+               // Intent intent = new Intent(getContext(), SearchActivity.class);
+               // startActivity(intent);
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
-
+        cidadeProcurada = "";
         View root = binding.getRoot();
         db.clear();
 
@@ -86,16 +95,36 @@ public class MoradiasFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                getDbBack(container);
+              //  final Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
+                String cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
+                Log.e("MoradiasFragment","EXTRA_SHOW_SEARCH: "+ cidade);
+                if (cidadeProcurada == "" && cidade == null){
+                    getDbBack(container);
+                }
+                else if (cidade != null){
+                    getPostCidadesBack(container, cidade);
+                }
+
+
+
             }
         }).start();
+
+        binding.toobarPica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
        // Menu menu;
 
         //        MenuInflater menuInflater = new MenuInflater(getContext());
 //        menuInflater.inflate(R.menu.menu_search_posts, menu);
 
-        binding.editProcurar.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
+       binding.editProcurar.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(@NonNull String s) {
                 Log.d("SimpleSearchView", "Submit:" + s);
@@ -116,7 +145,7 @@ public class MoradiasFragment extends Fragment {
         });
 
 
-
+        Log.e("MoradiasFragment","EXTRA_SHOW: ");
 
 
 
@@ -157,6 +186,63 @@ public class MoradiasFragment extends Fragment {
         binding.rvMoradias.setAdapter(moradiasAdapter);
         Log.e("rv", "dados db:" + db.toString());
     }
+
+
+     private void getPostCidadesBack(ViewGroup container, String cidade) {
+        //PEGAR TOKEN
+        SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
+        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+        Call<List<Post>> call = retrofitConfig.getPostService().getPostByCidade(cidade);
+
+       call.enqueue(new Callback<List<Post>>() {
+           @Override
+           public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+               if (response.isSuccessful()){
+
+                   if (response.isSuccessful()) {
+                       List<Post> tempDb = new ArrayList<>();
+                       tempDb.clear();
+
+                       tempDb = response.body();
+
+                       Log.e("Response body", "dados db local:" + db.toString());
+                       for (int i = 0; tempDb.size()> i; i++){
+                           if(tempDb.get(i).getPostMoradia() != null){
+                               db.add(tempDb.get(i));
+
+//                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
+                           }
+                       }
+                       moradiasAdapter.setPostagens(db);
+
+                       //for(int i =0 ; i < db.size(); i++){
+                       //    //Fotos fotos = new Fotos();
+                       //     Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
+                       // }
+
+
+                       Log.e("Response body", "dados ResponseBody:" + response.body());
+
+
+                   } else {
+                       mostrarErro(container);
+                   }
+
+               }
+           }
+
+           @Override
+           public void onFailure(Call<List<Post>> call, Throwable t) {
+
+           }
+       });
+
+    }
+
+
+
 
     private void getDbBack(ViewGroup container) {
         //PEGAR TOKEN

@@ -18,8 +18,13 @@ public interface PostService {
     @GET("posts/userPosts/{id}")
     Call<List<Post>> getPostByUserId(@Path("id") Long id);
 
+    @GET("posts/cidade/{cidade}")
+    Call<List<Post>> getPostByCidade(@Path("cidade") String cidade);
+
     @GET("posts")
     Call<List<Post>> getAllPost();
+
+
 
 
 
