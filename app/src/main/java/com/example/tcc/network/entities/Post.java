@@ -15,7 +15,7 @@ public class Post implements Serializable {
     private String estado;
     private String dataPost;
     private String cep;
-    protected SimpleDateFormat x = new SimpleDateFormat("dd MMM yyyy");
+    protected SimpleDateFormat x = new SimpleDateFormat("dd/MM/yyyy");
 
     private Usuario usuario;
 

@@ -15,10 +15,13 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.example.tcc.MainActivity;
@@ -32,7 +35,6 @@ import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
 import com.example.tcc.network.repositories.SecurityPreferences;
-import com.example.tcc.ui.adapter.ImagemAdapter;
 import com.example.tcc.ui.adapter.ImagemEditarMoradiaAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.google.android.material.chip.Chip;
@@ -64,7 +66,7 @@ public class NovoAnuncioFragment extends Fragment {
     private Uri imgNotFound;
     private List<MultipartBody.Part> multiPartImgList = new ArrayList<>();
    // private List<Uri> imageUriList = new ArrayList<>();
-
+    private Post post;
     private ImagemEditarMoradiaAdapter imagemAdapter;
     private Picasso picasso ;
     private RetrofitConfigCepApi retrofitConfigCepApi;
@@ -76,9 +78,9 @@ public class NovoAnuncioFragment extends Fragment {
         View root = binding.getRoot();
        // iniciarViews();
         //Post post = new Post();
-        RetrofitConfigCepApi retrofitConfigCepApi = new RetrofitConfigCepApi();
+        retrofitConfigCepApi = new RetrofitConfigCepApi();
 
-        Post post = new Post();
+        post = new Post();
         PostMoradia moradia = new PostMoradia();
         Detalhes detalhesMoradia = new Detalhes();
         post.setPostMoradia(moradia);
@@ -88,20 +90,24 @@ public class NovoAnuncioFragment extends Fragment {
         configAdapter(getContext());
         multiPartImgList.clear();
 
-        //imagemAdapter.setImagem(imageUriList);
-
-        //binding.crvFotosMoradia.setAdapter(imagemAdapter);
-        //binding.crvFotosMoradia.setInfinite(true);
-        // binding.ivFotosUsuario.set3DItem(true);
-        //binding.crvFotosMoradia.setFlat(true);
-
-
         registerResult();
+        getCheckButtons();
+        binding.etCepUsuario.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                pegarCepViaApi();
+
+                return false;
+            }
+        });
 
 
-        binding.btAddImg.setOnClickListener(view -> pickImage());  //coloca uma imagem na lista uri e atualiza o rv das imgs
 
-        binding.btRemoveImg.setOnClickListener(new View.OnClickListener() {
+
+
+        binding.ibAdicionarImg.setOnClickListener(view -> pickImage());  //coloca uma imagem na lista uri e atualiza o rv das imgs
+
+        binding.ibRemoverImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -122,36 +128,9 @@ public class NovoAnuncioFragment extends Fragment {
             public void onClick(View v) {
 
 
-                setarDados(post, root);
 
-                Integer cep = Integer.valueOf(binding.etCepUsuario.getText().toString());
-                Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
-                callApi.enqueue(new Callback<CepApi>() {
-                    @Override
-                    public void onResponse(Call<CepApi> call, Response<CepApi> response) {
-                        if (response.isSuccessful()){
-                            CepApi cepApiDados = response.body();
+                salvarPostagemViaApi();
 
-                            Log.e("VERIFICAR POST ", "deu bom "+ cepApiDados.toString());
-                            post.setCidade(cepApiDados.getCity());
-                            post.setEstado(cepApiDados.getState());
-                            post.setCep(cepApiDados.getCep());
-                            post.setQntdDenuncia(0);
-
-                            salvarPostagemViaApi(post);
-
-                        }
-                        else {
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<CepApi> call, Throwable t) {
-
-                    }
-                });
 
             }
         });
@@ -161,20 +140,110 @@ public class NovoAnuncioFragment extends Fragment {
         return root;
     }
 
+    private void getCheckButtons(){
+        binding.cbGaragem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.cbGaragem.isChecked()){
+                    post.getPostMoradia().getDetalhesMoradia().setGaragem(true);
+                    Log.e("onCheckboxClicked","CheckBoxON cb_garagem "+ post.getPostMoradia().getDetalhesMoradia().isGaragem());
+                }
+                else {
+                    post.getPostMoradia().getDetalhesMoradia().setGaragem(false);
+                    Log.e("onCheckboxClicked","CheckBoxOFF cb_garagem "+post.getPostMoradia().getDetalhesMoradia().isGaragem());
+                }
+            }
+        });
+
+        binding.cbResidencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( binding.cbResidencia.isChecked()){
+                    post.getPostMoradia().setTipoResidencia(true);
+                    Log.e("onCheckboxClicked","CheckBoxON cb_residencia "+post.getPostMoradia().isTipoResidencia());
+                }
+                else {
+                    post.getPostMoradia().setTipoResidencia(false);
+                    Log.e("onCheckboxClicked","CheckBoxOFF cb_residencia "+post.getPostMoradia().isTipoResidencia());
+                }
+
+            }
+        });
+
+        binding.cbPets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( binding.cbPets.isChecked()){
+                    post.getPostMoradia().getDetalhesMoradia().setPets(true);
+                    Log.e("onCheckboxClicked","CheckBoxON cb_residencia "+post.getPostMoradia().isTipoResidencia());
+                }
+                else {
+                    post.getPostMoradia().getDetalhesMoradia().setPets(false);
+                    Log.e("onCheckboxClicked","CheckBoxOFF cb_residencia "+post.getPostMoradia().isTipoResidencia());
+                }
+
+            }
+        });
+
+        binding.cbQuarto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( binding.cbQuarto.isChecked()){
+                    post.getPostMoradia().getDetalhesMoradia().setQuarto(true);
+                    Log.e("onCheckboxClicked","CheckBoxON cb_residencia "+post.getPostMoradia().isTipoResidencia());
+                }
+                else {
+                    post.getPostMoradia().getDetalhesMoradia().setQuarto(false);
+                    Log.e("onCheckboxClicked","CheckBoxOFF cb_residencia "+post.getPostMoradia().isTipoResidencia());
+                }
+
+            }
+        });
+
+
+
+    }
+
+    private void pegarCepViaApi() {
+        Integer cep = Integer.valueOf(binding.etCepUsuario.getText().toString());
+        Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+        callApi.enqueue(new Callback<CepApi>() {
+            @Override
+            public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                if (response.isSuccessful()){
+                    CepApi cepApiDados = response.body();
+
+                    Log.e("VERIFICAR POST ", "deu bom "+ cepApiDados.toString());
+                    post.setCidade(cepApiDados.getCity());
+                    post.setEstado(cepApiDados.getState());
+                    post.setCep(cepApiDados.getCep());
+                    post.setQntdDenuncia(0);
+                    binding.tvCidadeUsuario.setText(cepApiDados.getCity());
+                    binding.tvEstadoUsuario.setText(cepApiDados.getState());
+
+
+
+                }
+                else {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CepApi> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void configAdapter(Context context){
         imagemAdapter = new ImagemEditarMoradiaAdapter(context);
-        //imagemAdapter.setImagem(imageUriList);
         binding.crvFotosMoradia.setAdapter(imagemAdapter);
         imagemAdapter.addImgvazia();
         binding.crvFotosMoradia.setInfinite(true);
         binding.crvFotosMoradia.setFlat(true);
 
-//        Log.e("IMAGEM LISTA", ": "+imageUriList.toString());
-
-       // binding.ivFotosUsuario.setAdapter(imagemAdapter);
-       // binding.ivFotosUsuario.setInfinite(true);
-       // binding.ivFotosUsuario.set3DItem(true);
-       // binding.ivFotosUsuario.setFlat(true);
     }
 
     private OkHttpClient getOkHttpClientWithAuthorization(final String token) {
@@ -248,6 +317,8 @@ public class NovoAnuncioFragment extends Fragment {
         });
     }
 
+
+
     private void SalvarImagemViaApi(RetrofitConfig retrofitConfig,Long id, MultipartBody.Part imagem){
 
         Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagem, id);
@@ -274,7 +345,8 @@ public class NovoAnuncioFragment extends Fragment {
     }
 
 
-    private void salvarPostagemViaApi(Post post) {
+    private void salvarPostagemViaApi() {
+        setarDados();
         SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
@@ -332,40 +404,18 @@ public class NovoAnuncioFragment extends Fragment {
 
     //-------------------BOTOES------------------------------------------
 
-    private void setarDados(Post post,View root){
+    private void setarDados(){
         post.getPostMoradia().setEndereco(binding.etRuaUsuario.getText().toString());
         post.getPostMoradia().setNumCasa(Integer.valueOf(binding.etNumCasaUsuario.getText().toString()));
         post.setComentario(binding.etComentarioAnuncio.getText().toString());
         post.getPostMoradia().getDetalhesMoradia().setMoradores(Integer.valueOf(binding.etNumMoradoresUsuario.getText().toString()));
         post.getPostMoradia().setValorAluguel(Double.valueOf(binding.etAluguelUsuario.getText().toString()));
 
-        int escolhaAp = verificarChip(root.findViewById(R.id.chip_ap),  R.id.chip_ap_apart, R.id.chip_ap_casa);
-        adicionarAp(post, escolhaAp);
-        int escolhaPet = verificarChip(root.findViewById(R.id.chips_pet),  R.id.chips_pet_sim, R.id.chips_pet_nao);
-        adicionarPet(post, escolhaPet);
-        int escolhaGaragem = verificarChip(root.findViewById(R.id.chips_garagem),  R.id.chips_garagem_sim, R.id.chips_garagem_nao);
-        adicionarGaragem(post, escolhaGaragem);
         int escolhaGenero = verificarChip3Opcoes(binding.chipsGenero, R.id.chips_genero_masc, R.id.chips_genero_fem, R.id.chips_genero_misto);
-        adicionarGenero(post, escolhaGenero);
+        adicionarGenero(escolhaGenero);
     }
 
-    private int verificarChip(ChipGroup chip, int opcao1, int opcao2)  {
-        int escolha= 0;
-        int selectedChipId = chip.getCheckedChipId(); // Obtém o ID do Chip selecionado
 
-        if (selectedChipId != View.NO_ID) {
-            Chip selectedChip = chip.findViewById(selectedChipId); // Obtém a referência ao Chip selecionado
-            if (selectedChip.getId() == opcao1) {
-                escolha = 1;
-            } else if (selectedChip.getId() == opcao2) {
-                escolha = 2;
-            }
-        } else {
-            escolha = 0;
-        }
-
-        return escolha;
-    }
 
     private int verificarChip3Opcoes(ChipGroup chip, int opcao1, int opcao2,int opcao3)  {
         int escolha= 0;
@@ -388,34 +438,7 @@ public class NovoAnuncioFragment extends Fragment {
         return escolha;
     }
 
-    private void adicionarAp(Post post, int escolha){
-        if(escolha == 1){
-            post.getPostMoradia().setTipoResidencia(false);
-        }
-        else if (escolha == 2){
-            post.getPostMoradia().setTipoResidencia(true);
-        }
-    }
-
-    private void adicionarPet(Post post, int escolha){
-        if(escolha == 1){
-            post.getPostMoradia().getDetalhesMoradia().setPets(true);
-        }
-        else if (escolha == 2){
-            post.getPostMoradia().getDetalhesMoradia().setPets(false);
-        }
-    }
-
-    private void adicionarGaragem(Post post, int escolha){
-        if(escolha == 1){
-            post.getPostMoradia().getDetalhesMoradia().setGaragem(true);
-        }
-        else if (escolha == 2){
-            post.getPostMoradia().getDetalhesMoradia().setGaragem(false);
-        }
-    }
-
-    private void adicionarGenero(Post post, int escolha){
+    private void adicionarGenero( int escolha){
         if(escolha == 1){
             post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MASCULINA");
         }

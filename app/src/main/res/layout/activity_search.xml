@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.utils.SearchActivity"
+    tools:context=".ui.utils.SearchMoradiaActivity"
     android:background="@android:color/transparent"
     >
 
@@ -50,18 +50,16 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/container_search"
-
-
-
-                android:theme="@style/Search_view_theme"
                 android:layout_marginLeft="70dp"
+
+
                 android:layout_marginTop="5dp"
-
-                app:iconifiedByDefault="false"
-
-
-                />
+                android:theme="@style/Search_view_procurar"
+                android:background="@drawable/button_filtrar"
+                android:text="@string/app_name"
+                app:hideNavigationIcon="false"
+                app:searchIcon="@drawable/ic_lupa"
+                app:iconifiedByDefault="false" />
 
 
     </FrameLayout>

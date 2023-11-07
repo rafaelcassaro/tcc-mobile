@@ -39,15 +39,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     private Context context;
     private LayoutInflater inflater;
     private List<String> db = new ArrayList<>();
+    private OnItemClickListener listener;
 
 
-
-    public SearchAdapter(Context context) {
+    public SearchAdapter(Context context, OnItemClickListener listener) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        db.add("ola");
-        db.add("olaa");
-        db.add("olaaa");
+        this.listener = listener;
     }
 
     @NonNull
@@ -69,14 +67,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         return db.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tvCidadesSearch;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvCidadesSearch = itemView.findViewById(R.id.tv_cidades_layout_search);
-
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            listener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(int position);
 
     }
 

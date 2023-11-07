@@ -2,9 +2,11 @@ package com.example.tcc;
 
 import static kotlin.concurrent.ThreadsKt.thread;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import com.example.tcc.network.entities.Usuario;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.moradias.MoradiasUsuarioFragment;
+import com.example.tcc.ui.moradias.NovoAnuncioFragment;
 import com.example.tcc.ui.postagens.PostagensUsuarioFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.MemoryPolicy;
@@ -116,6 +119,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
+
+        Menu navMenu = navigationView.getMenu();
+
+        MenuItem logoutItem = navMenu.findItem(R.id.nav_logout);
+
+        logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                if (intent != null) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+                finish(); // Encerrar a atividade atual
+
+                return true;
+            }
+        });
+
+
         if(getIntent().hasExtra("editar_post_tag")){
             navigationView.getMenu().performIdentifierAction(R.id.nav_postagens_usuario, 0);
         } else if (getIntent().hasExtra("editar_postMoradia_tag")) {
@@ -124,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
         navigationView.getMenu().performIdentifierAction(R.id.nav_postagens_usuario, 0);
         }else if (getIntent().hasExtra("novo_postMoradia_tag")) {
             navigationView.getMenu().performIdentifierAction(R.id.nav_anuncio_usuario, 0);
+        }else if (getIntent().hasExtra("Search_post_cidades")) {
+            navigationView.getMenu().performIdentifierAction(R.id.nav_postagens, 0);
         }
 
 
@@ -132,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/"+ nome).noFade()
                 .placeholder(R.drawable.img_not_found_little).into(ivPerfil);
 
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 

@@ -63,4 +63,5 @@
         android:label="@string/menu_planos"
         tools:layout="@layout/fragment_planos"
         />
+
 </navigation>

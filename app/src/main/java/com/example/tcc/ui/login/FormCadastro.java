@@ -56,6 +56,9 @@ public class FormCadastro extends AppCompatActivity {
         setContentView(R.layout.activity_form_cadastro);
         IniciarComponentes();
 
+        String [] ddd ={ "61","62","64","65","66","67","82","71","73","74","75","77","85","88","98","99","83","81","87","86"
+                ,"89","84","79","68","96","92","97","91","93","94","69","95","63","27","28","31","32","33","34","35","36","37",
+                "38","21","22","24","11","12","13","14","15","16","17","18","19","41","42","43","44","45","46","51","53","54","55","47","48","49"};
 
         registerResult();
         bt_perfil_add.setOnClickListener(view -> pickImage());
@@ -78,12 +81,18 @@ public class FormCadastro extends AppCompatActivity {
                 tempUsuario.setNome(nomeEt.getText().toString());
                 tempUsuario.setEmail(emailEt.getText().toString());
                 tempUsuario.setSenha(senhaEt.getText().toString());
-                tempUsuario.setCelular(celularEt.getText().toString());
+
                 tempUsuario.setLink1(link1Et.getText().toString());
                 tempUsuario.setLink2(link2Et.getText().toString());
                 tempUsuario.setLink3(link3Et.getText().toString());
 
+                String x = celularEt.getText().toString().substring(0,2);
+                Log.e("ASDFASDFASDF", "ASDFASDFASDFASDF: "+x);
+
+
+
                 // registerResult();
+
 
 
                 //  bt_perfil_add.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +101,15 @@ public class FormCadastro extends AppCompatActivity {
 
                 //       }
                 //    });
+                for (String dddCel: ddd) {
+                    Log.e("ASDFASDFASDF", "x: "+ x);
+                    Log.e("ASDFASDFASDF", "dddCel: "+ dddCel);
+                    if(x.equals(dddCel.substring(0,2))){
+                        Log.e("ASDFASDFASDF", "ASDFASDFASDFASDF: ");
+                        tempUsuario.setCelular("+55"+celularEt.getText().toString());
+
+
+
 
 
 
@@ -104,9 +122,16 @@ public class FormCadastro extends AppCompatActivity {
                             Long id = response.body().getId();
                             Log.e("onResponse", "id: " + id);
                             salvarImagemViaApi(id);
-
                             Intent intent = new Intent(FormCadastro.this, FormLogin.class);
                             startActivity(intent);
+
+
+
+
+
+
+
+                            //startActivity(intent);
                         } else {
                             //mostrarErro(FormLogin.this, "Usuario ou senha inválida");
                             Log.e("login user", "deu bom res: " + response);
@@ -120,6 +145,14 @@ public class FormCadastro extends AppCompatActivity {
                         Log.e("login user", "deu ruim" + t);
                     }
                 });
+
+                        break;
+                    }
+                }
+
+
+                celularEt.requestFocus();
+                celularEt.setError("Digite um ddd valido");
 
 
             }

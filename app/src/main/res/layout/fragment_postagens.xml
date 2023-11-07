@@ -7,63 +7,7 @@
     tools:context=".ui.postagens.PostagensFragment"
     >
 
-    <com.google.android.material.appbar.AppBarLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toobar_pica"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/Blue"
-                />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/bt_filtrar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="4dp"
-                android:background="@drawable/button_filtrar"
-
-
-                android:text="Filtrar"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.95"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/edit_procurar"
-                style="@style/Edit_Text_procurar"
-                android:hint="Cidade, Estado"
-                android:textColorHint="@color/Grey"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:drawableLeft="@drawable/ic_lupa"
-                app:layout_constraintStart_toStartOf="@id/toobar_pica"
-                app:layout_constraintEnd_toStartOf="@id/bt_filtrar"
-                app:layout_constraintTop_toTopOf="@id/toobar_pica"
-                app:layout_constraintBottom_toBottomOf="@id/toobar_pica"
-
-                />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_postagens"
@@ -80,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/activity_postagem_layout" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

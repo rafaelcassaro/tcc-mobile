@@ -5,35 +5,23 @@ package com.example.tcc.ui.moradias;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tcc.R;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.ui.adapter.ImagemAdapter;
-import com.example.tcc.ui.adapter.MoradiasExpandirAdapter;
-import com.example.tcc.ui.adapter.MoradiasUsuarioAdapter;
-import com.example.tcc.ui.adapter.spinerAdapter.SocialsDropDownAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.utils.SearchActivity;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MoradiaExpandir extends AppCompatActivity {
 

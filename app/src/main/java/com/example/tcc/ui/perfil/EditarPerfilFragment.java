@@ -97,8 +97,13 @@ public class EditarPerfilFragment extends Fragment {
                     public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                         if(response.isSuccessful()){
                             salvarImagemViaApi(id,retrofitConfig);
-                            Intent intent = new Intent(getContext(), FormLogin.class);
-                            startActivity(intent);
+
+                            Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(getContext().getPackageName());
+                            if (intent != null) {
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+
                             Log.e("ATT DADOS", "IS SUCCESSFUL");
                         }
                         else {

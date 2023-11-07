@@ -3,11 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_search"
-        android:icon="@drawable/ic_lupa"
-
+        android:id="@+id/menu_space_left"
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_invisivel"
         app:showAsAction="always"
         android:title=""
+        android:visible="true"
         />
+
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_lupa"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title=""
+        app:actionViewClass="android.widget.TextView"
+
+        />
+
 
 </menu>

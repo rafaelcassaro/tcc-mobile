@@ -64,7 +64,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.MyViewHolder holder, int position) {
-        //Post item = db.get(position);
 
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));

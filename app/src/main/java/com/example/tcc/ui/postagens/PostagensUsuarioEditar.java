@@ -27,7 +27,9 @@ import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -97,6 +99,10 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
                             CepApi cepApiDados = response.body();
                             post.setCidade(cepApiDados.getCity());
                             post.setEstado(cepApiDados.getState());
+                           // post.setDataPost(new Date());
+
+
+                            Log.e("POSTAGEMUSUARIOEDITAR", "data"+ post.getDataPost());
 
                             salvarViaApi(post);
 

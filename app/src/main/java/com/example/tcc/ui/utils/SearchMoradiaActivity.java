@@ -1,40 +1,29 @@
 package com.example.tcc.ui.utils;
 
-import static java.security.AccessController.getContext;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuHost;
-import androidx.core.view.MenuProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.adapter.SearchAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.moradias.MoradiaExpandir;
-import com.example.tcc.ui.moradias.MoradiasFragment;
-import com.ferfalk.simplesearchview.SimpleSearchView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchMoradiaActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private SearchAdapter adapter;
@@ -61,11 +50,24 @@ public class SearchActivity extends AppCompatActivity {
 
         searchView = findViewById(R.id.edit_procurar);
         rv = findViewById(R.id.rv_moradias_search);
-        adapter = new SearchAdapter(this);
+        Intent intent = new Intent(this, MainActivity.class);
+       // adapter = new SearchAdapter(this);
+
+        adapter = new SearchAdapter(this, new SearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, listaCidades.get(position));
+                Log.e("INTENT INICIADO", ":" + listaCidades.get(position).toString());
+                startActivity(intent);
+
+            }
+        });
+
         rv.setAdapter(adapter);
         searchView.requestFocus();
 
-        Intent intent = new Intent(this, MainActivity.class);
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -101,36 +103,10 @@ public class SearchActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchActivity.super.onBackPressed();
+                SearchMoradiaActivity.super.onBackPressed();
             }
         });
 
-
-
-        /*MenuProvider menuProvider = new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.menu_search_posts, menu);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                simpe.showSearch();
-                return true;
-            }
-        };
-        ListView listView = findViewById(R.id.lv_moradias);
-
-        List<String> lista = new ArrayList<>();
-        lista.add("ola");
-        lista.add("ola");lista.add("ola");
-        String dados[] = {"ola", "alo", "rsrsrsr"};
-
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dados);
-
-
-        listView.setAdapter(arrayAdapter);*/
 
     }
 
@@ -145,6 +121,11 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         adapter.setDb(resultadosDaPesquisa);
+    }
+
+
+    private void ConfigAdapter(){
+
     }
 
 
@@ -166,11 +147,12 @@ public class SearchActivity extends AppCompatActivity {
                     tempDb = response.body();
 
                     for (int i = 0; tempDb.size()> i; i++){
-                        //String estado = tempDb.get(i).getCidade() +"-"+ tempDb.get(i).getEstado();
-
+                        if(tempDb.get(i).getPostMoradia() != null){
                             cidades.add(tempDb.get(i).getCidade());
-
+                        }
+                        //String estado = tempDb.get(i).getCidade() +"-"+ tempDb.get(i).getEstado();
                     }
+
                     Iterator<String> iterator = cidades.iterator();
                     while (iterator.hasNext()){
                         listaCidades.add(iterator.next());

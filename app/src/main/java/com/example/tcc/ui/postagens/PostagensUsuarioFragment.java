@@ -54,7 +54,7 @@ public class PostagensUsuarioFragment extends Fragment {
         View root = binding.getRoot();
 
         // --------- recycler view  --------
-        configAdapter(container);
+        configAdapter();
         getPostsByUserId(container);
 
         // Inflate the layout for this fragment
@@ -68,18 +68,10 @@ public class PostagensUsuarioFragment extends Fragment {
     }
 
 
-    private void configAdapter(ViewGroup container){
+    private void configAdapter(){
 
 
-        postAdapter = new PostUsuarioAdapter(container.getContext(), new PostUsuarioAdapter.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(int position) {
-                Intent intent = new Intent(getContext(), PostagensUsuarioEditar.class);
-                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
-                mStartForResult.launch(intent);
-            }
-        });
+       postAdapter = new PostUsuarioAdapter(getContext());
 
 
         //postAdapter = new PostAdapter(container.getContext());
@@ -87,14 +79,7 @@ public class PostagensUsuarioFragment extends Fragment {
     }
 
 
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode() == Activity.RESULT_OK){
-                adapter.notifyDataSetChanged();
-            }
-        }
-    });
+
 
 
 

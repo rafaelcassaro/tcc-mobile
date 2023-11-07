@@ -7,7 +7,7 @@
     <item
         android:id="@+id/menu_item_image2"
         android:icon="@drawable/logo"
-        android:iconTint="@color/white"
+
         app:showAsAction="always"
         android:title="TODO"
         />
@@ -15,7 +15,7 @@
     <item
         android:id="@+id/menu_item_image1"
         android:icon="@drawable/logo"
-        android:iconTint="@color/white"
+
         app:showAsAction="always"
         android:title="TODO"
         >
@@ -24,7 +24,7 @@
             <item
                 android:id="@+id/menu_item_image9"
                 android:icon="@drawable/logo"
-                android:iconTint="@color/white"
+
                 app:showAsAction="always"
                 android:title="TODO"
                 />

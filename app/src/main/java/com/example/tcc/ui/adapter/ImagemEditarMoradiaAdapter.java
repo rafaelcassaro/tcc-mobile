@@ -55,7 +55,7 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
     @NonNull
     @Override
     public ImagemEditarMoradiaAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.carousel_item,parent,false);
+        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.carousel_item_editar,parent,false);
 
         securityPreferences = new SecurityPreferences(context);
         picasso = new Picasso.Builder(context)
@@ -86,7 +86,7 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
                 //.animateIn(fadeInAnimation)
         //addImgvazia();
 
-        Picasso.get().load(db.get(position)).error(R.drawable.img_not_found_little).placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.carouselImageView);
+        Picasso.get().load(db.get(position)).resize(230,140).centerCrop().error(R.drawable.img_not_found_little).placeholder(R.drawable.img_not_found_little).into(holder.carouselImageView);
 
 
 
@@ -103,7 +103,7 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            carouselImageView = itemView.findViewById(R.id.iv_fotos);
+            carouselImageView = itemView.findViewById(R.id.iv_fotos_editar);
 
         }
 

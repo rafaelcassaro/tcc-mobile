@@ -1,7 +1,5 @@
 package com.example.tcc.ui.moradias;
 
-import static android.content.Intent.getIntent;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -19,8 +18,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
@@ -28,19 +25,14 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentMoradiasBinding;
-import com.example.tcc.db.models.Moradias;
 import com.example.tcc.network.RetrofitConfig;
-import com.example.tcc.network.RetrofitConfigToken;
-import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.utils.SearchActivity;
-import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.example.tcc.ui.utils.SearchMoradiaActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,14 +62,31 @@ public class MoradiasFragment extends Fragment {
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_search_posts, menu);
 
+                MenuItem searchItem = menu.findItem(R.id.menu_search);
+                TextView searchEditText = (TextView) searchItem.getActionView();
+
+
+                searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa),null,null,null);
+                searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                searchEditText.setWidth(500);
+                searchEditText.setHeight(100);
+                searchEditText.setPadding(0,10,0,0);
+                searchEditText.setTextSize(20);
+                searchEditText.setHint("Digite uma cidade");
+                searchEditText.setHintTextColor(getResources().getColor(R.color.cinzaClaro, getContext().getTheme() ));
+
+                searchEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), SearchMoradiaActivity.class);
+                        startActivity(intent);
+                    }
+                });
 
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-              //  binding.editProcurar.showSearch();
-               // Intent intent = new Intent(getContext(), SearchActivity.class);
-               // startActivity(intent);
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
@@ -109,46 +118,6 @@ public class MoradiasFragment extends Fragment {
 
             }
         }).start();
-
-        binding.toobarPica.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SearchActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-       // Menu menu;
-
-        //        MenuInflater menuInflater = new MenuInflater(getContext());
-//        menuInflater.inflate(R.menu.menu_search_posts, menu);
-
-       binding.editProcurar.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(@NonNull String s) {
-                Log.d("SimpleSearchView", "Submit:" + s);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(@NonNull String s) {
-                Log.d("SimpleSearchView", "Text changed:" + s);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextCleared() {
-                Log.d("SimpleSearchView", "Text cleared");
-                return false;
-            }
-        });
-
-
-        Log.e("MoradiasFragment","EXTRA_SHOW: ");
-
-
-
 
         return root;
     }

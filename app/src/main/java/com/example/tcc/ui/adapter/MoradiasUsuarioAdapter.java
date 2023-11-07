@@ -1,6 +1,10 @@
 package com.example.tcc.ui.adapter;
 
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +12,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.ui.constants.TaskConstants;
+import com.example.tcc.ui.moradias.MoradiaUsuarioEditar;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
 import java.util.ArrayList;
@@ -23,15 +33,13 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
 
     private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
-    private OnItemClickListener listener;
     private ImagemAdapter imagemAdapter;
     private Context context;
 
 
 
-    public MoradiasUsuarioAdapter(Context context, OnItemClickListener listener){
+    public MoradiasUsuarioAdapter(Context context){
         inflater = LayoutInflater.from(context);
-        this.listener = listener;
         this.context = context;
     }
 
@@ -95,24 +103,23 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
         holder.editarBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int btId = v.getId();
+                Intent intent = new Intent(context, MoradiaUsuarioEditar.class);
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                v.getContext().startActivity(intent);
 
-                if(btId == R.id.bt_editar_moradia_usuario){
-                    int clickedPosition = position;
-                    Log.e("BOTAO EDITAR", ""+ clickedPosition);
-
-                }
             }
         });
 
     }
+
+
 
     @Override
     public int getItemCount() {
         return db.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView tipoMoradiaTv;
         public TextView cidadeTv;
@@ -146,18 +153,15 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
             comentarioTv = itemView.findViewById(R.id.tv_comentario_usuario);
             recyclerview = itemView.findViewById(R.id.crv_fotos_moradia);
 
-            itemView.setOnClickListener(this);
+
         }
 
-        @Override
-        public void onClick(View v) {
-            listener.onItemClick(getAdapterPosition());
-        }
+
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
+
+
+
 
     public void setPostagens(List<Post> db){
         this.db = db;

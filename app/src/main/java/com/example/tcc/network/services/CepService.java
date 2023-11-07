@@ -10,7 +10,7 @@ import retrofit2.http.Path;
 public interface CepService {
 
 
-    @GET("api/cep/v2/{cep}")
+    @GET("api/cep/v1/{cep}")
     Call<CepApi> getCidadeEstadoByCEP(@Path("cep") Integer cep);
 
 }

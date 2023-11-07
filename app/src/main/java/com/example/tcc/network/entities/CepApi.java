@@ -8,18 +8,16 @@ public class CepApi {
     private String street;
     private String service;
 
-    private Location location;
 
     public CepApi(){}
 
-    public CepApi(String cep, String state, String city, String neighborhood, String street, String service, Location location) {
+    public CepApi(String cep, String state, String city, String neighborhood, String street, String service) {
         this.cep = cep;
         this.state = state;
         this.city = city;
         this.neighborhood = neighborhood;
         this.street = street;
         this.service = service;
-        this.location = location;
     }
 
     public String getCep() {
@@ -70,14 +68,6 @@ public class CepApi {
         this.service = service;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     @Override
     public String toString() {
         return "CepApi{" +
@@ -87,7 +77,7 @@ public class CepApi {
                 ", neighborhood='" + neighborhood + '\'' +
                 ", street='" + street + '\'' +
                 ", service='" + service + '\'' +
-                ", location=" + location +
+                ", location=" +
                 '}';
     }
 }

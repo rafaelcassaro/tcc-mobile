@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,10 +18,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.tcc.MainActivity;
 import com.example.tcc.R;
@@ -58,9 +64,12 @@ import retrofit2.Response;
 public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     private EditText cepEt, ruaEt, numCasaEt, comentarioEt, numMoradoresEt, aluguelEt;
-    private ChipGroup chipAp, chipPet, chipGaragem, chipGeneroRep;
-    private Button botaoEditar, btAddImg, btRemoveImg;
+    private ChipGroup  chipGeneroRep;
+    private CheckBox petsCb, garagemCb, quartoCb, residenciaCb;
+    private Button botaoEditar;
+    private ImageButton btAddImg, btRemoveImg;
     private ImageView ivTeste;
+    private TextView cidadeTv, estadoTv;
 
     private ActivityResultLauncher<Intent> resultLauncher;
     private Uri imageUri;
@@ -76,9 +85,8 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
     // .build();
     private RetrofitConfigCepApi retrofitConfigCepApi;//= new RetrofitConfigCepApi();
     private Uri text;
+    private Post editedPost;
 
-
-    //private Picasso picasso;
 
 
     @Override
@@ -87,7 +95,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         setContentView(R.layout.activity_moradia_usuario_editar_layout);
         iniciarViews();
         //Pegar dados do post clicado com a constante EXTRA_SHOW
-        Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
+        editedPost = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW);
 
         securityPreferences = new SecurityPreferences(MoradiaUsuarioEditar.this);
         picasso = new Picasso.Builder(MoradiaUsuarioEditar.this)
@@ -115,26 +123,47 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
-        pegarImgViaApi(retrofitConfig, post, this);
+        pegarImgViaApi(retrofitConfig, this);
         // ivTeste.setImageURI(text);
 
         //TRANSFERIR OS VALORES INT E DOUBLE DO POST PARA OS ET DA VIEW
         //------------------------------------------------setar dados pre-vindos do post no front-------------------------------------
-        int numMoradores = Integer.valueOf(post.getPostMoradia().getDetalhesMoradia().getMoradores());
-        int numCasa = Integer.valueOf(post.getPostMoradia().getNumCasa());
-        double valorAluguel = Double.valueOf(post.getPostMoradia().getValorAluguel());
+        int numMoradores = Integer.valueOf(editedPost.getPostMoradia().getDetalhesMoradia().getMoradores());
+        int numCasa = Integer.valueOf(editedPost.getPostMoradia().getNumCasa());
+        double valorAluguel = Double.valueOf(editedPost.getPostMoradia().getValorAluguel());
 
-        comentarioEt.setText(post.getComentario());
-        ruaEt.setText(post.getPostMoradia().getEndereco());
+        comentarioEt.setText(editedPost.getComentario());
+        ruaEt.setText(editedPost.getPostMoradia().getEndereco());
         numMoradoresEt.setText(String.valueOf(numMoradores));
         numCasaEt.setText(String.valueOf(numCasa));
         aluguelEt.setText(String.valueOf(valorAluguel));
-        cepEt.setText(String.valueOf(post.getCep()));
+        cepEt.setText(String.valueOf(editedPost.getCep()));
+        cidadeTv.setText(editedPost.getCidade());
+        estadoTv.setText(editedPost.getEstado());
 
-        selecionarChips(post);
+        pegarCheckboxPrevio();
+        selecionarChips();
         //------------------------------------------------setar dados pre-vindos do post no front-------------------------------------
 
         registerResult();
+
+
+
+        cepEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.e("setOnEditorActionListener", "onEditorAction: ");
+
+                    // Ação a ser executada quando o usuário pressionar "Submit" no teclado
+                    // Você pode chamar um método ou executar qualquer ação desejada aqui
+                    pegarCepViaApi();
+                    Log.e("setOnEditorActionListener", "onEditorAction: if");
+                    //return true; // Retorna true para indicar que o evento foi tratado
+
+                Log.e("setOnEditorActionListener", "onEditorAction: else");
+                return false;
+            }
+        });
 
         btAddImg.setOnClickListener(view -> pickImage());
 
@@ -160,23 +189,27 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Log.e("true ou false", "valor: "+ verificarChip(chipAp,  R.id.chip_ap_apart, R.id.chip_ap_casa));
-                setarDados(post);
 
+                EditarPostViaApi();
 
-                Integer cep = Integer.valueOf(cepEt.getText().toString());
+               /* Integer cep = Integer.valueOf(cepEt.getText().toString());
                 Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
                 callApi.enqueue(new Callback<CepApi>() {
                     @Override
                     public void onResponse(Call<CepApi> call, Response<CepApi> response) {
                         if (response.isSuccessful()) {
+
                             CepApi cepApiDados = response.body();
-                            post.setCidade(cepApiDados.getCity());
-                            post.setEstado(cepApiDados.getState());
-                            post.setCep(cepApiDados.getCep());
-                            EditarPostViaApi(post);
+                            editedPost.setCidade(cepApiDados.getCity());
+                            editedPost.setEstado(cepApiDados.getState());
+                            editedPost.setCep(cepApiDados.getCep());
+                            cidadeTv.setText(cepApiDados.getCity());
+                            estadoTv.setText(cepApiDados.getState());
+                            //EditarPostViaApi(post);
                             Log.e("BOTAO EDITAR CEP", "RETORNO BOM: " + response.errorBody());
 
                         } else {
+
                             Log.e("BOTAO EDITAR CEP", "RETORNO ERROR: " + response.errorBody());
 
                         }
@@ -188,7 +221,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                         Log.e("BOTAO EDITAR CEP", "INTERNAL ERROR: " + t.getMessage().toString());
 
                     }
-                });
+                });*/
 
                 //Call<Void> call= new RetrofitConfig(new SecurityPreferences(getApplicationContext()).getAuthToken(TaskConstants.SHARED.TOKEN_KEY))
                 //        .getPostService().updatePost(editPost,editPost.getUsuario().getId(), editPost.getPostMoradia().getId());
@@ -210,68 +243,115 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         recyclerview.setInfinite(true);
         recyclerview.setFlat(true);
 
+
     }
 
-    public Uri bitmapToUriConverter(Bitmap bitmap) {
-        // Salve o Bitmap em um arquivo temporário
-        File filesDir = getFilesDir();
-        File imageFile = new File(filesDir, "temp_image.png");
+    private void pegarCepViaApi(){
 
-        try {
-            FileOutputStream fos = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Integer cep = Integer.valueOf(cepEt.getText().toString());
+        Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+        callApi.enqueue(new Callback<CepApi>() {
+            @Override
+            public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                if (response.isSuccessful()) {
 
-        // Converta o arquivo em um Uri
-        Uri imageUri = FileProvider.getUriForFile(this, "com.seuapp.provider", imageFile);
+                    CepApi cepApiDados = response.body();
+                    editedPost.setCidade(cepApiDados.getCity());
+                    editedPost.setEstado(cepApiDados.getState());
+                    editedPost.setCep(cepApiDados.getCep());
+                    cidadeTv.setText(cepApiDados.getCity());
+                    estadoTv.setText(cepApiDados.getState());
+                    //EditarPostViaApi(post);
+                    Log.e("BOTAO EDITAR CEP", "RETORNO BOM: " + response.errorBody());
 
-        return imageUri;
-    }
+                } else {
 
-    private File createImageFileFromBitmap(Bitmap bitmap) {
-        File imageFile = null;
-        FileOutputStream fos = null;
+                    Log.e("BOTAO EDITAR CEP", "RETORNO ERROR: " + response.errorBody());
 
-        try {
-            // Crie um arquivo temporário no diretório de armazenamento externo
-            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            imageFile = File.createTempFile("image", ".jpg", storageDir);
-
-            // Salve o Bitmap como um arquivo JPEG
-            fos = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-        } catch (IOException e) {
-            // Lidar com exceções, se ocorrerem
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
-        return imageFile;
+            }
+
+            @Override
+            public void onFailure(Call<CepApi> call, Throwable t) {
+                Log.e("BOTAO EDITAR CEP", "INTERNAL ERROR: " + t.getMessage().toString());
+
+            }
+        });
     }
 
-    private void EditarPostViaApi(Post post) {
+    private void pegarCheckboxPrevio(){
+        if (editedPost.getPostMoradia().getDetalhesMoradia().isGaragem()){
+            garagemCb.setChecked(true);
+        }
+        if (editedPost.getPostMoradia().getDetalhesMoradia().isPets()){
+            petsCb.setChecked(true);
+        }
+        if (editedPost.getPostMoradia().getDetalhesMoradia().isQuarto()){
+            quartoCb.setChecked(true);
+        }
+        if (editedPost.getPostMoradia().isTipoResidencia()){
+            residenciaCb.setChecked(true);
+        }
+    }
+
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        if (view.getId() == R.id.cb_pets){
+            if (checked){
+                editedPost.getPostMoradia().getDetalhesMoradia().setPets(true);
+                Log.e("onCheckboxClicked","CheckBoxON cb_pets");
+            }
+            else {
+                editedPost.getPostMoradia().getDetalhesMoradia().setPets(false);
+                Log.e("onCheckboxClicked","CheckBoxOFF cb_pets");
+            }}
+        if (view.getId() == R.id.cb_garagem){
+            if (checked){
+                editedPost.getPostMoradia().getDetalhesMoradia().setGaragem(true);
+                Log.e("onCheckboxClicked","CheckBoxON cb_garagem");
+            }
+            else {
+                editedPost.getPostMoradia().getDetalhesMoradia().setGaragem(false);
+                Log.e("onCheckboxClicked","CheckBoxOFF cb_garagem");
+            }}
+        if (view.getId() == R.id.cb_quarto){
+            if (checked){
+                editedPost.getPostMoradia().getDetalhesMoradia().setQuarto(true);
+                Log.e("onCheckboxClicked","CheckBoxON cb_quarto");
+            }
+            else {
+                editedPost.getPostMoradia().getDetalhesMoradia().setQuarto(false);
+                Log.e("onCheckboxClicked","CheckBoxOFF cb_quarto");
+            }}
+        if (view.getId() == R.id.cb_residencia){
+            if (checked){
+                editedPost.getPostMoradia().setTipoResidencia(true);
+                Log.e("onCheckboxClicked","CheckBoxON cb_residencia");
+            }
+            else {
+                editedPost.getPostMoradia().setTipoResidencia(false);
+                Log.e("onCheckboxClicked","CheckBoxOFF cb_residencia");
+            }}
+
+    }
+
+    private void EditarPostViaApi() {
+        setarDados();
         SecurityPreferences securityPreferences = new SecurityPreferences(getApplicationContext());
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
 
         Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
-        Long idMoradia = post.getPostMoradia().getId();
+        Long idMoradia = editedPost.getPostMoradia().getId();
 
         //DAR UPDATE NO POST SELECIONADO
-        Call<Void> call = retrofitConfig.getPostService().updatePostMoradia(post, id, idMoradia);
-        Log.e("VALOR ID POSTMORADA", "deu ruim" + post.getPostMoradia().getId());
+        Call<Void> call = retrofitConfig.getPostService().updatePostMoradia(editedPost, id, idMoradia);
+        Log.e("VALOR ID POSTMORADA", "deu ruim" + editedPost.getPostMoradia().getId());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -289,7 +369,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
                     Log.e("EDITAR POSTMORADIA", "deu bom");
                 } else {
-                    Log.e("EDITAR POSTMORADIA", "deu ruim" + post.getDataPost());
+                    Log.e("EDITAR POSTMORADIA", "deu ruim" + editedPost.getDataPost());
                 }
 
             }
@@ -324,32 +404,29 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         comentarioEt = findViewById(R.id.et_comentario_anuncio);
         numMoradoresEt = findViewById(R.id.et_num_moradores_usuario);
         aluguelEt = findViewById(R.id.et_aluguel_usuario);
-        chipAp = findViewById(R.id.chip_ap);
-        chipPet = findViewById(R.id.chips_pet);
-        chipGaragem = findViewById(R.id.chips_garagem);
+        petsCb = findViewById(R.id.cb_pets);
+        garagemCb = findViewById(R.id.cb_garagem);
+        quartoCb = findViewById(R.id.cb_quarto);
+        residenciaCb = findViewById(R.id.cb_residencia);
         chipGeneroRep = findViewById(R.id.chips_genero);
         botaoEditar = findViewById(R.id.bt_publicar_edicao);
-        btAddImg = findViewById(R.id.bt_add_img);
-        btRemoveImg = findViewById(R.id.bt_remove_img);
+        btAddImg = findViewById(R.id.ib_adicionar_img);
+        btRemoveImg = findViewById(R.id.ib_remover_img);
         recyclerview = findViewById(R.id.crv_fotos_moradia);
+        cidadeTv = findViewById(R.id.tv_cidade_usuario);
+        estadoTv = findViewById(R.id.tv_estado_usuario);
         // ivTeste = findViewById(R.id.iv_teste);
     }
 
-    private void setarDados(Post post) {
-        post.getPostMoradia().setEndereco(ruaEt.getText().toString());
-        post.getPostMoradia().setNumCasa(Integer.valueOf(numCasaEt.getText().toString()));
-        post.setComentario(comentarioEt.getText().toString());
-        post.getPostMoradia().getDetalhesMoradia().setMoradores(Integer.valueOf(numMoradoresEt.getText().toString()));
-        post.getPostMoradia().setValorAluguel(Double.valueOf(aluguelEt.getText().toString()));
+    private void setarDados() {
+        editedPost.getPostMoradia().setEndereco(ruaEt.getText().toString());
+        editedPost.getPostMoradia().setNumCasa(Integer.valueOf(numCasaEt.getText().toString()));
+        editedPost.setComentario(comentarioEt.getText().toString());
+        editedPost.getPostMoradia().getDetalhesMoradia().setMoradores(Integer.valueOf(numMoradoresEt.getText().toString()));
+        editedPost.getPostMoradia().setValorAluguel(Double.valueOf(aluguelEt.getText().toString()));
 
-        int escolhaAp = verificarChip(chipAp, R.id.chip_ap_apart, R.id.chip_ap_casa);
-        adicionarAp(post, escolhaAp);
-        int escolhaPet = verificarChip(chipPet, R.id.chips_pet_sim, R.id.chips_pet_nao);
-        adicionarPet(post, escolhaPet);
-        int escolhaGaragem = verificarChip(chipGaragem, R.id.chips_garagem_sim, R.id.chips_garagem_nao);
-        adicionarGaragem(post, escolhaGaragem);
         int escolhaGenero = verificarChip3Opcoes(chipGeneroRep, R.id.chips_genero_masc, R.id.chips_genero_fem, R.id.chips_genero_misto);
-        adicionarGenero(post, escolhaGenero);
+        adicionarGenero(escolhaGenero);
     }
 
     //---------------------LIDAR COM IMAGEM-----------------------------------
@@ -418,12 +495,12 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         }
     }*/
 
-    private void pegarImgViaApi(RetrofitConfig retrofitConfig, Post post, Context context) {
+    private void pegarImgViaApi(RetrofitConfig retrofitConfig, Context context) {
 
-        for (int i = 0; i < post.getPostMoradia().getFotos().size(); i++) {
+        for (int i = 0; i < editedPost.getPostMoradia().getFotos().size(); i++) {
 
 
-            Call<ResponseBody> call = retrofitConfig.getImageService().getImage(post.getPostMoradia().getFotos().get(i).getNomeFoto());
+            Call<ResponseBody> call = retrofitConfig.getImageService().getImage(editedPost.getPostMoradia().getFotos().get(i).getNomeFoto());
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -578,37 +655,14 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
 
     //-------------------BOTOES------------------------------------------
 
-    private void adicionarAp(Post post, int escolha) {
-        if (escolha == 1) {
-            post.getPostMoradia().setTipoResidencia(false);
-        } else if (escolha == 2) {
-            post.getPostMoradia().setTipoResidencia(true);
-        }
-    }
 
-    private void adicionarPet(Post post, int escolha) {
+    private void adicionarGenero( int escolha) {
         if (escolha == 1) {
-            post.getPostMoradia().getDetalhesMoradia().setPets(true);
+            editedPost.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MASCULINA");
         } else if (escolha == 2) {
-            post.getPostMoradia().getDetalhesMoradia().setPets(false);
-        }
-    }
-
-    private void adicionarGaragem(Post post, int escolha) {
-        if (escolha == 1) {
-            post.getPostMoradia().getDetalhesMoradia().setGaragem(true);
-        } else if (escolha == 2) {
-            post.getPostMoradia().getDetalhesMoradia().setGaragem(false);
-        }
-    }
-
-    private void adicionarGenero(Post post, int escolha) {
-        if (escolha == 1) {
-            post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MASCULINA");
-        } else if (escolha == 2) {
-            post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("FEMININA");
+            editedPost.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("FEMININA");
         } else if (escolha == 3) {
-            post.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MISTA");
+            editedPost.getPostMoradia().getDetalhesMoradia().setGeneroMoradia("MISTA");
         }
     }
 
@@ -632,66 +686,15 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         return escolha;
     }
 
-    private int verificarChip(ChipGroup chip, int opcao1, int opcao2) {
-        int escolha = 0;
-        //Log.e("CHIPS", "OPCAO1 ID"+ opcao1);
-        //Log.e("CHIPS", "OPCAO2 ID"+ opcao2);
 
-        ChipGroup chipGroup = chip;
-        int selectedChipId = chipGroup.getCheckedChipId(); // Obtém o ID do Chip selecionado
-        Log.e("CHIPS", "OPCAO2 ID" + chip);
-        Log.e("CHIPS", "OPCAO2 ID" + selectedChipId);
-        Log.e("CHIPS", "OPCAO2 ID" + chip.getCheckedChipId());
-
-        if (selectedChipId != View.NO_ID) {
-            Chip selectedChip = findViewById(selectedChipId); // Obtém a referência ao Chip selecionado
-            // Log.e("CHIPS", "CHIPGROUP: "+ findViewById(selectedChipId));
-            // Verifica qual Chip foi selecionado com base no ID
-            if (selectedChip.getId() == opcao1) {
-                escolha = 1;
-                //   Log.e("CHIPS", "ESCOLHAOP1: "+ selectedChip.getId());
-            } else if (selectedChip.getId() == opcao2) {
-                escolha = 2;
-                //  Log.e("CHIPS", "ESCOLHAOP2: "+ selectedChip.getId());
-            }
-        } else {
-            escolha = 0;
-        }
-        //Log.e("CHIPS", "ESCOLHA FINAL: "+ selectedChipId);
-        // Log.e("CHIPS", "ESCOLHA FINAL: "+ escolha);
-        return escolha;
-    }
-
-    private void selecionarChips(Post post) {
+    private void selecionarChips() {
         //tipo da residencia
-        if (post.getPostMoradia().isTipoResidencia()) {
-            Chip chipSelecionado = (Chip) chipAp.getChildAt(1);
-            chipSelecionado.setChecked(true);
-        } else {
-            Chip chipSelecionado = (Chip) chipAp.getChildAt(0);
-            chipSelecionado.setChecked(true);
-        }
-        //pets
-        if (post.getPostMoradia().getDetalhesMoradia().isPets() == true) {
-            Chip chipSelecionado = (Chip) chipPet.getChildAt(0);
-            chipSelecionado.setChecked(true);
-        } else {
-            Chip chipSelecionado = (Chip) chipPet.getChildAt(1);
-            chipSelecionado.setChecked(true);
-        }
-        //garagem
-        if (post.getPostMoradia().getDetalhesMoradia().isGaragem() == true) {
-            Chip chipSelecionado = (Chip) chipGaragem.getChildAt(0);
-            chipSelecionado.setChecked(true);
-        } else {
-            Chip chipSelecionado = (Chip) chipGaragem.getChildAt(1);
-            chipSelecionado.setChecked(true);
-        }
+
         //genero
-        if (post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("MASCULINA")) {
+        if (editedPost.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("MASCULINA")) {
             Chip chipSelecionado = (Chip) chipGeneroRep.getChildAt(0);
             chipSelecionado.setChecked(true);
-        } else if (post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("FEMININA")) {
+        } else if (editedPost.getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals("FEMININA")) {
             Chip chipSelecionado = (Chip) chipGeneroRep.getChildAt(1);
             chipSelecionado.setChecked(true);
         } else {

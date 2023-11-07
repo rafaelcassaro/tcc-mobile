@@ -1,10 +1,12 @@
 package com.example.tcc.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,8 @@ import com.example.tcc.R;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
+import com.example.tcc.ui.moradias.MoradiaUsuarioEditar;
+import com.example.tcc.ui.postagens.PostagensUsuarioEditar;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -30,18 +34,15 @@ import okhttp3.Request;
 public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.MyViewHolder> {
 
     private List<Post> db = new ArrayList<>();
-    private LayoutInflater inflater;
 
-    private OnItemClickListener listener;
     private SecurityPreferences securityPreferences;
     private Picasso picasso;
     private Context context;
 
 
-    public PostUsuarioAdapter(Context context, OnItemClickListener listener) {
+    public PostUsuarioAdapter(Context context) {
         this.context =context;
-        this.listener = listener;
-        this.inflater = LayoutInflater.from(context);
+
     }
 
     @NonNull
@@ -57,7 +58,6 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull PostUsuarioAdapter.MyViewHolder holder, int position) {
-        Post item = db.get(position);
 
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));
@@ -72,6 +72,16 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
         picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + db.get(position).getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.imageView);
 
 
+        holder.btEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PostagensUsuarioEditar.class);
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                v.getContext().startActivity(intent);
+
+            }
+        });
+
         Log.e("ADAPTER", "item:" + db.toString());
 
     }
@@ -82,7 +92,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView nomeTv;
         public TextView cidadeTv;
@@ -91,6 +101,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
         public TextView dataTv;
         public TextView estadoTv;
         public CircleImageView imageView;
+        public Button btEditar;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -102,20 +113,16 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
             estadoTv = itemView.findViewById(R.id.tv_estado_usuario);
             dataTv = itemView.findViewById(R.id.tv_data_usuario_post);
             imageView = itemView.findViewById(R.id.iv_perfil_post);
-            itemView.setOnClickListener(this);
+            btEditar = itemView.findViewById(R.id.bt_editar_postagem_usuario);
+
 
         }
 
-        @Override
-        public void onClick(View v) {
-            listener.onItemClick(getAdapterPosition());
-        }
+
 
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
+
 
     public void setPostagens(List<Post> db){
         this.db = db;

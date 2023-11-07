@@ -169,9 +169,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
 
-        android:background="#B5B1B1"
+        android:background="@drawable/img_not_found_little"
 
-        android:fadingEdge="horizontal"
+
         app:layout_constraintHorizontal_bias="0.5"
 
         app:layout_constraintStart_toStartOf="@id/ContainerMoradia"

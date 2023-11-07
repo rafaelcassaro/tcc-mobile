@@ -65,17 +65,8 @@ public class MoradiasUsuarioFragment extends Fragment {
 
     private void configAdapter(ViewGroup container){
 
+        moradiasAdapter = new MoradiasUsuarioAdapter(getContext());
 
-        moradiasAdapter = new MoradiasUsuarioAdapter(container.getContext(), new MoradiasUsuarioAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Intent intent = new Intent(getContext(), MoradiaUsuarioEditar.class);
-                 intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
-               // Log.e("INTENT INICIADO", ":" + db.get(position).toString());
-                mStartForResult.launch(intent);
-
-            }
-        });
         binding.rvMoradiasUsuario.setAdapter(moradiasAdapter);
     }
 

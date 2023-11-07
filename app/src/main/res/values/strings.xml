@@ -15,7 +15,13 @@
     <string name="menu_nova_moradia">Anúnciar Imovel</string>
     <string name="menu_nova_postagem">Fazer postagem</string>
     <string name="menu_feedback">Nos envie um feedbackk</string>
+    <string name="menu_logout">Logout</string>
     <string name="menu_planos">Seja premium</string>
+
+    <string name="cb_pets">Possui pets?</string>
+    <string name="cb_garagem">Tem vaga para garagem?</string>
+    <string name="cb_quarto">O quarto é individual?</string>
+    <string name="cb_residencia">A residencia é uma casa ?</string>
 
 
     <string name="entrar">Entrar</string>
