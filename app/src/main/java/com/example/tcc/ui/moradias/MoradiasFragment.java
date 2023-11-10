@@ -30,6 +30,7 @@ import com.example.tcc.databinding.FragmentMoradiasBinding;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.adapter.MoradiasAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.utils.SearchMoradiaActivity;
@@ -44,36 +45,68 @@ import retrofit2.Response;
 public class MoradiasFragment extends Fragment {
 
     private FragmentMoradiasBinding binding;
-    private RecyclerView.Adapter adapter;
     private MoradiasAdapter moradiasAdapter;
     private List<Post> db = new ArrayList<>();
     private String cidadeProcurada;
-
+    private SecurityPreferences securityPreferences;
+    private RetrofitConfig retrofitConfig;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        binding = FragmentMoradiasBinding.inflate(inflater, container, false);
 
+        binding = FragmentMoradiasBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
+        retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+        setSearchBar();
+        cidadeProcurada = "";
+        db.clear();
+        //--------RV---------------
+        configAdapter();
+        threadGetDataFromApi();
+
+        return root;
+    }
+
+    private void threadGetDataFromApi() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  final Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
+                String cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
+                Log.e("MoradiasFragment", "EXTRA_SHOW_SEARCH: " + cidade);
+                if (cidadeProcurada == "" && cidade == null) {
+                    getDbBack();
+                } else if (cidade != null) {
+                    getPostCidadesBack(cidade);
+                }
+
+
+            }
+        }).start();
+    }
+
+    private void setSearchBar() {
         MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_search_posts, menu);
-
                 MenuItem searchItem = menu.findItem(R.id.menu_search);
                 TextView searchEditText = (TextView) searchItem.getActionView();
 
-
-                searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa),null,null,null);
+                searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
                 searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
                 searchEditText.setWidth(500);
                 searchEditText.setHeight(100);
-                searchEditText.setPadding(0,10,0,0);
-                searchEditText.setTextSize(20);
+                searchEditText.setPadding(0, 22, 0, 0);
+                searchEditText.setTextSize(17);
                 searchEditText.setHint("Digite uma cidade");
-                searchEditText.setHintTextColor(getResources().getColor(R.color.cinzaClaro, getContext().getTheme() ));
+                searchEditText.setHintTextColor(getResources().getColor(R.color.cinzaClaro, getContext().getTheme()));
 
                 searchEditText.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -90,38 +123,7 @@ public class MoradiasFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-
-        cidadeProcurada = "";
-        View root = binding.getRoot();
-        db.clear();
-
-
-
-        //--------RV---------------
-        configAdapter(container);
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-              //  final Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
-                String cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
-                Log.e("MoradiasFragment","EXTRA_SHOW_SEARCH: "+ cidade);
-                if (cidadeProcurada == "" && cidade == null){
-                    getDbBack(container);
-                }
-                else if (cidade != null){
-                    getPostCidadesBack(container, cidade);
-                }
-
-
-
-            }
-        }).start();
-
-        return root;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -129,145 +131,94 @@ public class MoradiasFragment extends Fragment {
         binding = null;
     }
 
-
-
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                adapter.notifyDataSetChanged();
+                moradiasAdapter.notifyDataSetChanged();
             }
         }
     });
 
-    private void configAdapter(ViewGroup container) {
-
-        moradiasAdapter = new MoradiasAdapter(container.getContext(), new MoradiasAdapter.OnItemClickListener() {
+    private void configAdapter() {
+        moradiasAdapter = new MoradiasAdapter(getContext(), new MoradiasAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(getContext(), MoradiaExpandir.class);
                 intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
                 Log.e("INTENT INICIADO", ":" + db.get(position).toString());
                 mStartForResult.launch(intent);
-
             }
         });
         binding.rvMoradias.setAdapter(moradiasAdapter);
-        Log.e("rv", "dados db:" + db.toString());
     }
 
+    private void getPostCidadesBack(String cidade) {
+        Call<List<Post>> call = retrofitConfig.getService(PostService.class).getPostByCidade(cidade);
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if (response.isSuccessful()) {
 
-     private void getPostCidadesBack(ViewGroup container, String cidade) {
-        //PEGAR TOKEN
-        SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                    if (response.isSuccessful()) {
+                        List<Post> tempDb = new ArrayList<>();
+                        tempDb.clear();
+                        tempDb = response.body();
 
-        Call<List<Post>> call = retrofitConfig.getPostService().getPostByCidade(cidade);
+                        for (int i = 0; tempDb.size() > i; i++) {
+                            if (tempDb.get(i).getPostMoradia() != null) {
+                                db.add(tempDb.get(i));
+                            }
+                        }
+                        moradiasAdapter.setPostagens(db);
 
-       call.enqueue(new Callback<List<Post>>() {
-           @Override
-           public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-               if (response.isSuccessful()){
+                    } else {
+                        mostrarErro();
+                    }
 
-                   if (response.isSuccessful()) {
-                       List<Post> tempDb = new ArrayList<>();
-                       tempDb.clear();
+                }
+            }
 
-                       tempDb = response.body();
-
-                       Log.e("Response body", "dados db local:" + db.toString());
-                       for (int i = 0; tempDb.size()> i; i++){
-                           if(tempDb.get(i).getPostMoradia() != null){
-                               db.add(tempDb.get(i));
-
-//                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
-                           }
-                       }
-                       moradiasAdapter.setPostagens(db);
-
-                       //for(int i =0 ; i < db.size(); i++){
-                       //    //Fotos fotos = new Fotos();
-                       //     Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
-                       // }
-
-
-                       Log.e("Response body", "dados ResponseBody:" + response.body());
-
-
-                   } else {
-                       mostrarErro(container);
-                   }
-
-               }
-           }
-
-           @Override
-           public void onFailure(Call<List<Post>> call, Throwable t) {
-
-           }
-       });
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+            }
+        });
 
     }
 
-
-
-
-    private void getDbBack(ViewGroup container) {
-        //PEGAR TOKEN
-        SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-
-        Call<List<Post>> call = retrofitConfig.getPostService().getAllPost();
-
+    private void getDbBack() {
+        Call<List<Post>> call = retrofitConfig.getService(PostService.class).getAllPost();
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
                     List<Post> tempDb = new ArrayList<>();
                     tempDb.clear();
-
                     tempDb = response.body();
 
-                    Log.e("Response body", "dados db local:" + db.toString());
-                    for (int i = 0; tempDb.size()> i; i++){
-                        if(tempDb.get(i).getPostMoradia() != null){
+                    for (int i = 0; tempDb.size() > i; i++) {
+                        if (tempDb.get(i).getPostMoradia() != null) {
                             db.add(tempDb.get(i));
 
-//                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
                         }
                     }
                     moradiasAdapter.setPostagens(db);
-
-                    //for(int i =0 ; i < db.size(); i++){
-                    //    //Fotos fotos = new Fotos();
-                   //     Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
-                   // }
-
-
-                    Log.e("Response body", "dados ResponseBody:" + response.body());
-
-
                 } else {
-                    mostrarErro(container);
+                    mostrarErro();
                 }
-
-
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
-                mostrarErro(container);
+                mostrarErro();
                 Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
             }
         });
 
     }
 
-
-    private void mostrarErro(ViewGroup container) {
-        Toast.makeText(container.getContext(), "deu ruim !", Toast.LENGTH_SHORT).show();
+    private void mostrarErro( ) {
+        Toast.makeText(getContext(), "deu ruim !", Toast.LENGTH_SHORT).show();
     }
 
 

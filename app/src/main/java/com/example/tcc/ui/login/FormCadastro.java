@@ -26,6 +26,7 @@ import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Usuario;
+import com.example.tcc.network.services.UserService;
 import com.example.tcc.ui.constants.TaskConstants;
 
 import java.io.File;
@@ -45,25 +46,24 @@ public class FormCadastro extends AppCompatActivity {
     private EditText nomeEt, emailEt, senhaEt, celularEt, link1Et, link2Et, link3Et;
     private CircleImageView iv_perfil;
     private Button bt_cadastrar, bt_perfil_add;
-    private ActivityResultLauncher<Intent> pickImageLauncher;
+    private ImageView backButton;
     private ActivityResultLauncher<Intent> resultLauncher;
     private Uri imageUri;
     private MultipartBody.Part imagemPart;
+    private RetrofitConfig retrofitConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_cadastro);
         IniciarComponentes();
-
-        String [] ddd ={ "61","62","64","65","66","67","82","71","73","74","75","77","85","88","98","99","83","81","87","86"
-                ,"89","84","79","68","96","92","97","91","93","94","69","95","63","27","28","31","32","33","34","35","36","37",
-                "38","21","22","24","11","12","13","14","15","16","17","18","19","41","42","43","44","45","46","51","53","54","55","47","48","49"};
+        retrofitConfig = new RetrofitConfig("");
+        String[] ddd = {"61", "62", "64", "65", "66", "67", "82", "71", "73", "74", "75", "77", "85", "88", "98", "99", "83", "81", "87", "86"
+                , "89", "84", "79", "68", "96", "92", "97", "91", "93", "94", "69", "95", "63", "27", "28", "31", "32", "33", "34", "35", "36", "37",
+                "38", "21", "22", "24", "11", "12", "13", "14", "15", "16", "17", "18", "19", "41", "42", "43", "44", "45", "46", "51", "53", "54", "55", "47", "48", "49"};
 
         registerResult();
         bt_perfil_add.setOnClickListener(view -> pickImage());
-
-        ImageView backButton = findViewById(R.id.iv_voltar);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,86 +75,46 @@ public class FormCadastro extends AppCompatActivity {
         bt_cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Usuario tempUsuario = new Usuario();
-
                 tempUsuario.setNome(nomeEt.getText().toString());
                 tempUsuario.setEmail(emailEt.getText().toString());
                 tempUsuario.setSenha(senhaEt.getText().toString());
-
                 tempUsuario.setLink1(link1Et.getText().toString());
                 tempUsuario.setLink2(link2Et.getText().toString());
                 tempUsuario.setLink3(link3Et.getText().toString());
+                String x = celularEt.getText().toString().substring(0, 2);
 
-                String x = celularEt.getText().toString().substring(0,2);
-                Log.e("ASDFASDFASDF", "ASDFASDFASDFASDF: "+x);
+                for (String dddCel : ddd) {
+                    if (x.equals(dddCel.substring(0, 2))) {
+                        tempUsuario.setCelular("+55" + celularEt.getText().toString());
 
+                        Call<Usuario> call = retrofitConfig.getService(UserService.class).registrar(tempUsuario);
+                        call.enqueue(new Callback<Usuario>() {
+                            @Override
+                            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                                if (response.code() == TaskConstants.HTTP.CREATED) {
+                                    Long id = response.body().getId();
+                                    salvarImagemViaApi(id);
+                                    Intent intent = new Intent(FormCadastro.this, FormLogin.class);
+                                    startActivity(intent);
+                                } else {
+                                    Log.e("onResponse", "else: " + response);
+                                }
+                            }
 
-
-                // registerResult();
-
-
-
-                //  bt_perfil_add.setOnClickListener(new View.OnClickListener() {
-                //       @Override
-                //       public void onClick(View v) {
-
-                //       }
-                //    });
-                for (String dddCel: ddd) {
-                    Log.e("ASDFASDFASDF", "x: "+ x);
-                    Log.e("ASDFASDFASDF", "dddCel: "+ dddCel);
-                    if(x.equals(dddCel.substring(0,2))){
-                        Log.e("ASDFASDFASDF", "ASDFASDFASDFASDF: ");
-                        tempUsuario.setCelular("+55"+celularEt.getText().toString());
-
-
-
-
-
-
-                Call<Usuario> call = new RetrofitConfig("").getUserService().registrar(tempUsuario);
-                Log.e("FORMCADASTRO", "RESULT_OK");
-                call.enqueue(new Callback<Usuario>() {
-                    @Override
-                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                        if (response.code() == TaskConstants.HTTP.CREATED) {
-                            Long id = response.body().getId();
-                            Log.e("onResponse", "id: " + id);
-                            salvarImagemViaApi(id);
-                            Intent intent = new Intent(FormCadastro.this, FormLogin.class);
-                            startActivity(intent);
-
-
-
-
-
-
-
-                            //startActivity(intent);
-                        } else {
-                            //mostrarErro(FormLogin.this, "Usuario ou senha inválida");
-                            Log.e("login user", "deu bom res: " + response);
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Usuario> call, Throwable t) {
-                        String s = "";
-                        Log.e("login user", "deu ruim" + t);
-                    }
-                });
+                            @Override
+                            public void onFailure(Call<Usuario> call, Throwable t) {
+                                String s = "";
+                                Log.e("onResponse", "onFailure: " + t.getMessage());
+                            }
+                        });
 
                         break;
                     }
                 }
 
-
                 celularEt.requestFocus();
                 celularEt.setError("Digite um ddd valido");
-
-
             }
         });
 
@@ -162,12 +122,8 @@ public class FormCadastro extends AppCompatActivity {
 
 
     private void pickImage() {
-        // registerResult();
-        Log.e("FORMCADASTRO", "RESULT_OK");
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-
         resultLauncher.launch(intent);
-        Log.e("FORMCADASTRO", "RESULT_OKk");
     }
 
     private void registerResult() {
@@ -196,33 +152,22 @@ public class FormCadastro extends AppCompatActivity {
                 });
     }
 
-    private void salvarImagemViaApi(Long id){
-        Log.e("salvarImagemViaApi", "inicio");
-        Call<Usuario> call = new RetrofitConfig("").getUserService().registrarFotoPerfil(imagemPart, id);
-
+    private void salvarImagemViaApi(Long id) {
+        Call<Usuario> call = retrofitConfig.getService(UserService.class).registrarFotoPerfil(imagemPart, id);
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                if(response.isSuccessful()){
-                    Log.e("salvarImagemViaApi", "response.isSuccessful");
+                if (response.isSuccessful()) {
 
-                }
-                else {
-                    Log.e("salvarImagemViaApi", "response.else "+ response.errorBody());
-                    Log.e("salvarImagemViaApi", "response.else "+ response.body());
+                } else {
 
                 }
             }
-
-
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-                Log.e("salvarImagemViaApi", "onFailure: "+ t.getMessage());
-
+                Log.e("salvarImagemViaApi", "onFailure: " + t.getMessage());
             }
         });
-
-
     }
 
 
@@ -255,7 +200,7 @@ public class FormCadastro extends AppCompatActivity {
         bt_cadastrar = findViewById(R.id.bt_cadastrar);
         iv_perfil = findViewById(R.id.iv_foto_perfil);
         bt_perfil_add = findViewById(R.id.bt_add_ft_perfil);
-
+        backButton = findViewById(R.id.iv_voltar);
     }
 
     private void verificarDados() {

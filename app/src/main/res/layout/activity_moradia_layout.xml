@@ -3,18 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <View
         android:id="@+id/ContainerMoradia"
-        android:layout_height="450dp"
         style="@style/ContainerMoradias"
+        android:layout_height="450dp"
 
 
-
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 
         />
@@ -27,32 +25,30 @@
         android:layout_marginTop="12dp"
 
         android:text="Apartamento"
-        android:textSize="15sp"
         android:textColor="@color/black"
-        app:layout_constraintHorizontal_bias="0.035"
-
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
+        app:layout_constraintHorizontal_bias="0.035"
+
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia" />
 
     <TextView
         android:id="@+id/tv_rua"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="Rua Hipólito José da Costa"
-        android:textSize="15sp"
         android:textColor="@color/black"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tipo_moradia"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/tv_tipo_moradia" />
 
     <TextView
         android:id="@+id/tv_num_casa"
@@ -61,14 +57,13 @@
 
         android:layout_marginTop="10dp"
         android:text="251"
-        android:textSize="15sp"
         android:textColor="@color/black"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_rua"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tipo_moradia"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/tv_tipo_moradia" />
 
     <TextView
         android:id="@+id/tv_cidade_usuario_post"
@@ -77,14 +72,13 @@
 
         android:layout_marginTop="12dp"
         android:text="Ribeirão preto"
-        android:textSize="15sp"
         android:textColor="@color/black"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_tipo_moradia"
-        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia" />
 
     <TextView
         android:id="@+id/tv_estado_usuario"
@@ -93,14 +87,13 @@
 
         android:layout_marginTop="12dp"
         android:text="SP"
-        android:textSize="15sp"
         android:textColor="@color/black"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toEndOf="@+id/tv_cidade_usuario_post"
-        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/crv_fotos_moradia" />
 
     <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
         android:id="@+id/crv_fotos_moradia"
@@ -112,11 +105,11 @@
         android:background="@drawable/img_not_found_little"
 
 
-        app:layout_constraintHorizontal_bias="0.5"
-
-
-        app:layout_constraintStart_toStartOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@id/ContainerMoradia"
+
+
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/ContainerMoradia"
         app:layout_constraintTop_toTopOf="@id/ContainerMoradia" />
 
     <TextView
@@ -126,8 +119,8 @@
 
         android:layout_marginTop="12dp"
         android:text="Masculina"
-        android:textSize="15sp"
         android:textColor="@color/Blue"
+        android:textSize="15sp"
 
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
@@ -141,12 +134,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
-        android:text="12"
-        android:textSize="15sp"
-        android:textColor="@color/Grey"
+        android:layout_marginTop="15dp"
         android:drawableLeft="@drawable/ic_user"
+        android:text="12"
+        android:textColor="@color/Grey"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/tv_ic_moradores_text"
 
@@ -161,8 +154,8 @@
 
         android:layout_marginTop="15dp"
         android:text="@string/ic_moradores"
-        android:textSize="15sp"
         android:textColor="@color/Grey"
+        android:textSize="15sp"
 
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
@@ -178,10 +171,10 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="15dp"
-        android:text="compartilhado"
-        android:textSize="15sp"
-        android:textColor="@color/Grey"
         android:drawableLeft="@drawable/ic_cama"
+        android:text="compartilhado"
+        android:textColor="@color/Grey"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
@@ -194,20 +187,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="10dp"
-        android:text="tem garagem"
-        android:textColor="@color/Grey"
-
-        android:textSize="15sp"
+        android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/ic_garage"
+        android:text="tem garagem"
+
+        android:textColor="@color/Grey"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ic_moradores"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_moradores" />
 
     <TextView
         android:id="@+id/tv_ic_pet"
@@ -219,8 +211,8 @@
         android:drawableLeft="@drawable/ic_pet"
 
         android:text=" possui"
-        android:textSize="15sp"
         android:textColor="@color/Grey"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
 
@@ -236,16 +228,15 @@
         android:layout_marginTop="8dp"
 
         android:text="R$"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
 
+        app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="@+id/ContainerMoradia"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ic_garagem"
-        app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_garagem" />
 
     <TextView
         android:id="@+id/tv_valor"
@@ -254,14 +245,14 @@
         android:layout_marginTop="8dp"
 
         android:text="250,00"
-        android:textSize="20sp"
         android:textColor="@color/black"
+        android:textSize="20sp"
 
+        app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toEndOf="@+id/tv_valor_cifra"
         app:layout_constraintTop_toBottomOf="@+id/tv_ic_garagem"
-        app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
 
         />
 
@@ -270,7 +261,6 @@
         android:layout_height="50dp"
         android:backgroundTint="@color/white"
         android:src="@drawable/ic_denunciar"
-
 
 
         app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"

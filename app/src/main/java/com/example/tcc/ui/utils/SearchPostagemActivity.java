@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.MainActivity;
@@ -16,10 +15,9 @@ import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.adapter.SearchAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.moradias.MoradiasFragment;
-import com.example.tcc.ui.postagens.PostagensFragment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,29 +36,41 @@ public class SearchPostagemActivity extends AppCompatActivity {
     private SearchView searchView;
     private Set<String> cidades = new HashSet<>();
     private List<String> listaCidades = new ArrayList<>();
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        iniciarComponentes();
+        Intent intent = new Intent(this, MainActivity.class);
+
+        configAdapter(intent);
+        setSearchView(intent);
+
+        getDbBack();
+        setBtVoltar();
+
+
+    }
+
+    private void iniciarComponentes() {
         searchView = findViewById(R.id.edit_procurar);
         rv = findViewById(R.id.rv_moradias_search);
-        //adapter = new SearchAdapter(this);
-        Intent intent = new Intent(this, MainActivity.class);
-        adapter = new SearchAdapter(this, new SearchAdapter.OnItemClickListener() {
+        backButton = findViewById(R.id.iv_voltar);
+    }
+
+    private void setBtVoltar() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(int position) {
-                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH_POST, listaCidades.get(position));
-                intent.putExtra("Search_post_cidades", "searchPostTag");
-                startActivity(intent);
+            public void onClick(View v) {
+                SearchPostagemActivity.super.onBackPressed();
             }
         });
+    }
 
-
-
-
-        rv.setAdapter(adapter);
+    private void setSearchView(Intent intent) {
         searchView.requestFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -68,50 +78,38 @@ public class SearchPostagemActivity extends AppCompatActivity {
 
                 for (String escolha : listaCidades) {
                     if (escolha.toLowerCase().equals(query.toLowerCase())) {
-
-
                         intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH_POST, escolha);
                         intent.putExtra("Search_post_cidades", "searchPostTag");
-                        startActivity(intent);
-
-
-                        // Objeto encontrado
-                        break; // Se você só precisa encontrar a primeira ocorrência, saia do loop
+                        break;
                     }
                 }
-                Log.e("onQueryTextSubmit", ": "+ query);
-
-
-
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.e("onQueryTextChange", ": "+ newText);
                 search(newText);
                 return false;
             }
         });
-        getDbBack();
-
-        ImageView backButton = findViewById(R.id.iv_voltar);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SearchPostagemActivity.super.onBackPressed();
-            }
-        });
-
-
     }
 
+    private void configAdapter(Intent intent) {
+        adapter = new SearchAdapter(this, new SearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH_POST, adapter.getDb().get(position));
+                intent.putExtra("Search_post_cidades", "searchPostTag");
+                startActivity(intent);
+            }
+        });
+        rv.setAdapter(adapter);
+    }
+
+    //atualizar lista enquanto digita
     private void search(String query) {
         List<String> resultadosDaPesquisa = new ArrayList<>();
 
-        // Substitua SeuItem, seuAdapter e suaRecyclerView pelos nomes reais da sua classe, adaptador e RecyclerView.
         for (String item : listaCidades) {
             if (item.toLowerCase().contains(query.toLowerCase())) {
                 resultadosDaPesquisa.add(item);
@@ -121,14 +119,12 @@ public class SearchPostagemActivity extends AppCompatActivity {
         adapter.setDb(resultadosDaPesquisa);
     }
 
-
     private void getDbBack() {
-        //PEGAR TOKEN
         SecurityPreferences securityPreferences = new SecurityPreferences(this);
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
-        Call<List<Post>> call = retrofitConfig.getPostService().getAllPost();
+        Call<List<Post>> call = retrofitConfig.getService(PostService.class).getAllPost();
 
         call.enqueue(new Callback<List<Post>>() {
             @Override
@@ -139,18 +135,17 @@ public class SearchPostagemActivity extends AppCompatActivity {
                     tempDb.clear();
                     tempDb = response.body();
 
-                    for (Post post:tempDb) {
-                        if(post.getPostMoradia() == null){
-                            cidades.add(post.getCidade());;
+                    for (Post post : tempDb) {
+                        if (post.getPostMoradia() == null) {
+                            cidades.add(post.getCidade());
                         }
                     }
 
                     Iterator<String> iterator = cidades.iterator();
-                    while (iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         listaCidades.add(iterator.next());
                     }
                     adapter.setDb(listaCidades);
-
 
                 } else {
 
@@ -167,45 +162,6 @@ public class SearchPostagemActivity extends AppCompatActivity {
         });
 
     }
-
-
-    /*private void getDbBack(ViewGroup container, String cidade) {
-        //PEGAR TOKEN
-        SecurityPreferences securityPreferences = new SecurityPreferences(this);
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-
-        Call<List<Post>> call = retrofitConfig.getPostService().getPostByCidade(cidade);
-
-       call.enqueue(new Callback<List<Post>>() {
-           @Override
-           public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-               if (response.isSuccessful()){
-
-                   List<Post> tempDb = new ArrayList<>();
-                   tempDb.clear();
-
-                   tempDb = response.body();
-
-                   for (int i = 0; tempDb.size()> i; i++){
-
-                           cidades.add(tempDb.get(i).getCidade());
-
-//                            Log.e("Response body", "dados ResponseBody:" + db.get(i).getPostMoradia().getFotos().toString());
-
-                   }
-                   adapter.setDb(cidades);
-
-               }
-           }
-
-           @Override
-           public void onFailure(Call<List<Post>> call, Throwable t) {
-
-           }
-       });
-
-    }*/
 
 
 }

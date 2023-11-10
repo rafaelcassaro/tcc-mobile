@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-
 public class Post implements Serializable {
     private Long id;
     private Integer qntdDenuncia;
@@ -33,7 +32,6 @@ public class Post implements Serializable {
         this.dataPost = dataPost;
         this.cep = cep;
     }
-
 
 
     public Long getId() {
@@ -81,7 +79,7 @@ public class Post implements Serializable {
     }
 
     public void setDataPost(Date dataPost) {
-        this.dataPost =  x.format(dataPost);
+        this.dataPost = x.format(dataPost);
     }
 
     public String getCep() {

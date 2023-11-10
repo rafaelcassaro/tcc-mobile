@@ -1,19 +1,8 @@
 package com.example.tcc.network;
 
-import androidx.annotation.NonNull;
-
 import com.example.tcc.network.services.CepService;
-import com.example.tcc.network.services.PostService;
-import com.example.tcc.network.services.UserService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,18 +23,7 @@ public class RetrofitConfigCepApi {
                 .build();
     }
 
-
-    public Retrofit getRetrofit() {
-        return retrofit;
-    }
-
-
-    public void setHttpClient(){
-
-    }
-
-
-    public CepService getCepService(){
-        return  this.retrofit.create(CepService.class);
+    public CepService getCepService() {
+        return this.retrofit.create(CepService.class);
     }
 }

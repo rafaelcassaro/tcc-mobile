@@ -2,7 +2,6 @@ package com.example.tcc.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.example.tcc.R;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.moradias.MoradiaUsuarioEditar;
 import com.example.tcc.ui.postagens.PostagensUsuarioEditar;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.OkHttp3Downloader;
@@ -41,8 +39,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
 
 
     public PostUsuarioAdapter(Context context) {
-        this.context =context;
-
+        this.context = context;
     }
 
     @NonNull
@@ -59,30 +56,27 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
     @Override
     public void onBindViewHolder(@NonNull PostUsuarioAdapter.MyViewHolder holder, int position) {
 
-        holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
-        holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));
-        holder.dataTv.setText(String.valueOf(db.get(position).getDataPost()));
-        holder.estadoTv.setText(String.valueOf(db.get(position).getEstado()));
+        holder.cidadeTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getCidade()));
+        holder.comentarioTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getComentario()));
+        holder.dataTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getDataPost()));
+        holder.estadoTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getEstado()));
 
-        if (db.get(position).getUsuario() != null) {
-            holder.celularTv.setText(String.valueOf(db.get(position).getUsuario().getCelular()));
-            holder.nomeTv.setText(String.valueOf(db.get(position).getUsuario().getNome()));
+        if (db.get(holder.getAdapterPosition()).getUsuario() != null) {
+            holder.celularTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getUsuario().getCelular()));
+            holder.nomeTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getUsuario().getNome()));
         }
 
-        picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + db.get(position).getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.imageView);
-
+        picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + db.get(holder.getAdapterPosition()).getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.imageView);
 
         holder.btEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PostagensUsuarioEditar.class);
-                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(holder.getAdapterPosition()));
                 v.getContext().startActivity(intent);
 
             }
         });
-
-        Log.e("ADAPTER", "item:" + db.toString());
 
     }
 
@@ -92,7 +86,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nomeTv;
         public TextView cidadeTv;
@@ -114,17 +108,11 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
             dataTv = itemView.findViewById(R.id.tv_data_usuario_post);
             imageView = itemView.findViewById(R.id.iv_perfil_post);
             btEditar = itemView.findViewById(R.id.bt_editar_postagem_usuario);
-
-
         }
-
-
-
     }
 
 
-
-    public void setPostagens(List<Post> db){
+    public void setPostagens(List<Post> db) {
         this.db = db;
         notifyDataSetChanged();
     }

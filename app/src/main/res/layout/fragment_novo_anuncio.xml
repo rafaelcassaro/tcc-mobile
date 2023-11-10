@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fillViewport="true"
-    >
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="1500dp"
-        tools:context=".ui.moradias.NovoAnuncioFragment"
-        android:background="@color/almostWhite"
-        >
-
+        android:background="@color/white"
+        tools:context=".ui.moradias.MoradiaUsuarioEditar">
 
         <View
             android:id="@+id/ContainerComponents_anuncio"
             style="@style/ContainerComponentsFull"
-            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="1220dp"
-            android:layout_marginTop="15dp"
+            android:layout_height="1260dp"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="@color/almostWhite"
 
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -36,13 +32,12 @@
 
             android:layout_marginTop="15dp"
             android:text="ENDEREÇO"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textSize="20dp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toTopOf="@id/ContainerComponents_anuncio"
-            />
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents_anuncio" />
 
         <EditText
             android:id="@+id/et_cep_usuario"
@@ -50,42 +45,41 @@
             android:layout_height="wrap_content"
 
             android:layout_marginTop="20dp"
-            android:background="@drawable/edit_text_cadastro"
+            android:background="@drawable/edit_text_novo_anuncio"
             android:hint="Digite o CEP"
             android:inputType="number"
 
             android:maxLength="8"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
             android:textSize="15sp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_endereço"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_endereço" />
 
         <EditText
             android:id="@+id/et_num_casa_usuario"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="40dp"
 
             android:layout_marginTop="15dp"
-            android:background="@drawable/edit_text_cadastro"
+            android:background="@drawable/edit_text_novo_anuncio"
             android:hint="Nº da casa"
 
             android:inputType="number"
 
             android:maxLength="5"
-            android:padding="10dp"
-            android:textColor="@color/black"
+
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
-            android:textSize="15sp"
+            android:textSize="12sp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toEndOf="@id/et_rua_usuario"
-            app:layout_constraintTop_toBottomOf="@id/et_cep_usuario"
-            />
+            app:layout_constraintTop_toBottomOf="@id/et_cep_usuario" />
 
         <EditText
             android:id="@+id/et_rua_usuario"
@@ -93,115 +87,110 @@
             android:layout_height="wrap_content"
 
             android:layout_marginTop="15dp"
-            android:background="@drawable/edit_text_cadastro"
+            android:background="@drawable/edit_text_novo_anuncio"
             android:hint="Digite a rua"
             android:inputType="text"
 
             android:maxLength="30"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
-            android:textSize="15sp"
+            android:textSize="14sp"
 
             app:layout_constraintEnd_toStartOf="@id/et_num_casa_usuario"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/et_cep_usuario"
-            />
+            app:layout_constraintTop_toBottomOf="@id/et_cep_usuario" />
 
         <TextView
             android:id="@+id/tv_cidade_usuario"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="15dp"
-            android:background="@drawable/edit_text_cidade_estado"
 
+            android:alpha="0.5"
+
+            android:background="@drawable/edit_text_cidade_estado"
             android:hint="Cidade"
             android:inputType="text"
 
             android:maxLength="30"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
-            android:textSize="15sp"
+            android:textSize="14sp"
 
             app:layout_constraintEnd_toStartOf="@id/tv_estado_usuario"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/et_rua_usuario"
-            />
+            app:layout_constraintTop_toBottomOf="@id/et_rua_usuario" />
 
         <TextView
             android:id="@+id/tv_estado_usuario"
-            android:layout_width="100dp"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
 
             android:layout_marginTop="15dp"
+            android:alpha="0.5"
             android:background="@drawable/edit_text_cidade_estado"
             android:hint="Estado"
             android:inputType="text"
 
             android:maxLength="30"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
-            android:textSize="15sp"
+            android:textSize="14sp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toEndOf="@id/tv_cidade_usuario"
-            app:layout_constraintTop_toBottomOf="@id/et_num_casa_usuario"
-            />
-
-
+            app:layout_constraintTop_toBottomOf="@id/et_num_casa_usuario" />
 
 
         <TextView
             android:id="@+id/tv_detalhes_moradias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DETALHES MORADIAS"
-            android:textColor="@color/black"
-            android:textSize="20dp"
             android:layout_marginTop="20dp"
+            android:text="DETALHES MORADIAS"
+            android:textColor="@color/almostBlack"
+            android:textSize="20dp"
 
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_cidade_usuario"
-            />
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_cidade_usuario" />
 
         <TextView
             android:id="@+id/tv_linha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="__________________________________"
+            android:text="____________________________________________"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
 
 
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_detalhes_moradias"
-            />
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_detalhes_moradias" />
 
         <CheckBox
             android:id="@+id/cb_pets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:onClick="onCheckboxClickedd"
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             android:text="@string/cb_pets"
-            android:textColor="@color/black"
-            android:textSize="9sp"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
 
-            android:scaleY="2"
-            android:scaleX="2"
-
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="@id/tv_linha"
             app:layout_constraintEnd_toEndOf="@id/tv_linha"
+            app:layout_constraintHorizontal_bias="0.2"
+
+            app:layout_constraintStart_toStartOf="@id/tv_linha"
             app:layout_constraintTop_toBottomOf="@id/tv_linha"
-            />
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
 
         <CheckBox
             android:id="@+id/cb_garagem"
@@ -209,21 +198,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
 
-            android:onClick="onCheckboxClickedd"
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             android:text="@string/cb_garagem"
-            android:textColor="@color/black"
-            android:textSize="9sp"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
 
-            android:scaleY="2"
-            android:scaleX="2"
-
-            app:layout_constraintHorizontal_bias="0.429"
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintHorizontal_bias="0.429"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/cb_pets"
-            />
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
 
         <CheckBox
             android:id="@+id/cb_quarto"
@@ -231,21 +219,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
 
-            android:onClick="d"
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             android:text="@string/cb_quarto"
-            android:textColor="@color/black"
-            android:textSize="9sp"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
 
-            android:scaleY="2"
-            android:scaleX="2"
-
-            app:layout_constraintHorizontal_bias="0.38"
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintHorizontal_bias="0.38"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/cb_garagem"
-            />
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
 
         <CheckBox
             android:id="@+id/cb_residencia"
@@ -253,40 +240,35 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
 
-            android:onClick="onCheckboxClickedd"
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             android:text="@string/cb_residencia"
-            android:textColor="@color/black"
-            android:textSize="9sp"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
 
-            android:scaleY="2"
-            android:scaleX="2"
-
-            app:layout_constraintHorizontal_bias="0.448"
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintHorizontal_bias="0.448"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/cb_quarto"
-            />
-
-
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
 
 
         <TextView
             android:id="@+id/tv_genero_escolha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Qual o gênero da republica?"
-            android:textColor="@color/black"
-            android:textSize="17dp"
             android:layout_marginTop="25dp"
+            android:text="Qual o gênero da republica?"
+            android:textColor="@color/almostBlack"
+            android:textSize="17dp"
 
 
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_residencia"
-            />
-
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/cb_residencia" />
 
 
         <com.google.android.material.chip.ChipGroup
@@ -334,15 +316,14 @@
             android:id="@+id/tv_linha_baixo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="__________________________________"
+            android:text="____________________________________________"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
 
 
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/chips_genero"
-            />
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/chips_genero" />
 
 
         <TextView
@@ -352,13 +333,12 @@
 
             android:layout_marginTop="15dp"
             android:text="Valor Aluguel"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textSize="17dp"
 
             app:layout_constraintEnd_toStartOf="@id/tv_num_moradores"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_linha_baixo"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_linha_baixo" />
 
         <TextView
             android:id="@+id/tv_num_moradores"
@@ -367,13 +347,12 @@
 
             android:layout_marginTop="15dp"
             android:text="Nº Moradores"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textSize="17dp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toEndOf="@id/tv_aluguel"
-            app:layout_constraintTop_toBottomOf="@id/tv_linha_baixo"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_linha_baixo" />
 
         <EditText
             android:id="@+id/et_aluguel_usuario"
@@ -381,18 +360,19 @@
             android:layout_height="40dp"
 
             android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_cadastro"
+            android:background="@drawable/edit_text_novo_anuncio"
             android:hint="0000,00"
             android:inputType="numberDecimal"
 
             android:maxLength="8"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
             android:textSize="15sp"
 
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toStartOf="@id/et_num_moradores_usuario"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/tv_aluguel"
 
             />
@@ -403,35 +383,34 @@
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_cadastro"
+            android:background="@drawable/edit_text_novo_anuncio"
             android:hint="00"
             android:inputType="number"
 
             android:maxLength="2"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
             android:textSize="15sp"
 
 
-            app:layout_constraintStart_toEndOf="@id/et_aluguel_usuario"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_num_moradores"
-            />
+            app:layout_constraintStart_toEndOf="@id/et_aluguel_usuario"
+            app:layout_constraintTop_toBottomOf="@id/tv_num_moradores" />
 
         <TextView
             android:id="@+id/tv_linha_alguel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="__________________________________"
+            android:text="____________________________________________"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
 
 
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/et_num_moradores_usuario"
-            />
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/et_num_moradores_usuario" />
 
         <TextView
             android:id="@+id/tv_comentario_post"
@@ -440,58 +419,55 @@
 
             android:layout_marginTop="15dp"
             android:text="Digite um comentario para a pulicação"
-            android:textColor="@color/black"
+            android:textColor="@color/almostBlack"
             android:textSize="17dp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_linha_alguel"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_linha_alguel" />
 
         <EditText
             android:id="@+id/et_comentario_anuncio"
-            android:layout_width="match_parent"
+            android:layout_width="318dp"
             android:layout_height="150dp"
-            android:background="@drawable/edit_text_login"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
-            android:padding="10dp"
+            android:background="@drawable/edit_text_novo_anuncio"
             android:hint="Digite um comentário"
-            android:textColorHint="@color/Grey"
-            android:maxLength="300"
             android:inputType="textMultiLine"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/tv_comentario_post"
-            />
+            android:maxLength="300"
+            android:padding="10dp"
+            android:textColor="@color/almostBlack"
+            android:textColorHint="@color/Grey"
+            app:layout_constraintEnd_toEndOf="@id/tv_linha_alguel"
+            app:layout_constraintStart_toStartOf="@id/tv_linha_alguel"
+            app:layout_constraintTop_toBottomOf="@id/tv_comentario_post" />
 
         <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
             android:id="@+id/crv_fotos_moradia"
-            android:layout_width="300dp"
-            android:layout_height="180dp"
+            android:layout_width="318dp"
+            android:layout_height="208dp"
 
             android:layout_marginTop="15dp"
 
-            android:background="@drawable/img_not_found_little"
 
-            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/et_comentario_anuncio"
-            />
+
+            app:layout_constraintEnd_toEndOf="@id/et_comentario_anuncio"
+            app:layout_constraintStart_toStartOf="@id/et_comentario_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/et_comentario_anuncio" />
 
         <ImageButton
             android:id="@+id/ib_adicionar_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@android:color/transparent"
+
+            android:scaleType="centerCrop"
             android:scaleX="2"
             android:scaleY="2"
-
-            android:layout_marginTop="20dp"
             android:src="@drawable/ic_add"
-            android:scaleType="centerCrop"
-            android:backgroundTint="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toEndOf="@id/ib_remover_img"
             app:layout_constraintTop_toBottomOf="@id/crv_fotos_moradia"
@@ -502,13 +478,13 @@
             android:id="@+id/ib_remover_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@android:color/transparent"
+
+            android:scaleType="centerCrop"
             android:scaleX="2"
             android:scaleY="2"
-
-            android:layout_marginTop="20dp"
             android:src="@drawable/ic_remover"
-            android:scaleType="centerCrop"
-            android:backgroundTint="@android:color/transparent"
             app:layout_constraintEnd_toStartOf="@id/ib_adicionar_img"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/crv_fotos_moradia"
@@ -518,16 +494,13 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_publicar"
             style="@style/Button"
-            android:text="Publicar"
-
             android:layout_marginBottom="5dp"
+
+            android:text="Publicar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ContainerComponents_anuncio"
-            />
-
-
+            app:layout_constraintTop_toBottomOf="@+id/ContainerComponents_anuncio" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

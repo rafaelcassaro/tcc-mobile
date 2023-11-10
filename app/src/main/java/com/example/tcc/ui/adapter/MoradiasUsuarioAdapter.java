@@ -1,21 +1,13 @@
 package com.example.tcc.ui.adapter;
 
-import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,8 +29,7 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
     private Context context;
 
 
-
-    public MoradiasUsuarioAdapter(Context context){
+    public MoradiasUsuarioAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         this.context = context;
     }
@@ -47,64 +38,33 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
     @NonNull
     @Override
     public MoradiasUsuarioAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //View itemList = inflater.inflate(R.layout.activity_anuncio_layout, parent, false);
-        View itemList = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_moradia_usuario_layout,parent,false);
+        View itemList = inflater.inflate(R.layout.activity_moradia_usuario_layout, parent, false);
         return new MyViewHolder(itemList);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MoradiasUsuarioAdapter.MyViewHolder holder, int position) {
-        //holder.tipoMoradiaTv.setText(String.valueOf(db.get(position).getPostMoradia().isTipoResidencia()));
-        holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
-        holder.ruaTv.setText(String.valueOf(db.get(position).getPostMoradia().getEndereco()));
-        holder.numCasaTv.setText(String.valueOf(db.get(position).getPostMoradia().getNumCasa()));
-        holder.moradoresTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getMoradores()));
-        //holder.quartoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isQuarto()));
-        //holder.garagemTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isGaragem()));
-        //holder.petTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().isPets()));
-        holder.valorTv.setText(String.valueOf(db.get(position).getPostMoradia().getValorAluguel()));
-        holder.estadoTv.setText(String.valueOf(db.get(position).getEstado()));
-        holder.generoTv.setText(String.valueOf(db.get(position).getPostMoradia().getDetalhesMoradia().getGeneroMoradia()));
-        holder.comentarioTv.setText(String.valueOf(db.get(position).getComentario()));
 
+        holder.cidadeTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getCidade()));
+        holder.ruaTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getPostMoradia().getEndereco()));
+        holder.numCasaTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getPostMoradia().getNumCasa()));
+        holder.moradoresTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getPostMoradia().getDetalhesMoradia().getMoradores()));
+        holder.valorTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getPostMoradia().getValorAluguel()));
+        holder.estadoTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getEstado()));
+        holder.generoTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getPostMoradia().getDetalhesMoradia().getGeneroMoradia()));
+        holder.comentarioTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getComentario()));
 
-        if(db.get(position).getPostMoradia().isTipoResidencia()){
-            holder.tipoMoradiaTv.setText(" Casa");
-        }
-        else{
-            holder.tipoMoradiaTv.setText(" Apartamento");
-        }
-        if(db.get(position).getPostMoradia().getDetalhesMoradia().isGaragem()){
-            holder.garagemTv.setText(" possui");
-        }
-        else{
-            holder.garagemTv.setText(" não possui");
-        }
-        if(db.get(position).getPostMoradia().getDetalhesMoradia().isPets()){
-            holder.petTv.setText(" possui");
-        }
-        else{
-            holder.petTv.setText(" não possui");
-        }
-
-        if(db.get(position).getPostMoradia().getDetalhesMoradia().isQuarto()){
-            holder.quartoTv.setText(" individual");
-        }
-        else{
-            holder.quartoTv.setText(" compartilhado");
-        }
-
+        holderDetalhesMoradias(holder);
 
         imagemAdapter = new ImagemAdapter(context);
-        imagemAdapter.setDbPost(db.get(position).getPostMoradia().getFotos());
+        imagemAdapter.setDbPost(db.get(holder.getAdapterPosition()).getPostMoradia().getFotos());
         holder.recyclerview.setAdapter(imagemAdapter);
-
 
         holder.editarBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MoradiaUsuarioEditar.class);
-                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(position));
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW, db.get(holder.getAdapterPosition()));
                 v.getContext().startActivity(intent);
 
             }
@@ -113,13 +73,12 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
     }
 
 
-
     @Override
     public int getItemCount() {
         return db.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tipoMoradiaTv;
         public TextView cidadeTv;
@@ -153,18 +112,37 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
             comentarioTv = itemView.findViewById(R.id.tv_comentario_usuario);
             recyclerview = itemView.findViewById(R.id.crv_fotos_moradia);
 
-
         }
-
 
     }
 
-
-
-
-
-    public void setPostagens(List<Post> db){
+    public void setPostagens(List<Post> db) {
         this.db = db;
         notifyDataSetChanged();
     }
+
+    private void holderDetalhesMoradias(@NonNull MyViewHolder holder) {
+        if (db.get(holder.getAdapterPosition()).getPostMoradia().isTipoResidencia()) {
+            holder.tipoMoradiaTv.setText(" Casa");
+        } else {
+            holder.tipoMoradiaTv.setText(" Apartamento");
+        }
+        if (db.get(holder.getAdapterPosition()).getPostMoradia().getDetalhesMoradia().isGaragem()) {
+            holder.garagemTv.setText(" possui");
+        } else {
+            holder.garagemTv.setText(" não possui");
+        }
+        if (db.get(holder.getAdapterPosition()).getPostMoradia().getDetalhesMoradia().isPets()) {
+            holder.petTv.setText(" possui");
+        } else {
+            holder.petTv.setText(" não possui");
+        }
+
+        if (db.get(holder.getAdapterPosition()).getPostMoradia().getDetalhesMoradia().isQuarto()) {
+            holder.quartoTv.setText(" individual");
+        } else {
+            holder.quartoTv.setText(" compartilhado");
+        }
+    }
+
 }

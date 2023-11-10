@@ -1,19 +1,14 @@
 package com.example.tcc.network;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
-import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.network.services.ImageService;
 import com.example.tcc.network.services.PostService;
 import com.example.tcc.network.services.UserService;
-import com.example.tcc.ui.constants.TaskConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -31,11 +26,10 @@ public class RetrofitConfig {
     Gson gson = new GsonBuilder().setDateFormat("dd MMM yyyy").create();
 
     public RetrofitConfig(String tokenValue) {
-
-        if (tokenValue.equals("")){
+        token = tokenValue;
+        if (tokenValue.equals("")) {
             okHttpClient = new OkHttpClient().newBuilder().build();
-        }
-        else{
+        } else {
             okHttpClient = new OkHttpClient().newBuilder().addInterceptor(new Interceptor() {
 
                 @NonNull
@@ -60,43 +54,37 @@ public class RetrofitConfig {
                 .build();
     }
 
+    public OkHttpClient getOkHttpClientWithAuthorization(final String token) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
+        httpClient.addInterceptor(new Interceptor() {
+            @NonNull
+            @Override
+            public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+                okhttp3.Request original = chain.request();
+                Request request = original
+                        .newBuilder()
+                        .addHeader("Authorization", token)
+                        .method(original.method(), original.body())
+                        .build();
 
-    public Retrofit getRetrofit() {
-        return retrofit;
+                return chain.proceed(request);
+            }
+        });
+        return httpClient.build();
+
     }
 
-
-
-    public void setHttpClient(){
-
-    }
-
-    public String getToken(){
+    public String getToken() {
         return token;
     }
 
-    public void setToken(String theToken){
+    public void setToken(String theToken) {
         token = theToken;
     }
 
-    public void addHeader(String tokenValue){
-        token = tokenValue;
-
-    }
-
-
-    public <T> T getService(Class<T> serviceClass){
+    public <T> T getService(Class<T> serviceClass) {
         return retrofit.create(serviceClass);
     }
-
-    public UserService getUserService(){
-        return this.retrofit.create(UserService.class);
-    }
-
-    public PostService getPostService(){return this.retrofit.create(PostService.class);}
-    public ImageService getImageService(){return this.retrofit.create(ImageService.class);}
-
-
 
 }

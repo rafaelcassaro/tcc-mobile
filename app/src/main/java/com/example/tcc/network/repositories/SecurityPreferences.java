@@ -11,7 +11,7 @@ public class SecurityPreferences {
     private final SharedPreferences preferences;
 
     public SecurityPreferences(Context context) {
-        preferences = context.getSharedPreferences(TaskConstants.SECURITY.PREF_NAME  , Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(TaskConstants.SECURITY.PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public void store(String key, String authToken) {
@@ -19,8 +19,6 @@ public class SecurityPreferences {
         editor.putString(key, authToken);
         editor.apply();
     }
-
-
 
     public String getAuthToken(String data) {
         return preferences.getString(data, null);

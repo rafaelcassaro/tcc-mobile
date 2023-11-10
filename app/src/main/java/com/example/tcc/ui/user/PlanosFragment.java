@@ -21,10 +21,8 @@ public class PlanosFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentPlanosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
 
         escolhaPlano(binding);
         escolhaSemanas(binding);

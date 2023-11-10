@@ -35,6 +35,8 @@ import com.example.tcc.network.entities.Fotos;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.entities.PostMoradia;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.ImageService;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.adapter.ImagemEditarMoradiaAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.google.android.material.chip.Chip;
@@ -61,48 +63,40 @@ public class NovoAnuncioFragment extends Fragment {
 
     private FragmentNovoAnuncioBinding binding;
     private ActivityResultLauncher<Intent> resultLauncher;
-    private ImageView imageView;
-    private Uri imageUri;
-    private Uri imgNotFound;
     private List<MultipartBody.Part> multiPartImgList = new ArrayList<>();
-   // private List<Uri> imageUriList = new ArrayList<>();
     private Post post;
     private ImagemEditarMoradiaAdapter imagemAdapter;
-    private Picasso picasso ;
     private RetrofitConfigCepApi retrofitConfigCepApi;
+    private SecurityPreferences securityPreferences;
+    private RetrofitConfig retrofitConfig;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNovoAnuncioBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-       // iniciarViews();
-        //Post post = new Post();
-        retrofitConfigCepApi = new RetrofitConfigCepApi();
 
-        post = new Post();
-        PostMoradia moradia = new PostMoradia();
-        Detalhes detalhesMoradia = new Detalhes();
-        post.setPostMoradia(moradia);
-        post.getPostMoradia().setDetalhesMoradia(detalhesMoradia);
-        post.getPostMoradia().setFotos(new ArrayList<>());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                startRetrofit();
+                criarNovoPost();
+                configAdapterImage(getContext());
+            }
+        }).start();
 
-        configAdapter(getContext());
         multiPartImgList.clear();
-
         registerResult();
+
         getCheckButtons();
+
         binding.etCepUsuario.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 pegarCepViaApi();
-
                 return false;
             }
         });
-
-
-
 
 
         binding.ibAdicionarImg.setOnClickListener(view -> pickImage());  //coloca uma imagem na lista uri e atualiza o rv das imgs
@@ -110,34 +104,39 @@ public class NovoAnuncioFragment extends Fragment {
         binding.ibRemoverImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 imagemAdapter.removeImg(binding.crvFotosMoradia.getSelectedPosition());
-
                 if(!multiPartImgList.isEmpty() && binding.crvFotosMoradia.getSelectedPosition() >= 0 && binding.crvFotosMoradia.getSelectedPosition() < multiPartImgList.size()) {
                     multiPartImgList.remove(binding.crvFotosMoradia.getSelectedPosition());
                 }
-
                 imagemAdapter.addImgvazia();
                 binding.crvFotosMoradia.smoothScrollToPosition(0);
-
             }
         });
 
         binding.btPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
                 salvarPostagemViaApi();
-
-
             }
         });
-
-
         // Inflate the layout for this fragment
         return root;
+    }
+
+    private void startRetrofit() {
+        retrofitConfigCepApi = new RetrofitConfigCepApi();
+        securityPreferences = new SecurityPreferences(getContext());
+        retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+    }
+
+    private void criarNovoPost() {
+        post = new Post();
+        PostMoradia moradia = new PostMoradia();
+        Detalhes detalhesMoradia = new Detalhes();
+        post.setPostMoradia(moradia);
+        post.getPostMoradia().setDetalhesMoradia(detalhesMoradia);
+        post.getPostMoradia().setFotos(new ArrayList<>());
     }
 
     private void getCheckButtons(){
@@ -212,7 +211,6 @@ public class NovoAnuncioFragment extends Fragment {
             public void onResponse(Call<CepApi> call, Response<CepApi> response) {
                 if (response.isSuccessful()){
                     CepApi cepApiDados = response.body();
-
                     Log.e("VERIFICAR POST ", "deu bom "+ cepApiDados.toString());
                     post.setCidade(cepApiDados.getCity());
                     post.setEstado(cepApiDados.getState());
@@ -220,16 +218,12 @@ public class NovoAnuncioFragment extends Fragment {
                     post.setQntdDenuncia(0);
                     binding.tvCidadeUsuario.setText(cepApiDados.getCity());
                     binding.tvEstadoUsuario.setText(cepApiDados.getState());
-
-
-
                 }
                 else {
 
                 }
 
             }
-
             @Override
             public void onFailure(Call<CepApi> call, Throwable t) {
 
@@ -237,34 +231,12 @@ public class NovoAnuncioFragment extends Fragment {
         });
     }
 
-    private void configAdapter(Context context){
+    private void configAdapterImage(Context context){
         imagemAdapter = new ImagemEditarMoradiaAdapter(context);
         binding.crvFotosMoradia.setAdapter(imagemAdapter);
         imagemAdapter.addImgvazia();
         binding.crvFotosMoradia.setInfinite(true);
         binding.crvFotosMoradia.setFlat(true);
-
-    }
-
-    private OkHttpClient getOkHttpClientWithAuthorization(final String token) {
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-        httpClient.addInterceptor(new Interceptor() {
-            @NonNull
-            @Override
-            public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
-                okhttp3.Request original = chain.request();
-                Request request = original
-                        .newBuilder()
-                        .addHeader("Authorization", token)
-                        .method(original.method(), original.body())
-                        .build();
-
-                return chain.proceed(request);
-            }
-        });
-        return httpClient.build();
-
     }
 
     public String getRealPathFromUri(Context context, Uri uri) {
@@ -296,21 +268,15 @@ public class NovoAnuncioFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 try {
-                    //imageUri = result.getData().getData();
-
-                   // binding.ivFotosUsuario.setImageURI(imageUri);
 
                     File imageFile = new File(getRealPathFromUri(getContext(), result.getData().getData()));
-                   // RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
                     RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("multipart/form-data"));
                     MultipartBody.Part imagemPart = MultipartBody.Part.createFormData("file", imageFile.getName(), requestBody);
                     multiPartImgList.add(imagemPart);
                     imagemAdapter.addImagem(result.getData().getData());
-                    // Enviar a imagem usando Retrofit
-
                 }
                 catch (Exception e){
-                    Log.e("sem img", "sem");
+                    Log.e("registerResult", "sem img: "+ e.getMessage());
                 }
 
             }
@@ -319,27 +285,23 @@ public class NovoAnuncioFragment extends Fragment {
 
 
 
-    private void SalvarImagemViaApi(RetrofitConfig retrofitConfig,Long id, MultipartBody.Part imagem){
-
-        Call<Fotos> call = retrofitConfig.getImageService().uploadImage(imagem, id);
+    private void SalvarImagemViaApi(Long id, MultipartBody.Part imagem){
+        Call<Fotos> call = retrofitConfig.getService(ImageService.class).uploadImage(imagem, id);
         call.enqueue(new Callback<Fotos>() {
             @Override
             public void onResponse(Call<Fotos> call, Response<Fotos> response) {
-                // Lidar com a resposta do servidor, se houver
                 if (response.isSuccessful()) {
                     Fotos resposta = response.body();
-                    // Faça algo com a resposta do servidor, se necessário
-                    Log.e("json bom", ": " + resposta);
+                    Log.e("SalvarImagemViaApi", "response.isSuccessful: " + resposta);
                 }
                 else {
-                    Log.e("json rum", ": " + response.body());
+                    Log.e("SalvarImagemViaApi", "response else: " + response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<Fotos> call, Throwable t) {
-                // Lidar com erros na requisição
-                Log.e("JSON ERRO", ": " + t.getMessage());
+                Log.e("SalvarImagemViaApi", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -347,14 +309,10 @@ public class NovoAnuncioFragment extends Fragment {
 
     private void salvarPostagemViaApi() {
         setarDados();
-        SecurityPreferences securityPreferences = new SecurityPreferences(getContext());
-        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-        retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-
         Long id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
         post.getPostMoradia().setFotos(new ArrayList<>());
 
-        Call<Post> callSave = retrofitConfig.getPostService().createPost(post, id);
+        Call<Post> callSave = retrofitConfig.getService(PostService.class).createPost(post, id);
         callSave.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
@@ -364,13 +322,9 @@ public class NovoAnuncioFragment extends Fragment {
                     Log.e("NovoAnuncio", "deu bom" + response.body().toString());
                     Log.e("NovoAnuncio", "IDIDIDI" + id);
 
-
-
                     for(int i = 0; i < multiPartImgList.size(); i++){
-                        SalvarImagemViaApi(retrofitConfig, idMoradia, multiPartImgList.get(i));
+                        SalvarImagemViaApi(idMoradia, multiPartImgList.get(i));
                     }
-
-
 
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.putExtra("novo_postMoradia_tag", "editPostTag");
@@ -379,9 +333,6 @@ public class NovoAnuncioFragment extends Fragment {
                 else{
                     Log.e("NovoAnuncio", "deu bom ruim");
                 }
-
-
-
             }
 
             @Override
@@ -414,8 +365,6 @@ public class NovoAnuncioFragment extends Fragment {
         int escolhaGenero = verificarChip3Opcoes(binding.chipsGenero, R.id.chips_genero_masc, R.id.chips_genero_fem, R.id.chips_genero_misto);
         adicionarGenero(escolhaGenero);
     }
-
-
 
     private int verificarChip3Opcoes(ChipGroup chip, int opcao1, int opcao2,int opcao3)  {
         int escolha= 0;

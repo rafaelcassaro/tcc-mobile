@@ -16,11 +16,11 @@ public class Usuario implements Serializable {
     private String nomeFotoPerfil;
     private String caminhoImagem;
 
-
     @SerializedName("token")
     private String token;
 
-    public Usuario(){}
+    public Usuario() {
+    }
 
     public Usuario(Long id, String nome, String email, String celular, String senha, String link1, String link2, String link3) {
         this.id = id;
@@ -33,7 +33,7 @@ public class Usuario implements Serializable {
         this.link3 = link3;
     }
 
-    public Usuario(Long id, String nome, String email, String celular, String senha, String link1, String link2, String link3, String nomeFotoPerfil, String caminhoImagem  ) {
+    public Usuario(Long id, String nome, String email, String celular, String senha, String link1, String link2, String link3, String nomeFotoPerfil, String caminhoImagem) {
         this.id = id;
         this.nome = nome;
         this.email = email;

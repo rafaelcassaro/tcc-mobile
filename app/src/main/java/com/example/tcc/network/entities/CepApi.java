@@ -9,7 +9,8 @@ public class CepApi {
     private String service;
 
 
-    public CepApi(){}
+    public CepApi() {
+    }
 
     public CepApi(String cep, String state, String city, String neighborhood, String street, String service) {
         this.cep = cep;

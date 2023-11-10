@@ -1,36 +1,22 @@
 package com.example.tcc.ui.postagens;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.tcc.R;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.tcc.databinding.FragmentPostagensUsuarioBinding;
-import com.example.tcc.db.PostagemDb;
-import com.example.tcc.network.RetrofitConfigToken;
+import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
-
-import com.example.tcc.ui.adapter.PostAdapter;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.adapter.PostUsuarioAdapter;
-import com.example.tcc.ui.adapter.PostagemAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +28,6 @@ import retrofit2.Response;
 public class PostagensUsuarioFragment extends Fragment {
 
     private FragmentPostagensUsuarioBinding binding;
-    private RecyclerView.Adapter adapter;
     private PostUsuarioAdapter postAdapter;
     private List<Post> db = new ArrayList<>();
 
@@ -57,7 +42,6 @@ public class PostagensUsuarioFragment extends Fragment {
         configAdapter();
         getPostsByUserId(container);
 
-        // Inflate the layout for this fragment
         return root;
     }
 
@@ -65,51 +49,36 @@ public class PostagensUsuarioFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        postAdapter= null;
     }
 
 
-    private void configAdapter(){
-
-
-       postAdapter = new PostUsuarioAdapter(getContext());
-
-
-        //postAdapter = new PostAdapter(container.getContext());
+    private void configAdapter() {
+        postAdapter = new PostUsuarioAdapter(getContext());
         binding.rvPostagensUsuario.setAdapter(postAdapter);
     }
 
-
-
-
-
-
-    private void getPostsByUserId(ViewGroup container){
+    private void getPostsByUserId(ViewGroup container) {
         SecurityPreferences securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
-        RetrofitConfigToken retrofitConfigToken = new RetrofitConfigToken();
-        retrofitConfigToken.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+        RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         String idUser = securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY);
 
-        Call<List<Post>> call = retrofitConfigToken.getPostService().getPostByUserId(Long.parseLong(idUser));
-
+        Call<List<Post>> call = retrofitConfig.getService(PostService.class).getPostByUserId(Long.parseLong(idUser));
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
 
-                    List<Post> tempDb ;
+                    List<Post> tempDb;
                     tempDb = response.body();
 
-                    for (Post post:tempDb) {
-                        if(post.getPostMoradia() == null){
+                    for (Post post : tempDb) {
+                        if (post.getPostMoradia() == null) {
                             db.add(post);
                         }
                     }
-                   // Log.e("Response body", "dados db local:" + db.toString());
                     postAdapter.setPostagens(db);
-                   // Log.e("Response body", "dados ResponseBody:" + response.body());
-
-                }
-                else{
+                } else {
                     mostrarErro(container);
                 }
 
@@ -124,7 +93,7 @@ public class PostagensUsuarioFragment extends Fragment {
         });
     }
 
-    private void mostrarErro(ViewGroup container){
-        Toast.makeText(container.getContext(), "deu ruim !",Toast.LENGTH_SHORT).show();
+    private void mostrarErro(ViewGroup container) {
+        Toast.makeText(container.getContext(), "deu ruim !", Toast.LENGTH_SHORT).show();
     }
 }

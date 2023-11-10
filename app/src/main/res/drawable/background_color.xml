@@ -2,10 +2,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <gradient
-        android:startColor="@color/Blue"
+        android:angle="90"
         android:centerColor="@color/Cerulean"
         android:endColor="@color/Sky"
-        android:angle="90"
-        />
+        android:startColor="@color/Blue" />
 
 </shape>

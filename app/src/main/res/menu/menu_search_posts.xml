@@ -4,20 +4,19 @@
 
     <item
         android:id="@+id/menu_space_left"
-        android:orderInCategory="101"
         android:icon="@drawable/ic_invisivel"
-        app:showAsAction="always"
+        android:orderInCategory="101"
         android:title=""
         android:visible="true"
-        />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_lupa"
         android:orderInCategory="100"
-        app:showAsAction="always"
         android:title=""
         app:actionViewClass="android.widget.TextView"
+        app:showAsAction="always"
 
         />
 
