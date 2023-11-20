@@ -1,5 +1,6 @@
 package com.example.tcc;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         View headerview = navigationView.getHeaderView(0);
+        ivPerfil = headerview.findViewById(R.id.iv_foto_perfil_header);
         usuario = new Usuario();
 
 
@@ -83,7 +86,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // nameHeader.setText(usuario.getNome());
+       // emailHeader.setText(usuario.getEmail());
+       // String nome = usuario.getNomeFotoPerfil();
+       // picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + nome).noFade()
+       //         .placeholder(R.drawable.img_not_found_little).into(ivPerfil);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,12 +134,24 @@ public class MainActivity extends AppCompatActivity {
         logoutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                if (intent != null) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-                finish(); // Encerrar a atividade atual
+                AlertDialog.Builder confirmarSaida = new AlertDialog.Builder(MainActivity.this);
+                confirmarSaida.setTitle("Atenção!");
+                confirmarSaida.setMessage("Deseja sair da sua conta ? \n");
+                confirmarSaida.setCancelable(true);
+                confirmarSaida.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                        if (intent != null) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                        finish(); // Encerrar a atividade atual
+
+                    }
+                });
+                confirmarSaida.setNegativeButton("Não", null);
+                confirmarSaida.create().show();
 
                 return true;
             }
@@ -141,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 nameHeader = headerview.findViewById(R.id.tv_name_header);
                 emailHeader = headerview.findViewById(R.id.tv_email_header);
-                ivPerfil = headerview.findViewById(R.id.iv_foto_perfil_header);
+
 
                 picasso = new Picasso.Builder(binding.getRoot().getContext())
                         .downloader(new OkHttp3Downloader(retrofitConfig.getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))

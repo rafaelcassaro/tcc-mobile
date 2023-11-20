@@ -101,18 +101,7 @@
             app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
             app:layout_constraintTop_toTopOf="@+id/containerComponents_cadastro" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_add_ft_perfil"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/button_add_ft_perfil"
 
-            android:text="@string/bt_cadastro_add"
-
-            app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
-            app:layout_constraintStart_toEndOf="@+id/iv_foto_perfil"
-            app:layout_constraintTop_toTopOf="@+id/containerComponents_cadastro" />
 
         <EditText
             android:id="@+id/et_nome"
@@ -184,7 +173,7 @@
             style="@style/Edit_Text_Cadastro"
             android:drawableRight="@drawable/ic_link"
 
-            android:hint="Link"
+            android:hint="@string/facebook"
             android:inputType="textUri"
             android:textColor="@color/black"
             android:textColorHint="@color/Grey"
@@ -196,7 +185,7 @@
             android:id="@+id/et_link2"
             style="@style/Edit_Text_Cadastro"
             android:drawableRight="@drawable/ic_link"
-            android:hint="Link"
+            android:hint="@string/instagram"
             android:inputType="textUri"
             android:textColor="@color/black"
             android:textColorHint="@color/Grey"
@@ -208,7 +197,7 @@
             android:id="@+id/et_link3"
             style="@style/Edit_Text_Cadastro"
             android:drawableRight="@drawable/ic_link"
-            android:hint="Link"
+            android:hint="@string/twitter"
             android:inputType="textUri"
             android:textColor="@color/black"
             android:textColorHint="@color/Grey"

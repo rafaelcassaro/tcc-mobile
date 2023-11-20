@@ -47,6 +47,8 @@ public class MoradiasUsuarioFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        moradiasAdapter = null;
+        db.clear();
     }
 
     private void configAdapter() {

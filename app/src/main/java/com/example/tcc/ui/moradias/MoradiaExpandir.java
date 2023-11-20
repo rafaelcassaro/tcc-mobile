@@ -6,9 +6,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,10 +20,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import com.example.tcc.R;
+import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.adapter.ImagemAdapter;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MoradiaExpandir extends AppCompatActivity {
 
@@ -29,9 +39,11 @@ public class MoradiaExpandir extends AppCompatActivity {
     private CarouselRecyclerview recyclerview;
     private ImagemAdapter adapter;
     private Button whatsappBt;
+    private ImageButton denunciarIb;
     private ImageView backButton;
     private TextView imgButton;
     private Post post;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +71,34 @@ public class MoradiaExpandir extends AppCompatActivity {
             }
         });
 
+        denunciarIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                    SecurityPreferences securityPreferences = new SecurityPreferences(MoradiaExpandir.this);
+                    RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                    retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+                    Call<Void> addDenuncia = retrofitConfig.getService(PostService.class).denunciarPost(post.getId());
+                    addDenuncia.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(MoradiaExpandir.this, "Denúncia enviada!", Toast.LENGTH_SHORT).show();
+                            denunciarIb.setClickable(false);
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                        }
+                    });
+
+
+
+            }
+        });
+
         imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,24 +116,30 @@ public class MoradiaExpandir extends AppCompatActivity {
                 item.setIcon(R.drawable.logo);
                 // Handle item clicks here
                 if (item.getItemId() == R.id.facebook) {
-                    openSocialMediaLink("https://www.facebook.com/" + post.getUsuario().getLink1());
-                    // Handle the first image click
-                    Toast.makeText(MoradiaExpandir.this, "Image 1 Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (item.getItemId() == R.id.instagram) {
-                    openSocialMediaLink("https://www.instagram.com/" + post.getUsuario().getLink2());
-
-                    // Handle the second image click
-                    Toast.makeText(MoradiaExpandir.this, "Image 2 Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (item.getItemId() == R.id.X) {
-                    openSocialMediaLink("https://www.x.com/" + post.getUsuario().getLink3());
-
-                    // Handle the second image click
-                    Toast.makeText(MoradiaExpandir.this, "Image 2 Clicked", Toast.LENGTH_SHORT).show();
+                    if (post.getUsuario().getLink1().length() > 0) {
+                        openSocialMediaLink("https://www.facebook.com/" + post.getUsuario().getLink1());
+                    } else {
+                        Toast.makeText(MoradiaExpandir.this, "Usuario não possui facebook!", Toast.LENGTH_SHORT).show();
+                    }
                     return true;
                 }
-                // Add more conditions for other images
+                else if (item.getItemId() == R.id.instagram) {
+                    if (post.getUsuario().getLink2().length() > 0) {
+                        openSocialMediaLink("https://www.instagram.com/" + post.getUsuario().getLink2());
+                    } else {
+                        Toast.makeText(MoradiaExpandir.this, "Usuario não possui instagram!", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+                else if (item.getItemId() == R.id.X) {
+                    if (post.getUsuario().getLink3().length() > 0) {
+                        openSocialMediaLink("https://www.x.com/" + post.getUsuario().getLink3());
+                    } else {
+                        Toast.makeText(MoradiaExpandir.this, "Usuario não possui Twitter!", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+                // Add more conditions for other images  MoradiaExpandir.this
                 return false;
 
             }
@@ -143,7 +189,6 @@ public class MoradiaExpandir extends AppCompatActivity {
         generoTv.setText(post.getPostMoradia().getDetalhesMoradia().getGeneroMoradia());
     }
 
-
     private void openSocialMediaLink(String url) {
         try {
             Uri webpage = Uri.parse(url);
@@ -153,14 +198,13 @@ public class MoradiaExpandir extends AppCompatActivity {
             } else {
                 // Caso não haja aplicativo disponível para abrir o link
                 startActivity(intent);
-                Toast.makeText(this, "Nenhum aplicativo disponível para abrir o link", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Nenhum aplicativo disponível para abrir o link", Toast.LENGTH_SHORT).show();
             }
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
             // Lida com exceção, se ocorrer
         }
     }
-
 
     private void iniciarViews() {
         tipoMoradiaTv = findViewById(R.id.tv_tipo_moradia);
@@ -179,5 +223,6 @@ public class MoradiaExpandir extends AppCompatActivity {
         imgButton = findViewById(R.id.spiner);
         comentarioTv = findViewById(R.id.tv_comentario);
         backButton = findViewById(R.id.iv_voltar);
+        denunciarIb = findViewById(R.id.ib_denunciar_moradia_expandir);
     }
 }

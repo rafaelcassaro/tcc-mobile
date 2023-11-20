@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TCC</string>
+    <string name="app_name">RightPlaceApp</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -14,7 +14,7 @@
     <string name="menu_postagem_usuario">Minhas postagens</string>
     <string name="menu_nova_moradia">Anúnciar Imovel</string>
     <string name="menu_nova_postagem">Fazer postagem</string>
-    <string name="menu_feedback">Nos envie um feedbackk</string>
+    <string name="menu_feedback">Nos envie um feedback</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_planos">Seja premium</string>
 
@@ -35,6 +35,9 @@
 
     <string name="bt_cadastro_add">Adicionar</string>
     <string name="redes_sociais">Redes Sociais</string>
+    <string name="facebook">Facebook</string>
+    <string name="instagram">Instagram</string>
+    <string name="twitter">Twitter</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

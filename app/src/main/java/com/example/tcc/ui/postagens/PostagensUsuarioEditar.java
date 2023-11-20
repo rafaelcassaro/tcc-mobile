@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,7 +71,53 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
         botaoEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvarViaApi();
+                if (verificarDados()) {
+                    verificarCepViaAPi();
+                }
+            }
+        });
+    }
+
+    private boolean verificarDados() {
+        if (cepEt.getText().toString().length() == 0) {
+            cepEt.requestFocus();
+            cepEt.setError("Digite um CEP !");
+            return false;
+        } else if (comentarioEt.getText().toString().length() == 0) {
+            comentarioEt.requestFocus();
+            comentarioEt.setError("Digite um Comentario !");
+            return false;
+        }
+        return true;
+    }
+
+    private void verificarCepViaAPi() {
+        Integer cep = Integer.valueOf(cepEt.getText().toString());
+        Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+        callApi.enqueue(new Callback<CepApi>() {
+            @Override
+            public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                if (response.isSuccessful()) {
+                    CepApi cepApiDados = response.body();
+                    post.setCidade(cepApiDados.getCity());
+                    post.setEstado(cepApiDados.getState());
+                    cidadeTv.setText(cepApiDados.getCity());
+                    estadoTv.setText(cepApiDados.getState());
+                    // post.setDataPost(new Date());
+
+                    salvarViaApi();
+                    Log.e("POSTAGEMUSUARIOEDITAR", "response.isSuccessful" + post.getDataPost());
+
+                } else {
+                    cepEt.requestFocus();
+                    cepEt.setError("Digite um CEP valido!");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CepApi> call, Throwable t) {
+                Log.e("POSTAGEMUSUARIOEDITAR", "onFailure" + t.getMessage());
             }
         });
     }
@@ -93,6 +140,8 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
                     Log.e("POSTAGEMUSUARIOEDITAR", "response.isSuccessful" + post.getDataPost());
 
                 } else {
+                    cepEt.requestFocus();
+                    cepEt.setError("Digite um CEP valido!");
                     Log.e("POSTAGEMUSUARIOEDITAR", "response.isSuccessful else" + post.getDataPost());
                 }
             }

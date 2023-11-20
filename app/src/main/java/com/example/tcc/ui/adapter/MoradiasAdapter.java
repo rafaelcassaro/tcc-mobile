@@ -1,20 +1,33 @@
 package com.example.tcc.ui.adapter;
 
 import android.content.Context;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
+import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
+import com.example.tcc.ui.constants.TaskConstants;
+import com.example.tcc.ui.login.FormCadastro;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyViewHolder> {
@@ -24,7 +37,6 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
     private OnItemClickListener listener;
     private ImagemAdapter imagemAdapter;
     private Context context;
-
 
     public MoradiasAdapter(Context context, OnItemClickListener listener) {
         inflater = LayoutInflater.from(context);
@@ -44,6 +56,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MoradiasAdapter.MyViewHolder holder, int position) {
 
+
         holder.cidadeTv.setText(String.valueOf(db.get(position).getCidade()));
         holder.ruaTv.setText(String.valueOf(db.get(position).getPostMoradia().getEndereco()));
         holder.numCasaTv.setText(String.valueOf(db.get(position).getPostMoradia().getNumCasa()));
@@ -57,6 +70,36 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
         imagemAdapter = new ImagemAdapter(context);
         imagemAdapter.setDbPost(db.get(position).getPostMoradia().getFotos());
         holder.recyclerview.setAdapter(imagemAdapter);
+
+
+
+
+        holder.denunciarIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("denunciarIb", "onClick");
+                    SecurityPreferences securityPreferences = new SecurityPreferences(context);
+                    RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                    retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+                    Call<Void> addDenuncia = retrofitConfig.getService(PostService.class).denunciarPost(db.get(position).getId());
+                    addDenuncia.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(context, "Denúncia enviada!", Toast.LENGTH_SHORT).show();
+                            holder.denunciarIb.setClickable(false);
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                        }
+                    });
+
+                }
+
+
+        });
 
     }
 
@@ -79,6 +122,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
         public TextView garagemTv;
         public TextView petTv;
         public TextView valorTv;
+        public ImageButton denunciarIb;
         public CarouselRecyclerview recyclerview;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -95,6 +139,7 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
             petTv = itemView.findViewById(R.id.tv_ic_pet);
             valorTv = itemView.findViewById(R.id.tv_valor);
             recyclerview = itemView.findViewById(R.id.crv_fotos_moradia);
+            denunciarIb = itemView.findViewById(R.id.ib_deuninciar_moradia);
 
             itemView.setOnClickListener(this);
         }

@@ -32,6 +32,8 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
     public MoradiasUsuarioAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         this.context = context;
+        db.clear();
+        imagemAdapter = null;
     }
 
 

@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="12dp"
-
+        android:layout_marginLeft="10dp"
         android:text="Apartamento"
         android:textSize="15sp"
         android:textColor="@color/black"
@@ -162,7 +162,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="12dp"
         android:text="12"
         android:textSize="15sp"
         android:textColor="@color/Grey"
@@ -232,7 +232,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/ic_pet"
 

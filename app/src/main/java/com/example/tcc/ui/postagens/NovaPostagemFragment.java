@@ -65,12 +65,28 @@ public class NovaPostagemFragment extends Fragment {
         binding.btPostar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvarViaApi();
+                if (verificarDados()) {
+                    verificarCepViaApi();
+                }
+
 
             }
         });
         // Inflate the layout for this fragment
         return root;
+    }
+
+    private boolean verificarDados() {
+        if (binding.etCepUsuario.getText().toString().length() == 0) {
+            binding.etCepUsuario.requestFocus();
+            binding.etCepUsuario.setError("Digite um CEP !");
+            return false;
+        } else if (binding.etComentario.getText().toString().length() == 0) {
+            binding.etComentario.requestFocus();
+            binding.etComentario.setError("Digite um Comentario !");
+            return false;
+        }
+        return true;
     }
 
     private void pegarCepViaApi() {
@@ -88,7 +104,36 @@ public class NovaPostagemFragment extends Fragment {
                     binding.tvEstadoUsuario.setText(cepApiDados.getState());
 
                 } else {
+                    binding.etCepUsuario.requestFocus();
+                    binding.etCepUsuario.setError("Digite um CEP valido!");
+                }
 
+            }
+
+            @Override
+            public void onFailure(Call<CepApi> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void verificarCepViaApi() {
+        Integer cep = Integer.valueOf(binding.etCepUsuario.getText().toString());
+        Call<CepApi> callApi = retrofitConfigCepApi.getCepService().getCidadeEstadoByCEP(cep);
+        callApi.enqueue(new Callback<CepApi>() {
+            @Override
+            public void onResponse(Call<CepApi> call, Response<CepApi> response) {
+                if (response.isSuccessful()) {
+                    CepApi cepApiDados = response.body();
+
+                    post.setCidade(cepApiDados.getCity());
+                    post.setEstado(cepApiDados.getState());
+                    binding.tvCidadeUsuarioPost.setText(cepApiDados.getCity());
+                    binding.tvEstadoUsuario.setText(cepApiDados.getState());
+                    salvarViaApi();
+                } else {
+                    binding.etCepUsuario.requestFocus();
+                    binding.etCepUsuario.setError("Digite um CEP valido!");
                 }
 
             }

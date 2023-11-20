@@ -1,17 +1,15 @@
 package com.example.tcc.ui.user;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.tcc.R;
-import com.example.tcc.databinding.FragmentFeedbackBinding;
 import com.example.tcc.databinding.FragmentPlanosBinding;
 
 public class PlanosFragment extends Fragment {
@@ -37,7 +35,7 @@ public class PlanosFragment extends Fragment {
         binding = null;
     }
 
-    public void escolhaPlano(FragmentPlanosBinding binding){
+    public void escolhaPlano(FragmentPlanosBinding binding) {
         binding.tvPlano1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +65,7 @@ public class PlanosFragment extends Fragment {
         });
     }
 
-    public void escolhaSemanas(FragmentPlanosBinding binding){
+    public void escolhaSemanas(FragmentPlanosBinding binding) {
 
         binding.tvSemana1.setOnClickListener(new View.OnClickListener() {
             @Override

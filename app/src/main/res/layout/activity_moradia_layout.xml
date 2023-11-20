@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="12dp"
+        android:layout_marginLeft="6dp"
 
         android:text="Apartamento"
         android:textColor="@color/black"
@@ -39,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:text="Rua Hipólito José da Costa"
         android:textColor="@color/black"
@@ -187,7 +188,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/ic_garage"
         android:text="tem garagem"
@@ -224,9 +225,9 @@
         android:id="@+id/tv_valor_cifra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="8dp"
 
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"
         android:text="R$"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -257,6 +258,7 @@
         />
 
     <ImageButton
+        android:id="@+id/ib_deuninciar_moradia"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/white"

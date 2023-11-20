@@ -30,4 +30,7 @@ public interface PostService {
     @POST("posts/edit/{idUser}")
     Call<Void> updatePost(@Body Post post, @Path("idUser") Long idUser);
 
+    @POST("posts/denunciar/{idPost}")
+    Call<Void> denunciarPost(@Path("idPost") Long idPost);
+
 }

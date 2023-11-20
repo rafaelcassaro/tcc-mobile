@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +17,10 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
+import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.OkHttp3Downloader;
@@ -31,6 +34,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
 
@@ -71,6 +77,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             holder.nomeTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getUsuario().getNome()));
         }
 
+        holder.denunciarIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
+                Call<Void> addDenuncia = retrofitConfig.getService(PostService.class).denunciarPost(db.get(position).getId());
+                addDenuncia.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Toast.makeText(context, "Denúncia enviada!", Toast.LENGTH_SHORT).show();
+                        holder.denunciarIb.setClickable(false);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
         picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + db.get(holder.getAdapterPosition()).getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.imageView);
 
         holder.tvRedesSocias.setOnClickListener(new View.OnClickListener() {
@@ -86,26 +114,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         item.setIcon(R.drawable.logo);
                         // Handle item clicks here
                         if (item.getItemId() == R.id.facebook) {
-                            openSocialMediaLink("https://www.facebook.com/" + db.get(holder.getAdapterPosition()).getUsuario().getLink1());
-                            // Handle the first image click
-                            Toast.makeText(context, "Image 1 Clicked", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (item.getItemId() == R.id.instagram) {
-                            openSocialMediaLink("https://www.instagram.com/" + db.get(holder.getAdapterPosition()).getUsuario().getLink2());
-
-                            // Handle the second image click
-                            Toast.makeText(context, "Image 2 Clicked", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (item.getItemId() == R.id.X) {
-                            openSocialMediaLink("https://www.x.com/" + db.get(holder.getAdapterPosition()).getUsuario().getLink3());
-
-                            // Handle the second image click
-                            Toast.makeText(context, "Image 2 Clicked", Toast.LENGTH_SHORT).show();
+                            if (db.get(holder.getAdapterPosition()).getUsuario().getLink1().length() > 0) {
+                                openSocialMediaLink("https://www.facebook.com/" + db.get(holder.getAdapterPosition()).getUsuario().getLink1());
+                            } else {
+                                Toast.makeText(context, "Usuario não possui facebook!", Toast.LENGTH_SHORT).show();
+                            }
                             return true;
                         }
-                        // Add more conditions for other images
+                        else if (item.getItemId() == R.id.instagram) {
+                            if (db.get(holder.getAdapterPosition()).getUsuario().getLink2().length() > 0) {
+                                openSocialMediaLink("https://www.instagram.com/" + db.get(holder.getAdapterPosition()).getUsuario().getLink2());
+                            } else {
+                                Toast.makeText(context, "Usuario não possui instagram!", Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        }
+                        else if (item.getItemId() == R.id.X) {
+                            if (db.get(holder.getAdapterPosition()).getUsuario().getLink3().length() > 0) {
+                                openSocialMediaLink("https://www.x.com/" + db.get(holder.getAdapterPosition()).getUsuario().getLink3());
+                            } else {
+                                Toast.makeText(context, "Usuario não possui Twitter!", Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        }
                         return false;
-
                     }
                 });
 
@@ -129,6 +161,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         public TextView dataTv;
         public TextView estadoTv;
         public TextView tvRedesSocias;
+        public ImageButton denunciarIb;
         public CircleImageView imageView;
 
 
@@ -142,6 +175,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             dataTv = itemView.findViewById(R.id.tv_data_usuario_post);
             imageView = itemView.findViewById(R.id.iv_perfil_post);
             tvRedesSocias = itemView.findViewById(R.id.tv_redes_sociais);
+            denunciarIb = itemView.findViewById(R.id.ib_denunciar);
         }
 
     }
@@ -177,7 +211,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             } else {
                 // Caso não haja aplicativo disponível para abrir o link
                 context.startActivity(intent);
-                Toast.makeText(context, "Nenhum aplicativo disponível para abrir o link", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Nenhum aplicativo disponível para abrir o link", Toast.LENGTH_SHORT).show();
             }
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();

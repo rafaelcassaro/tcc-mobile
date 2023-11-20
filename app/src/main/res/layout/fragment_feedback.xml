@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color"
+    android:background="@color/white"
     tools:context=".ui.user.FeedbackFragment">
 
 
@@ -12,6 +12,7 @@
         android:id="@+id/container_feedback"
         style="@style/ContainerComponents"
         android:layout_height="500dp"
+        android:background="@color/almostWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +28,7 @@
         android:text="feedback"
         android:textAllCaps="true"
         android:textSize="25sp"
-        android:textColor="@color/black"
+        android:textColor="@color/almostBlack"
         android:textStyle="bold"
         android:layout_margin="25dp"
 
@@ -37,7 +38,7 @@
         />
 
     <EditText
-        android:id="@+id/et_sugestao"
+        android:id="@+id/et_feedback"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/edit_text_login"
@@ -57,7 +58,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_enviar"
-        style="@style/ButtonGrey"
+        style="@style/Button"
 
         android:text="Enviar"
         android:textSize="22sp"

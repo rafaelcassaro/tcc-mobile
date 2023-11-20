@@ -344,6 +344,7 @@
         app:layout_constraintVertical_bias="0.806" />
 
     <ImageButton
+        android:id="@+id/ib_denunciar_moradia_expandir"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/white"

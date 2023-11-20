@@ -38,6 +38,7 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
         this.context = context;
         inflater = LayoutInflater.from(context);
         imgNotFound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.drawable.img_not_found_little);
+        db.clear();
     }
 
     @NonNull
@@ -55,7 +56,7 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
     @Override
     public void onBindViewHolder(@NonNull ImagemEditarMoradiaAdapter.MyViewHolder holder, int position) {
 
-        Picasso.get().load(db.get(position)).error(R.drawable.img_not_found_little).placeholder(R.drawable.img_not_found_little).into(holder.carouselImageView);
+        Picasso.get().load(db.get(position)).noFade().error(R.drawable.img_not_found_little).placeholder(R.drawable.img_not_found_little).into(holder.carouselImageView);
 
     }
 
@@ -78,6 +79,10 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
         return db;
     }
 
+    public void nome(String nome) {
+        Log.e("ADAPTER", "nome img adicionada: " + nome);
+    }
+
     public void addImagem(Uri uri) {
         if (db.get(0) == imgNotFound) {
             db.remove(0);
@@ -85,9 +90,12 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
 
         db.add(uri);
         Log.e("ADAPTER", "addImagem db: " + db.size());
+        //  Log.e("ADAPTER", "addImagem db: " + db.toString());
+        // Log.e("ADAPTER", "addImagem db: " + nome);
         notifyItemInserted(db.size() - 1);
         notifyDataSetChanged();
     }
+
 
     public void removeImg(int position) {
 

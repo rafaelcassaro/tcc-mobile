@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.postagens.PostagensUsuarioEditar"
-    android:background="@drawable/background_color"
+    android:background="@color/white"
     >
 
     <ImageView
@@ -30,11 +30,11 @@
 
     <View
         android:id="@+id/ContainerComponents_postagem"
-        style="@style/ContainerComponents"
+        style="@style/ContainerComponentsFull"
         android:layout_width="match_parent"
         android:layout_height="584dp"
 
-
+        android:backgroundTint="@color/almostWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -115,7 +115,7 @@
         android:hint="Digite o CEP da sua cidade"
 
         android:textColorHint="@color/Grey"
-        android:maxLength="300"
+        android:maxLength="8"
         android:inputType="number"
         android:textColor="@color/black"
 
@@ -137,7 +137,7 @@
         android:paddingLeft="10dp"
         android:hint="Digite um comentário "
         android:textColorHint="@color/Grey"
-        android:maxLength="300"
+        android:maxLength="255"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/ContainerComponents_postagem"
@@ -154,7 +154,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
 
-        android:background="@drawable/button_grey"
+        android:background="@drawable/button_login"
         android:text="Publicar"
 
         android:textAllCaps="false"

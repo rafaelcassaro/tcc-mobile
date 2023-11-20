@@ -16,7 +16,6 @@ public class RetrofitConfigCepApi {
         okHttpClient = new OkHttpClient().newBuilder().build();
 
         this.retrofit = new Retrofit.Builder()
-                //.baseUrl("http://10.0.2.2:8080/") para o emulador
                 .baseUrl("https://brasilapi.com.br/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())

@@ -3,6 +3,7 @@ package com.example.tcc.ui.login;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +45,10 @@ public class FormLogin extends AppCompatActivity {
 
     }
 
+    private boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+
+    }
 
     private void IniciarComponentes() {
         text_tela_cadastro = findViewById(R.id.text_tela_cadastro);
@@ -73,32 +78,40 @@ public class FormLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Usuario tempUsuario = new Usuario();
-                tempUsuario.setEmail(email.getText().toString());
-                tempUsuario.setSenha(senha.getText().toString());
 
-                Call<Usuario> call = new RetrofitConfig("").getService(UserService.class).login(tempUsuario);
-                Log.e("TOKEN", TaskConstants.SHARED.TOKEN_KEY);
-                call.enqueue(new Callback<Usuario>() {
-                    @Override
-                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                        if (response.code() == TaskConstants.HTTP.SUCCESS) {
-                            salvarDadosLogin(response);
+                /*String emailEscrito = email.getText().toString().trim();
+                if (!isValidEmail(emailEscrito)) {
+                    email.requestFocus();
+                    email.setError("Email inválido");
+                } else {*/
 
-                            Intent intent = new Intent(FormLogin.this, MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            mostrarErro(FormLogin.this, "Usuario ou senha inválida");
+                    tempUsuario.setEmail(email.getText().toString());
+                    tempUsuario.setSenha(senha.getText().toString());
+
+                    Call<Usuario> call = new RetrofitConfig("").getService(UserService.class).login(tempUsuario);
+                    Log.e("TOKEN", TaskConstants.SHARED.TOKEN_KEY);
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            if (response.code() == TaskConstants.HTTP.SUCCESS) {
+                                salvarDadosLogin(response);
+
+                                Intent intent = new Intent(FormLogin.this, MainActivity.class);
+                                startActivity(intent);
+                            } else {
+                                mostrarErro(FormLogin.this, "Email ou senha incorreto!");
+                            }
+
                         }
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<Usuario> call, Throwable t) {
-                        Log.e("login user", "onFailure" + t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            Log.e("login user", "onFailure" + t.getMessage());
+                        }
+                    });
 
 
+                //}
             }
         });
 

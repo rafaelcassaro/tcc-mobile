@@ -458,7 +458,7 @@
             android:background="@drawable/edit_text_novo_anuncio"
             android:hint="Digite um comentário"
             android:inputType="textMultiLine"
-            android:maxLength="300"
+            android:maxLength="255"
             android:padding="10dp"
             android:textColor="@color/almostBlack"
             android:textColorHint="@color/Grey"
