@@ -52,7 +52,7 @@ public class MoradiasFragment extends Fragment {
     private SecurityPreferences securityPreferences;
     private RetrofitConfig retrofitConfig;
     private DetalhesBusca detalhesBusca;
-
+    private MenuItem closeIcon;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class MoradiasFragment extends Fragment {
         securityPreferences = new SecurityPreferences(binding.getRoot().getContext());
         retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
 
         setSearchBar();
 
@@ -79,6 +80,7 @@ public class MoradiasFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 detalhesBusca = new DetalhesBusca();
                 detalhesBusca.setValorAluguelMaximo(100d);
 
@@ -91,12 +93,14 @@ public class MoradiasFragment extends Fragment {
 
 
                 if (cidadeProcurada == "" && cidade == null && db2==null) {
+                    //closeIcon.setIcon(R.drawable.ic_invisivel);
                     getDbBack();
                 } else if (cidade != null) {
                     getPostCidadesBack(cidade);
                 }
 
                 if (db2 !=null) {
+                   // closeIcon.setIcon(R.drawable.ic_close);
                     Log.e("MoradiasFragment", "getDbBackFiltrar inicio: "+ db2.toString());
                     moradiasAdapter.setPostagens(db2);
                     Log.e("MoradiasFragment", "getDbBackFiltrar inicio: ");
@@ -115,7 +119,10 @@ public class MoradiasFragment extends Fragment {
                 menuInflater.inflate(R.menu.menu_search_posts, menu);
                 MenuItem searchItem = menu.findItem(R.id.menu_search);
                 MenuItem filterItem = menu.findItem(R.id.menu_space_left);
+                closeIcon = menu.findItem(R.id.menu_close_icon);
                 TextView searchEditText = (TextView) searchItem.getActionView();
+                TextView filterEditText = (TextView) filterItem.getActionView();
+
 
                 searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
                 searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
@@ -134,14 +141,38 @@ public class MoradiasFragment extends Fragment {
                     }
                 });
 
-                filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+                filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                filterEditText.setWidth(150);
+                filterEditText.setHeight(100);
+                filterEditText.setPadding(30,25,10,10);
+                filterEditText.setTextSize(14);
+                filterEditText.setHint("Filtrar");
+                filterEditText.setHintTextColor(getResources().getColor(R.color.black, getContext().getTheme()));
+
+                filterEditText.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onMenuItemClick(@NonNull MenuItem item) {
+                    public void onClick(View v) {
                         Intent intent = new Intent(getContext(), FiltrarMoradiaActivity.class);
                         startActivity(intent);
-                        return false;
                     }
                 });
+
+                if(db2 == null){
+                    closeIcon.setIcon(R.drawable.ic_invisivel);
+                }else{
+                    closeIcon.setIcon(R.drawable.ic_close);
+
+                    closeIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(@NonNull MenuItem item) {
+                            getDbBack();
+                            db2.clear();
+                            closeIcon.setIcon(R.drawable.ic_invisivel);
+                            return false;
+                        }
+                    });
+                }
 
 
             }
@@ -296,6 +327,7 @@ public class MoradiasFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
+
                     List<Post> tempDb = new ArrayList<>();
 
 

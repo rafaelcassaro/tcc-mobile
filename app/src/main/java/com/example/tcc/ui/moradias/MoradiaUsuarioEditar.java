@@ -233,10 +233,10 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         comentarioEt = findViewById(R.id.et_comentario_anuncio);
         numMoradoresEt = findViewById(R.id.et_num_moradores_usuario);
         aluguelEt = findViewById(R.id.et_aluguel_usuario);
-        petsCb = findViewById(R.id.cb_pets);
-        garagemCb = findViewById(R.id.cb_garagem);
-        quartoCb = findViewById(R.id.cb_quarto);
-        residenciaCb = findViewById(R.id.cb_residencia);
+        petsCb = findViewById(R.id.cb_pets_sim);
+        garagemCb = findViewById(R.id.cb_garagem_sim);
+        quartoCb = findViewById(R.id.cb_quarto_sim);
+        residenciaCb = findViewById(R.id.cb_residencia_sim);
         chipGeneroRep = findViewById(R.id.chips_genero);
         botaoEditar = findViewById(R.id.bt_publicar_edicao);
         btAddImg = findViewById(R.id.ib_adicionar_img);
@@ -357,7 +357,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         boolean checked = ((CheckBox) view).isChecked();
 
         // Check which checkbox was clicked
-        if (view.getId() == R.id.cb_pets) {
+        if (view.getId() == R.id.cb_pets_sim) {
             if (checked) {
                 editedPost.getPostMoradia().getDetalhesMoradia().setPets(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
@@ -366,7 +366,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 Log.e("onCheckboxClicked", "CheckBoxOFF cb_pets");
             }
         }
-        if (view.getId() == R.id.cb_garagem) {
+        if (view.getId() == R.id.cb_garagem_sim) {
             if (checked) {
                 editedPost.getPostMoradia().getDetalhesMoradia().setGaragem(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_garagem");
@@ -375,7 +375,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 Log.e("onCheckboxClicked", "CheckBoxOFF cb_garagem");
             }
         }
-        if (view.getId() == R.id.cb_quarto) {
+        if (view.getId() == R.id.cb_quarto_sim) {
             if (checked) {
                 editedPost.getPostMoradia().getDetalhesMoradia().setQuarto(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_quarto");
@@ -384,7 +384,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 Log.e("onCheckboxClicked", "CheckBoxOFF cb_quarto");
             }
         }
-        if (view.getId() == R.id.cb_residencia) {
+        if (view.getId() == R.id.cb_residencia_sim) {
             if (checked) {
                 editedPost.getPostMoradia().setTipoResidencia(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_residencia");

@@ -3,25 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_close_icon"
-        android:icon="@drawable/ic_close"
-        android:orderInCategory="103"
-        android:title=""
-
-        android:visible="true"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/menu_space_left"
-        android:icon="@drawable/ic_invisivel"
-        android:orderInCategory="102"
-        android:title=""
-
-
-        app:actionViewClass="android.widget.TextView"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/menu_space_left102"
         android:icon="@drawable/ic_invisivel"
         android:orderInCategory="101"
         android:title=""

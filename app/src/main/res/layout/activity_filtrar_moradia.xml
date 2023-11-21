@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="830dp"
         android:background="@color/white"
         tools:context=".ui.utils.FiltrarMoradiaActivity">
 
@@ -38,7 +38,7 @@
             android:id="@+id/ContainerComponents_anuncio"
             style="@style/ContainerComponentsFull"
             android:layout_width="match_parent"
-            android:layout_height="610dp"
+            android:layout_height="775dp"
             android:layout_marginTop="48dp"
             android:backgroundTint="@color/almostWhite"
 
@@ -61,6 +61,7 @@
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toTopOf="@id/ContainerComponents_anuncio" />
 
+
         <TextView
             android:id="@+id/tv_linha"
             android:layout_width="wrap_content"
@@ -74,88 +75,200 @@
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/tv_detalhes_moradias" />
 
+        <TextView
+            android:id="@+id/tv_pets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/tv_pets"
+            android:textColor="@color/almostBlack"
+            android:textSize="18dp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_linha" />
+
         <CheckBox
-            android:id="@+id/cb_pets"
+            android:id="@+id/cb_pets_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:onClick="onCheckboxClicked"
+            android:onClick="onCheckboxFilterClicked"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:text="@string/cb_pets"
+            android:text="@string/cb_sim"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toStartOf="@id/cb_pets_nao"
+
+
+            app:layout_constraintStart_toStartOf="@id/tv_linha"
+            app:layout_constraintTop_toBottomOf="@id/tv_pets" />
+
+        <CheckBox
+            android:id="@+id/cb_pets_nao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:onClick="onCheckboxFilterClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_nao"
             android:textColor="@color/almostBlack"
             android:textSize="12sp"
 
             app:layout_constraintEnd_toEndOf="@id/tv_linha"
-            app:layout_constraintHorizontal_bias="0.2"
 
-            app:layout_constraintStart_toStartOf="@id/tv_linha"
-            app:layout_constraintTop_toBottomOf="@id/tv_linha"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp" />
 
-        <CheckBox
-            android:id="@+id/cb_garagem"
+            app:layout_constraintStart_toEndOf="@id/cb_pets_sim"
+            app:layout_constraintTop_toBottomOf="@id/tv_pets" />
+
+
+        <TextView
+            android:id="@+id/tv_garagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-
-            android:onClick="onCheckboxClicked"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:layout_marginTop="15dp"
             android:text="@string/cb_garagem"
             android:textColor="@color/almostBlack"
-            android:textSize="12sp"
+            android:textSize="18dp"
+
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintHorizontal_bias="0.429"
-
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_pets"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp" />
+            app:layout_constraintTop_toBottomOf="@id/cb_pets_nao" />
 
         <CheckBox
-            android:id="@+id/cb_quarto"
+            android:id="@+id/cb_garagem_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
 
-            android:onClick="onCheckboxClicked"
+            android:onClick="onCheckboxFilterClicked"
             android:scaleX="1.5"
             android:scaleY="1.5"
+            android:text="@string/cb_sim"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toStartOf="@id/cb_garagem_nao"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_garagem" />
+
+        <CheckBox
+            android:id="@+id/cb_garagem_nao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxFilterClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_nao"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toEndOf="@id/cb_garagem_sim"
+            app:layout_constraintTop_toBottomOf="@id/tv_garagem" />
+
+        <TextView
+            android:id="@+id/tv_quarto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:text="@string/cb_quarto"
             android:textColor="@color/almostBlack"
-            android:textSize="12sp"
+            android:textSize="18dp"
+
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintHorizontal_bias="0.38"
-
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_garagem"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp" />
+            app:layout_constraintTop_toBottomOf="@id/cb_garagem_nao" />
 
         <CheckBox
-            android:id="@+id/cb_residencia"
+            android:id="@+id/cb_quarto_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
 
-            android:onClick="onCheckboxClicked"
+            android:onClick="onCheckboxFilterClicked"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:text="@string/cb_residencia"
+            android:text="@string/cb_sim"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toStartOf="@id/cb_quarto_nao"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_quarto" />
+
+        <CheckBox
+            android:id="@+id/cb_quarto_nao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxFilterClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_nao"
             android:textColor="@color/almostBlack"
             android:textSize="12sp"
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintHorizontal_bias="0.448"
+            app:layout_constraintStart_toEndOf="@id/cb_quarto_sim"
+            app:layout_constraintTop_toBottomOf="@id/tv_quarto" />
 
+        <TextView
+            android:id="@+id/tv_residencia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/tv_residencia"
+            android:textColor="@color/almostBlack"
+            android:textSize="18dp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_quarto"
-            tools:layout_editor_absoluteX="266dp"
-            tools:layout_editor_absoluteY="361dp" />
+            app:layout_constraintTop_toBottomOf="@id/cb_quarto_nao" />
+
+        <CheckBox
+            android:id="@+id/cb_residencia_sim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxFilterClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="casa"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toStartOf="@id/cb_residencia_nao"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_residencia" />
+
+        <CheckBox
+            android:id="@+id/cb_residencia_nao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxFilterClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="apartamento"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toEndOf="@id/cb_residencia_sim"
+            app:layout_constraintTop_toBottomOf="@id/tv_residencia" />
 
 
         <TextView
@@ -170,7 +283,7 @@
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_residencia" />
+            app:layout_constraintTop_toBottomOf="@id/cb_residencia_sim" />
 
 
         <com.google.android.material.chip.ChipGroup
@@ -331,9 +444,9 @@
 
             android:text="Filtrar"
 
-            app:layout_constraintTop_toBottomOf="@+id/ContainerComponents_anuncio"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ContainerComponents_anuncio"
             tools:layout_editor_absoluteY="689dp" />
 
 

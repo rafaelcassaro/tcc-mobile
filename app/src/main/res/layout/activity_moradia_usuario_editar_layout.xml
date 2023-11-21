@@ -195,7 +195,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_detalhes_moradias" />
 
         <CheckBox
-            android:id="@+id/cb_pets"
+            android:id="@+id/cb_pets_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -215,7 +215,7 @@
             tools:layout_editor_absoluteY="361dp" />
 
         <CheckBox
-            android:id="@+id/cb_garagem"
+            android:id="@+id/cb_garagem_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -231,12 +231,12 @@
             app:layout_constraintHorizontal_bias="0.429"
 
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_pets"
+            app:layout_constraintTop_toBottomOf="@id/cb_pets_sim"
             tools:layout_editor_absoluteX="266dp"
             tools:layout_editor_absoluteY="361dp" />
 
         <CheckBox
-            android:id="@+id/cb_quarto"
+            android:id="@+id/cb_quarto_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -252,12 +252,12 @@
             app:layout_constraintHorizontal_bias="0.38"
 
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_garagem"
+            app:layout_constraintTop_toBottomOf="@id/cb_garagem_sim"
             tools:layout_editor_absoluteX="266dp"
             tools:layout_editor_absoluteY="361dp" />
 
         <CheckBox
-            android:id="@+id/cb_residencia"
+            android:id="@+id/cb_residencia_sim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -273,7 +273,7 @@
             app:layout_constraintHorizontal_bias="0.448"
 
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_quarto"
+            app:layout_constraintTop_toBottomOf="@id/cb_quarto_sim"
             tools:layout_editor_absoluteX="266dp"
             tools:layout_editor_absoluteY="361dp" />
 
@@ -290,7 +290,7 @@
 
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
-            app:layout_constraintTop_toBottomOf="@id/cb_residencia" />
+            app:layout_constraintTop_toBottomOf="@id/cb_residencia_sim" />
 
 
         <com.google.android.material.chip.ChipGroup

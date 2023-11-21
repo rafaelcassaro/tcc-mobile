@@ -23,6 +23,14 @@
     <string name="cb_quarto">O quarto é individual?</string>
     <string name="cb_residencia">A residencia é uma casa ?</string>
 
+    <string name="cb_sim">Sim</string>
+    <string name="cb_nao">Não</string>
+
+    <string name="tv_pets">Possui pets?</string>
+    <string name="tv_garagem">Tem vaga para garagem?</string>
+    <string name="tv_quarto">O quarto é individual?</string>
+    <string name="tv_residencia">Tipo de residencia</string>
+
 
     <string name="entrar">Entrar</string>
     <string name="text_cadastro">Cadastrar-se</string>

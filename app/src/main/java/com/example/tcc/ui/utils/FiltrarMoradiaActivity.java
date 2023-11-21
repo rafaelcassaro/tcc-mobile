@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.tcc.MainActivity;
@@ -33,10 +35,12 @@ import retrofit2.Response;
 public class FiltrarMoradiaActivity extends AppCompatActivity {
 
     private EditText aluguelMinimoEt, aluguelMaximoEt, numMoradoresEt;
-    private CheckBox petsCb, garagemCb, quartoCb, residenciaCb;
+    private CheckBox petsSimCb, garagemSimCb, quartoSimCb, residenciaSimCb;
+    private CheckBox petsNaoCb, garagemNaoCb, quartoNaoCb, residenciaNaoCb;
     private ChipGroup chipGeneroRep;
     private DetalhesBusca detalhesBusca;
     private Button filtrar;
+    private ImageView backButton;
     private int escolhaGenero, vaisefude;
     private List<Post> db = new ArrayList<>();
     private List<Post> db2 = new ArrayList<>();
@@ -45,6 +49,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
     private boolean verificar;
     private int vaisefude2 = 0;
     private int contador = 0;
+    private int contResidencia, contGaragem,contQuarto,contPets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +60,19 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
         securityPreferences = new SecurityPreferences(FiltrarMoradiaActivity.this);
         retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-
+        contResidencia = 0;
+        contGaragem = 0;
+        contQuarto = 0;
+        contPets = 0;
         iniciarViews();
         Intent intent = new Intent(this, MainActivity.class);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FiltrarMoradiaActivity.super.onBackPressed();
+            }
+        });
 
         filtrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,10 +93,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
         aluguelMaximoEt = findViewById(R.id.et_aluguel_maximo);
         aluguelMinimoEt = findViewById(R.id.et_aluguel_minimo);
         numMoradoresEt = findViewById(R.id.et_num_moradores_usuario);
-        petsCb = findViewById(R.id.cb_pets);
-        garagemCb = findViewById(R.id.cb_garagem);
-        quartoCb = findViewById(R.id.cb_quarto);
-        residenciaCb = findViewById(R.id.cb_residencia);
+        petsSimCb = findViewById(R.id.cb_pets_sim);
+        garagemSimCb = findViewById(R.id.cb_garagem_sim);
+        quartoSimCb = findViewById(R.id.cb_quarto_sim);
+        residenciaSimCb = findViewById(R.id.cb_residencia_sim);
+        petsNaoCb = findViewById(R.id.cb_pets_nao);
+        garagemNaoCb = findViewById(R.id.cb_garagem_nao);
+        quartoNaoCb = findViewById(R.id.cb_quarto_nao);
+        residenciaNaoCb = findViewById(R.id.cb_residencia_nao);
+        backButton = findViewById(R.id.iv_voltar);
         chipGeneroRep = findViewById(R.id.chips_genero);
     }
 
@@ -108,6 +128,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
 
                     db2.addAll(db);
                     db.removeAll(db);
+                    //===============================================================ALUGUEL MAX ====================================================
                     if (detalhesBusca.getValorAluguelMaximo() != null) {
 
                         for (int i = 0; db2.size() > i; i++) {
@@ -133,6 +154,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMaximo db2: " + db2.toString());
                         Log.e("FiltrarMoradiaActivity", "rAluguelMaximo minimo: " + detalhesBusca.getValorAluguelMinimo());
                     }
+                    //===============================================================GENERO MORADIA ====================================================
                     if (detalhesBusca.getGeneroMoradia() != null) {
                         for (int i = 0; db2.size() > i; i++) {
                             if (db2.get(i).getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals(detalhesBusca.getGeneroMoradia())) {
@@ -153,6 +175,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         contador = 0;
 
                     }
+                    //===============================================================NUM MORADORES ====================================================
                     if (detalhesBusca.getMoradores() != null) {
                         for (int i = 0; db2.size() > i; i++) {
                             if (db2.get(i).getPostMoradia().getDetalhesMoradia().getMoradores() <= detalhesBusca.getMoradores()) {
@@ -173,6 +196,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
                         contador = 0;
                     }
+                    //===============================================================ALUGUEL MINIMO ====================================================
                     if (detalhesBusca.getValorAluguelMinimo() != null) {
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo db2: " + db2.toString());
                         for (int i = 0; db2.size() > i; i++) {
@@ -197,9 +221,108 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         contador = 0;
 
                     }
+                    //===============================================================PETS ====================================================
+                    if (contPets == 1) {
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo db2: " + db2.toString());
+                        for (int i = 0; db2.size() > i; i++) {
+                            if (db2.get(i).getPostMoradia().getDetalhesMoradia().isPets() == detalhesBusca.isPets()) {
+                                contador++;
+                                db.add(db2.get(i));
+                            }
+                        }
+
+                        if (contador == 0) {
+                            vaisefude2 = 0;
+                            Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para PETS!", Toast.LENGTH_SHORT).show();
+                            aluguelMinimoEt.requestFocus();
+                            return;
+                        } else if (contador > 0) {
+                            vaisefude2 = 1;
+                            db2.removeAll(db2);
+                            db2.addAll(db);
+                            db.removeAll(db);
+                        }
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
+                        contador = 0;
+
+                    }
+                    //===============================================================RESIDENCIA ====================================================
+                    if (contResidencia == 1) {
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo db2: " + db2.toString());
+                        for (int i = 0; db2.size() > i; i++) {
+                            if (db2.get(i).getPostMoradia().isTipoResidencia() == detalhesBusca.isTipoResidencia()) {
+                                contador++;
+                                db.add(db2.get(i));
+                            }
+                        }
+
+                        if (contador == 0) {
+                            vaisefude2 = 0;
+                            Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo da RESIDENCIA!", Toast.LENGTH_SHORT).show();
+                            aluguelMinimoEt.requestFocus();
+                            return;
+                        } else if (contador > 0) {
+                            vaisefude2 = 1;
+                            db2.removeAll(db2);
+                            db2.addAll(db);
+                            db.removeAll(db);
+                        }
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
+                        contador = 0;
+
+                    }
+                    //===============================================================GARAGEM ====================================================
+                    if (contGaragem == 1) {
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo db2: " + db2.toString());
+                        for (int i = 0; db2.size() > i; i++) {
+                            if (db2.get(i).getPostMoradia().getDetalhesMoradia().isGaragem() == detalhesBusca.isGaragem()) {
+                                contador++;
+                                db.add(db2.get(i));
+                            }
+                        }
+
+                        if (contador == 0) {
+                            vaisefude2 = 0;
+                            Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo da GARAGEM!", Toast.LENGTH_SHORT).show();
+                            aluguelMinimoEt.requestFocus();
+                            return;
+                        } else if (contador > 0) {
+                            vaisefude2 = 1;
+                            db2.removeAll(db2);
+                            db2.addAll(db);
+                            db.removeAll(db);
+                        }
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
+                        contador = 0;
+
+                    }
+                    //===============================================================QUARTO ====================================================
+                    if (contQuarto == 1) {
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo db2: " + db2.toString());
+                        for (int i = 0; db2.size() > i; i++) {
+                            if (db2.get(i).getPostMoradia().getDetalhesMoradia().isQuarto() == detalhesBusca.isQuarto()) {
+                                contador++;
+                                db.add(db2.get(i));
+                            }
+                        }
+
+                        if (contador == 0) {
+                            vaisefude2 = 0;
+                            Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo do QUARTO!", Toast.LENGTH_SHORT).show();
+                            aluguelMinimoEt.requestFocus();
+                            return;
+                        } else if (contador > 0) {
+                            vaisefude2 = 1;
+                            db2.removeAll(db2);
+                            db2.addAll(db);
+                            db.removeAll(db);
+                        }
+                        Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
+                        contador = 0;
+
+                    }
 
 
-                    
 
                     if (vaisefude2 == 1) {
                         Log.e("FiltrarMoradiaActivity", "onFailureverificar: " + vaisefude);
@@ -220,6 +343,95 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    public void onCheckboxFilterClicked(View view){
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // --------PETS--------------
+        if (view.getId() == R.id.cb_pets_sim) {
+            if (checked) {
+                contPets =1 ;
+                detalhesBusca.setPets(true);
+                petsNaoCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if (view.getId() == R.id.cb_pets_nao) {
+            if (checked) {
+                contPets =1 ;
+                detalhesBusca.setPets(false);
+                petsSimCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if(!petsSimCb.isChecked() && !petsNaoCb.isChecked()){
+            contPets = 0 ;
+            DetalhesBusca x = new DetalhesBusca();
+            detalhesBusca.setPets(x.isPets());
+        }
+        // --------GARAGEM--------------
+        if (view.getId() == R.id.cb_garagem_sim) {
+            if (checked) {
+                contPets =1 ;
+                detalhesBusca.setGaragem(true);
+                garagemNaoCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if (view.getId() == R.id.cb_garagem_nao) {
+            if (checked) {
+                contGaragem =1 ;
+                detalhesBusca.setGaragem(false);
+                garagemSimCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if(!garagemSimCb.isChecked() && !garagemNaoCb.isChecked()){
+            contGaragem = 0 ;
+        }
+        // -----------QUARTO--------------
+        if (view.getId() == R.id.cb_quarto_sim) {
+            if (checked) {
+                contQuarto =1 ;
+                detalhesBusca.setQuarto(true);
+                quartoNaoCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if (view.getId() == R.id.cb_quarto_nao) {
+            if (checked) {
+                contQuarto =1 ;
+                detalhesBusca.setQuarto(false);
+                quartoSimCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if(!quartoSimCb.isChecked() && !quartoNaoCb.isChecked()){
+            contQuarto = 0 ;
+        }
+        // --------RESIDENCIA--------------
+        if (view.getId() == R.id.cb_residencia_sim) {
+            if (checked) {
+                contResidencia =1 ;
+                detalhesBusca.setTipoResidencia(true);
+                residenciaNaoCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if (view.getId() == R.id.cb_residencia_nao) {
+            if (checked) {
+                contResidencia =1 ;
+                detalhesBusca.setTipoResidencia(false);
+                residenciaSimCb.setChecked(false);
+                Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
+            }
+        }
+        if(!residenciaSimCb.isChecked() && !residenciaNaoCb.isChecked()){
+            contResidencia = 0 ;
+        }
+
+
     }
 
     private void setarDados() {
@@ -273,7 +485,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
         boolean checked = ((CheckBox) view).isChecked();
 
         // Check which checkbox was clicked
-        if (view.getId() == R.id.cb_pets) {
+        if (view.getId() == R.id.cb_pets_sim) {
             if (checked) {
                 detalhesBusca.setPets(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_pets");
@@ -282,7 +494,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                 Log.e("onCheckboxClicked", "CheckBoxOFF cb_pets");
             }
         }
-        if (view.getId() == R.id.cb_garagem) {
+        if (view.getId() == R.id.cb_garagem_sim) {
             if (checked) {
                 detalhesBusca.setGaragem(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_garagem");
@@ -291,7 +503,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                 Log.e("onCheckboxClicked", "CheckBoxOFF cb_garagem");
             }
         }
-        if (view.getId() == R.id.cb_quarto) {
+        if (view.getId() == R.id.cb_quarto_sim) {
             if (checked) {
                 detalhesBusca.setQuarto(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_quarto");
@@ -300,7 +512,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                 Log.e("onCheckboxClicked", "CheckBoxOFF cb_quarto");
             }
         }
-        if (view.getId() == R.id.cb_residencia) {
+        if (view.getId() == R.id.cb_residencia_sim) {
             if (checked) {
                 detalhesBusca.setTipoResidencia(true);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_residencia");
