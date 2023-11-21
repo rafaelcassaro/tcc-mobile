@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:background="@color/white"
+        tools:context=".ui.utils.FiltrarMoradiaActivity">
+
+        <ImageView
+            android:id="@+id/iv_voltar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="7dp"
+            android:layout_marginTop="4dp"
+
+            android:background="@drawable/container_user"
+            android:elevation="8dp"
+            android:src="@drawable/ic_back"
+
+            android:translationZ="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+        <View
+            android:id="@+id/ContainerComponents_anuncio"
+            style="@style/ContainerComponentsFull"
+            android:layout_width="match_parent"
+            android:layout_height="610dp"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="@color/almostWhite"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_detalhes_moradias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Filtros"
+            android:textColor="@color/almostBlack"
+            android:textSize="20dp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents_anuncio" />
+
+        <TextView
+            android:id="@+id/tv_linha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="____________________________________________"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_detalhes_moradias" />
+
+        <CheckBox
+            android:id="@+id/cb_pets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_pets"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toEndOf="@id/tv_linha"
+            app:layout_constraintHorizontal_bias="0.2"
+
+            app:layout_constraintStart_toStartOf="@id/tv_linha"
+            app:layout_constraintTop_toBottomOf="@id/tv_linha"
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
+
+        <CheckBox
+            android:id="@+id/cb_garagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_garagem"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintHorizontal_bias="0.429"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/cb_pets"
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
+
+        <CheckBox
+            android:id="@+id/cb_quarto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_quarto"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintHorizontal_bias="0.38"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/cb_garagem"
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
+
+        <CheckBox
+            android:id="@+id/cb_residencia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:onClick="onCheckboxClicked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="@string/cb_residencia"
+            android:textColor="@color/almostBlack"
+            android:textSize="12sp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintHorizontal_bias="0.448"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/cb_quarto"
+            tools:layout_editor_absoluteX="266dp"
+            tools:layout_editor_absoluteY="361dp" />
+
+
+        <TextView
+            android:id="@+id/tv_genero_escolha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="Qual o gênero da republica?"
+            android:textColor="@color/almostBlack"
+            android:textSize="17dp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/cb_residencia" />
+
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chips_genero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="15dp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_genero_escolha"
+
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chips_genero_masc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Masculina"
+                app:chipBackgroundColor="@drawable/chip_selecao" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chips_genero_fem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Feminina"
+                app:chipBackgroundColor="@drawable/chip_selecao" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chips_genero_misto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Mista"
+                app:chipBackgroundColor="@drawable/chip_selecao" />
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:id="@+id/tv_linha_baixo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="____________________________________________"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/chips_genero" />
+
+
+        <TextView
+            android:id="@+id/tv_aluguel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="15dp"
+            android:text="Aluguel valores"
+            android:textColor="@color/almostBlack"
+            android:textSize="17dp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/et_num_moradores_usuario" />
+
+        <TextView
+            android:id="@+id/tv_num_moradores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="15dp"
+            android:text="Nº maximo de moradores"
+            android:textColor="@color/almostBlack"
+            android:textSize="17dp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_linha_baixo" />
+
+        <EditText
+            android:id="@+id/et_aluguel_minimo"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_novo_anuncio"
+            android:hint="Mínimo"
+            android:inputType="numberDecimal"
+
+            android:maxLength="8"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
+            android:textColorHint="@color/Grey"
+            android:textSize="15sp"
+
+            app:layout_constraintEnd_toStartOf="@id/et_aluguel_maximo"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_aluguel"
+
+            />
+
+        <EditText
+            android:id="@+id/et_aluguel_maximo"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_novo_anuncio"
+            android:hint="máximo"
+            android:inputType="numberDecimal"
+
+            android:maxLength="8"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
+            android:textColorHint="@color/Grey"
+            android:textSize="15sp"
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toEndOf="@id/et_aluguel_minimo"
+            app:layout_constraintTop_toBottomOf="@id/tv_aluguel"
+
+            />
+
+        <EditText
+            android:id="@+id/et_num_moradores_usuario"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_novo_anuncio"
+            android:hint="00"
+            android:inputType="number"
+
+            android:maxLength="2"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/almostBlack"
+            android:textColorHint="@color/Grey"
+            android:textSize="15sp"
+
+
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
+            app:layout_constraintTop_toBottomOf="@id/tv_num_moradores" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_publicar_edicao"
+            style="@style/Button"
+
+            android:text="Filtrar"
+
+            app:layout_constraintTop_toBottomOf="@+id/ContainerComponents_anuncio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="689dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

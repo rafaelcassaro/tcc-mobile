@@ -4,9 +4,10 @@
 
     <item
         android:id="@+id/menu_space_left"
-        android:icon="@drawable/ic_invisivel"
+        android:icon="@drawable/ic_lupa"
         android:orderInCategory="101"
-        android:title=""
+        android:title="ola"
+
         android:visible="true"
         app:showAsAction="always" />
 
