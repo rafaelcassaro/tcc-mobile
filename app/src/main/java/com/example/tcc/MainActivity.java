@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         emailHeader.setText(usuario.getEmail());
         String nome = usuario.getNomeFotoPerfil();
 
-        picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + nome).noFade()
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + nome).noFade()
                 .placeholder(R.drawable.img_not_found_little).into(ivPerfil);
         Log.e("onCreateOptionsMenu","ivPerfil");
         return true;

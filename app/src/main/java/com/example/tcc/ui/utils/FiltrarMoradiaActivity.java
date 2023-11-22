@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,6 +16,7 @@ import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.DetalhesBusca;
+import com.example.tcc.network.entities.ListaPosts;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.network.services.PostService;
@@ -44,10 +44,12 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
     private int escolhaGenero, vaisefude;
     private List<Post> db = new ArrayList<>();
     private List<Post> db2 = new ArrayList<>();
+    private ListaPosts posts;
+
     private SecurityPreferences securityPreferences;
     private RetrofitConfig retrofitConfig;
     private boolean verificar;
-    private int vaisefude2 = 0;
+    private int possuiResultado = 0;
     private int contador = 0;
     private int contResidencia, contGaragem,contQuarto,contPets;
 
@@ -113,8 +115,8 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
-                    db2.removeAll(db2);
-                    db.removeAll(db);
+                    db2.clear();
+                    db.clear();
 
                     List<Post> tempDb = new ArrayList<>();
                     tempDb.clear();
@@ -127,7 +129,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                     }
 
                     db2.addAll(db);
-                    db.removeAll(db);
+                    db.clear();
                     //===============================================================ALUGUEL MAX ====================================================
                     if (detalhesBusca.getValorAluguelMaximo() != null) {
 
@@ -139,15 +141,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
 
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             aluguelMaximoEt.setError("Nenhum resultado encontrado!");
                             aluguelMaximoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMaximo contador: " + contador);
                         contador = 0;
@@ -163,14 +165,14 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                             }
                         }
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para o genero escolhido!", Toast.LENGTH_SHORT).show();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         contador = 0;
 
@@ -184,15 +186,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                             }
                         }
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             numMoradoresEt.setError("Nenhum resultado encontrado!");
                             numMoradoresEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         contador = 0;
                     }
@@ -207,15 +209,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
 
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             aluguelMinimoEt.setError("Nenhum resultado encontrado!");
                             aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
                         contador = 0;
@@ -232,15 +234,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
 
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para PETS!", Toast.LENGTH_SHORT).show();
                             aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
                         contador = 0;
@@ -257,15 +259,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
 
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo da RESIDENCIA!", Toast.LENGTH_SHORT).show();
                             aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
                         contador = 0;
@@ -282,15 +284,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
 
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo da GARAGEM!", Toast.LENGTH_SHORT).show();
                             aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
                         contador = 0;
@@ -307,15 +309,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         }
 
                         if (contador == 0) {
-                            vaisefude2 = 0;
+                            possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo do QUARTO!", Toast.LENGTH_SHORT).show();
                             aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
-                            vaisefude2 = 1;
-                            db2.removeAll(db2);
+                            possuiResultado = 1;
+                            db2.clear();
                             db2.addAll(db);
-                            db.removeAll(db);
+                            db.clear();
                         }
                         Log.e("FiltrarMoradiaActivity", "detalhesBusca.getValorAluguelMinimo contador: " + contador);
                         contador = 0;
@@ -324,7 +326,8 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
 
 
 
-                    if (vaisefude2 == 1) {
+                    if (possuiResultado == 1) {
+                        posts = new ListaPosts(db2);
                         Log.e("FiltrarMoradiaActivity", "onFailureverificar: " + vaisefude);
                         intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_FILTER, (Serializable) db2);
                         startActivity(intent);

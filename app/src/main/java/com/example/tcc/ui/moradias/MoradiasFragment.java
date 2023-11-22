@@ -52,7 +52,9 @@ public class MoradiasFragment extends Fragment {
     private SecurityPreferences securityPreferences;
     private RetrofitConfig retrofitConfig;
     private DetalhesBusca detalhesBusca;
-    private MenuItem closeIcon;
+
+    private String cidade;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class MoradiasFragment extends Fragment {
                 detalhesBusca.setValorAluguelMaximo(100d);
 
                 //  final Post post = (Post) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
-                String cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
+                cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH);
                 db2 = (List<Post>) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_FILTER);
 
 
@@ -100,11 +102,13 @@ public class MoradiasFragment extends Fragment {
                 }
 
                 if (db2 !=null) {
-                   // closeIcon.setIcon(R.drawable.ic_close);
+                    db.clear();
+                    db.addAll(db2);
+                    // closeIcon.setIcon(R.drawable.ic_close);
                     Log.e("MoradiasFragment", "getDbBackFiltrar inicio: "+ db2.toString());
-                    moradiasAdapter.setPostagens(db2);
+                    moradiasAdapter.setPostagens(db);
                     Log.e("MoradiasFragment", "getDbBackFiltrar inicio: ");
-                   // getDbBackFiltrar();
+                    // getDbBackFiltrar();
                 }
 
             }
@@ -119,7 +123,9 @@ public class MoradiasFragment extends Fragment {
                 menuInflater.inflate(R.menu.menu_search_posts, menu);
                 MenuItem searchItem = menu.findItem(R.id.menu_search);
                 MenuItem filterItem = menu.findItem(R.id.menu_space_left);
-                closeIcon = menu.findItem(R.id.menu_close_icon);
+                MenuItem closeCitSerchIcon = menu.findItem(R.id.menu_close_cit_filter);
+                MenuItem closeIcon = menu.findItem(R.id.menu_close_icon);
+
                 TextView searchEditText = (TextView) searchItem.getActionView();
                 TextView filterEditText = (TextView) filterItem.getActionView();
 
@@ -158,21 +164,64 @@ public class MoradiasFragment extends Fragment {
                     }
                 });
 
+                if(cidade == null){
+                    closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+                }else{
+                    closeCitSerchIcon.setIcon(R.drawable.ic_close);
+
+
+                    searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
+                    searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
+                    searchEditText.setWidth(500);
+                    searchEditText.setHeight(100);
+                    searchEditText.setPadding(0, 22, 0, 0);
+                    searchEditText.setTextSize(17);
+                    searchEditText.setHint(cidade);
+                    searchEditText.setHintTextColor(getResources().getColor(R.color.black, getContext().getTheme()));
+
+                    closeCitSerchIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(@NonNull MenuItem item) {
+                            db.clear();
+                            cidade = null;
+                            getDbBack();
+
+                            closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+                            searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
+                            searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                            searchEditText.setWidth(500);
+                            searchEditText.setHeight(100);
+                            searchEditText.setPadding(0, 22, 0, 0);
+                            searchEditText.setTextSize(17);
+                            searchEditText.setHint("Digite uma cidade");
+                            searchEditText.setHintTextColor(getResources().getColor(R.color.cinzaClaro, getContext().getTheme()));
+
+                            return false;
+                        }
+                    });
+
+                }
+
                 if(db2 == null){
                     closeIcon.setIcon(R.drawable.ic_invisivel);
                 }else{
                     closeIcon.setIcon(R.drawable.ic_close);
+                    filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
 
                     closeIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(@NonNull MenuItem item) {
                             getDbBack();
                             db2.clear();
+                            filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
                             closeIcon.setIcon(R.drawable.ic_invisivel);
                             return false;
                         }
                     });
                 }
+
+
+
 
 
             }
@@ -245,81 +294,7 @@ public class MoradiasFragment extends Fragment {
 
     }
 
-    private void getDbBackFiltrar() {
-        db.clear();
 
-        Call<List<Post>> call = retrofitConfig.getService(PostService.class).getAllPost();
-        call.enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                if (response.isSuccessful()) {
-                    int contador = 0;
-                    List<Post> tempDb = new ArrayList<>();
-                    tempDb.clear();
-                    tempDb = response.body();
-
-                    for (int i = 0; tempDb.size() > i; i++) {
-                        if (tempDb.get(i).getPostMoradia() != null) {
-                            db.add(tempDb.get(i));
-                        }
-                    }
-
-                    db2.addAll(db);
-                    db.removeAll(db);
-
-                    for (int i = 0; db2.size() > i; i++) {
-                        if (detalhesBusca.getValorAluguelMaximo() != null) {
-                            if (db2.get(i).getPostMoradia().getValorAluguel() >= detalhesBusca.getValorAluguelMaximo()) {
-                                db.add(db2.get(i));
-                                contador++;
-                            }
-                        }
-                    }
-
-                    if (contador > 0) {
-                        db2.removeAll(db2);
-                        db2.addAll(db);
-                        db.removeAll(db);
-                    }
-                    contador = 0;
-
-                    for (int i = 0; db2.size() > i; i++) {
-                        if (detalhesBusca.getGeneroMoradia() != null) {
-                            if (db2.get(i).getPostMoradia().getDetalhesMoradia().getGeneroMoradia().equals(detalhesBusca.getGeneroMoradia())) {
-                                db.add(db2.get(i));
-                                contador++;
-                            }
-                        }
-                    }
-
-                    if (contador > 0) {
-                        db2.removeAll(db2);
-                        db2.addAll(db);
-                        db.removeAll(db);
-                    }
-                    contador = 0;
-
-
-                    Log.e("MoradiasFragment", "db: " + db.toString());
-                    Log.e("MoradiasFragment", "dbsize: " + db.size());
-                    Log.e("MoradiasFragment", "db2size: " + db2.size());
-                    Log.e("MoradiasFragment", "tempDb: " + tempDb.toString());
-
-
-                    moradiasAdapter.setPostagens(db2);
-                } else {
-                    mostrarErro();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                mostrarErro();
-                Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
-            }
-        });
-
-    }
 
     private void getDbBack() {
         Call<List<Post>> call = retrofitConfig.getService(PostService.class).getAllPost();

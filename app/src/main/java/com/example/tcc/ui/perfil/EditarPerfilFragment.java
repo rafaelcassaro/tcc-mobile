@@ -217,7 +217,7 @@ public class EditarPerfilFragment extends Fragment {
         binding.etLink2.setText(usuario.getLink2());
         binding.etLink3.setText(usuario.getLink3());
 
-        picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little)
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little)
                 .memoryPolicy(MemoryPolicy.NO_CACHE).into(binding.ivEditImgPerfil);
     }
 

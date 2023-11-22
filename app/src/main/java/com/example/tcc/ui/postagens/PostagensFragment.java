@@ -44,6 +44,8 @@ public class PostagensFragment extends Fragment {
     private TextView searchEditText;
     private SecurityPreferences securityPreferences;
     private RetrofitConfig retrofitConfig;
+    private String cidade;
+    private ViewGroup containerUi;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,6 +53,7 @@ public class PostagensFragment extends Fragment {
 
         binding = FragmentPostagensBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        containerUi = container;
         cidadeProcurada = "";
         db.clear();
         iniciarRetrofit();
@@ -71,7 +74,7 @@ public class PostagensFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH_POST);
+                cidade = (String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH_POST);
                 if (cidadeProcurada == "" && cidade == null) {
                     getDbBack(container);
                 } else if (cidade != null) {
@@ -105,7 +108,9 @@ public class PostagensFragment extends Fragment {
     }
 
     private void createSearchBarOnMenu(@NonNull Menu menu) {
+
         searchItem = menu.findItem(R.id.menu_search);
+        MenuItem closeCitSerchIcon = menu.findItem(R.id.menu_space_left);
         searchEditText = (TextView) searchItem.getActionView();
         searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
         searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
@@ -123,6 +128,45 @@ public class PostagensFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        if(cidade == null){
+            closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+        }else{
+            closeCitSerchIcon.setIcon(R.drawable.ic_close);
+
+
+            searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
+            searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
+            searchEditText.setWidth(500);
+            searchEditText.setHeight(100);
+            searchEditText.setPadding(0, 22, 0, 0);
+            searchEditText.setTextSize(17);
+            searchEditText.setHint(cidade);
+            searchEditText.setHintTextColor(getResources().getColor(R.color.black, getContext().getTheme()));
+
+            closeCitSerchIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                    db.clear();
+                    cidade = null;
+                    getDbBack(containerUi);
+
+                    closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+                    searchEditText.setCompoundDrawablesWithIntrinsicBounds(getContext().getDrawable(R.drawable.ic_lupa), null, null, null);
+                    searchEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                    searchEditText.setWidth(500);
+                    searchEditText.setHeight(100);
+                    searchEditText.setPadding(0, 22, 0, 0);
+                    searchEditText.setTextSize(17);
+                    searchEditText.setHint("Digite uma cidade");
+                    searchEditText.setHintTextColor(getResources().getColor(R.color.cinzaClaro, getContext().getTheme()));
+
+                    return false;
+                }
+            });
+
+        }
+
     }
 
     @Override

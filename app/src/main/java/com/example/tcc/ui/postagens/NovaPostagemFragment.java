@@ -173,7 +173,7 @@ public class NovaPostagemFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Usuario tempUser = response.body();
                     usuario = tempUser;
-                    picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little)
+                    picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little)
                             .memoryPolicy(MemoryPolicy.NO_CACHE).into(binding.ivPerfilPost);
                     binding.tvNameUsuarioPost.setText(usuario.getNome());
 

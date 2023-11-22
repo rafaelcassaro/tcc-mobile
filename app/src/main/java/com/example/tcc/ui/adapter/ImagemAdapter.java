@@ -55,7 +55,7 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull ImagemAdapter.MyViewHolder holder, int position) {
 
-        picasso.load("http://192.168.1.107:8080/imagens/" + dbPost.get(position).getNomeFoto()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.carouselImageView);
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/imagens/" + dbPost.get(position).getNomeFoto()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.carouselImageView);
 
     }
 

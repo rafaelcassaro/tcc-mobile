@@ -154,7 +154,7 @@ public class PostagensUsuarioEditar extends AppCompatActivity {
     }
 
     private void setarDadosNasViews() {
-        picasso.load("http://192.168.1.107:8080/usuarios/fotoperfil/" + post.getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(imageView);
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + post.getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(imageView);
         cidadeTv.setText(post.getCidade());
         estadoTv.setText(post.getEstado());
         nomeTv.setText(post.getUsuario().getNome());

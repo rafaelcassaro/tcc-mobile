@@ -7,6 +7,12 @@ public class TaskConstants {
     public static class HTTP{
         public final static int SUCCESS = 200;
         public final static int CREATED = 201;
+
+    }
+
+    public static class PATH{
+        public final static String URL = "url";
+
     }
 
     public static class SHARED {

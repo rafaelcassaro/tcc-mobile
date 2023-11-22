@@ -14,7 +14,7 @@ public class Post implements Serializable {
     private String estado;
     private String dataPost;
     private String cep;
-    protected SimpleDateFormat x = new SimpleDateFormat("dd/MM/yyyy");
+    //protected SimpleDateFormat x = new SimpleDateFormat("dd/MM/yyyy");
 
     private Usuario usuario;
 
@@ -78,9 +78,9 @@ public class Post implements Serializable {
         return dataPost;
     }
 
-    public void setDataPost(Date dataPost) {
+    /*public void setDataPost(Date dataPost) {
         this.dataPost = x.format(dataPost);
-    }
+    }*/
 
     public String getCep() {
         return cep;
