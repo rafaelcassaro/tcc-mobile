@@ -119,10 +119,11 @@ public class FormLogin extends AppCompatActivity {
 
     public void salvarDadosLogin(Response<Usuario> response) {
         Usuario user = response.body();
-        String url = "http://10.0.2.2:8080";
+        String url = "http://192.168.1.107:8080";
         securityPreferences.store(TaskConstants.SHARED.TOKEN_KEY, user.getToken());
         securityPreferences.store(TaskConstants.SHARED.PERSON_KEY, String.valueOf(user.getId()));
         securityPreferences.store(TaskConstants.PATH.URL, url);
+        securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, null);
     }
 
 }

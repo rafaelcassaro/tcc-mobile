@@ -41,7 +41,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
     private DetalhesBusca detalhesBusca;
     private Button filtrar;
     private ImageView backButton;
-    private int escolhaGenero, vaisefude;
+    private int escolhaGenero;
     private List<Post> db = new ArrayList<>();
     private List<Post> db2 = new ArrayList<>();
     private ListaPosts posts;
@@ -52,11 +52,15 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
     private int possuiResultado = 0;
     private int contador = 0;
     private int contResidencia, contGaragem,contQuarto,contPets;
+    private String cidade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        cidade = (String) getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_CIT);
+        Log.e("MoradiasFragment", "cidade 2 ============== : " + cidade);
         setContentView(R.layout.activity_filtrar_moradia);
         detalhesBusca = new DetalhesBusca();
         securityPreferences = new SecurityPreferences(FiltrarMoradiaActivity.this);
@@ -81,7 +85,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 getDbBackFiltrar(intent);
-                Log.e("FiltrarMoradiaActivity", "verificar: " + vaisefude);
+
 
                 //  intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_FILTER, (Serializable) db2);
                 //  startActivity(intent);
@@ -236,7 +240,6 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         if (contador == 0) {
                             possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para PETS!", Toast.LENGTH_SHORT).show();
-                            aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
                             possuiResultado = 1;
@@ -261,7 +264,6 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         if (contador == 0) {
                             possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo da RESIDENCIA!", Toast.LENGTH_SHORT).show();
-                            aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
                             possuiResultado = 1;
@@ -286,7 +288,6 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         if (contador == 0) {
                             possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo da GARAGEM!", Toast.LENGTH_SHORT).show();
-                            aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
                             possuiResultado = 1;
@@ -311,7 +312,6 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
                         if (contador == 0) {
                             possuiResultado = 0;
                             Toast.makeText(FiltrarMoradiaActivity.this, "Nenhum resultado encontrado para tipo do QUARTO!", Toast.LENGTH_SHORT).show();
-                            aluguelMinimoEt.requestFocus();
                             return;
                         } else if (contador > 0) {
                             possuiResultado = 1;
@@ -328,8 +328,10 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
 
                     if (possuiResultado == 1) {
                         posts = new ListaPosts(db2);
-                        Log.e("FiltrarMoradiaActivity", "onFailureverificar: " + vaisefude);
+
                         intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_FILTER, (Serializable) db2);
+                        securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, cidade);
+                       // intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_CIT, cidade);
                         startActivity(intent);
                     }
 
@@ -376,7 +378,7 @@ public class FiltrarMoradiaActivity extends AppCompatActivity {
         // --------GARAGEM--------------
         if (view.getId() == R.id.cb_garagem_sim) {
             if (checked) {
-                contPets =1 ;
+                contGaragem =1 ;
                 detalhesBusca.setGaragem(true);
                 garagemNaoCb.setChecked(false);
                 Log.e("onCheckboxClicked", "CheckBoxON cb_pets");

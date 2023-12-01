@@ -101,9 +101,8 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         nameHeader.setText(usuario.getNome());
         emailHeader.setText(usuario.getEmail());
-        String nome = usuario.getNomeFotoPerfil();
 
-        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + nome).noFade()
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade()
                 .placeholder(R.drawable.img_not_found_little).into(ivPerfil);
         Log.e("onCreateOptionsMenu","ivPerfil");
         return true;

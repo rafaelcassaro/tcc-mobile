@@ -23,6 +23,8 @@ public class TaskConstants {
         public static final String EXTRA_SHOW_SEARCH = "EXTRA_SHOW_SEARCH";
         public static final String EXTRA_SHOW_SEARCH_POST = "EXTRA_SHOW_SEARCH_POST";
         public static final String EXTRA_SHOW_FILTER = "EXTRA_SHOW_FILTER";
+        public static final String EXTRA_SHOW_CIT = "EXTRA_SHOW_FILTER";
+        public static final String EXTRA_SHOW_BD2 = "EXTRA_SHOW_FILTER";
         public static final String PICK_IMAGE_REQUEST_CODE = "PICK_IMAGE_REQUEST_CODE";
 
     }

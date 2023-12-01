@@ -160,9 +160,9 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
 
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="23dp"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="23dp"
 
         android:background="@drawable/img_not_found_little"
 

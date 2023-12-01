@@ -37,11 +37,13 @@ public class SearchMoradiaActivity extends AppCompatActivity {
     private Set<String> cidades = new HashSet<>();
     private List<String> listaCidades = new ArrayList<>();
     private ImageView backButton;
+    private SecurityPreferences securityPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        securityPreferences = new SecurityPreferences(this);
 
         iniciarViews();
         Intent intent = new Intent(this, MainActivity.class);
@@ -76,6 +78,7 @@ public class SearchMoradiaActivity extends AppCompatActivity {
                 for (String escolha : listaCidades) {
                     if (escolha.toLowerCase().equals(query.toLowerCase())) {
                         intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, escolha);
+                        //securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, escolha);
                         startActivity(intent);
                         break;
                     }
@@ -97,6 +100,7 @@ public class SearchMoradiaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, adapter.getDb().get(position));
+                //securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, adapter.getDb().get(position));
                 startActivity(intent);
             }
         });
@@ -117,7 +121,7 @@ public class SearchMoradiaActivity extends AppCompatActivity {
     }
 
     private void getDbBack() {
-        SecurityPreferences securityPreferences = new SecurityPreferences(this);
+
         RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
         retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
