@@ -87,7 +87,7 @@ public class NovoAnuncioFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 pegarCepViaApi();
-                return false;
+                return true;
             }
         });
 
@@ -97,7 +97,8 @@ public class NovoAnuncioFragment extends Fragment {
         binding.ibRemoverImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imagemAdapter.removeImg(binding.crvFotosMoradia.getSelectedPosition());
+                int position = binding.crvFotosMoradia.getSelectedPosition();
+                imagemAdapter.removeImg(position);
                 if (!multiPartImgList.isEmpty() && binding.crvFotosMoradia.getSelectedPosition() >= 0 && binding.crvFotosMoradia.getSelectedPosition() < multiPartImgList.size()) {
                     multiPartImgList.remove(binding.crvFotosMoradia.getSelectedPosition());
                 }
@@ -292,7 +293,7 @@ public class NovoAnuncioFragment extends Fragment {
         imagemAdapter = new ImagemEditarMoradiaAdapter(context);
         binding.crvFotosMoradia.setAdapter(imagemAdapter);
         imagemAdapter.addImgvazia();
-        binding.crvFotosMoradia.setInfinite(true);
+        binding.crvFotosMoradia.setInfinite(false);
         binding.crvFotosMoradia.setFlat(true);
     }
 

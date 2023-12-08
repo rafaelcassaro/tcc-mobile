@@ -66,7 +66,7 @@
         android:fontFamily="serif"
         android:text="Procuro alguem para divir um ap próximo do lugar x, com valor de xxxx, que aceita pets xxxxxxxxxxxxxxxxxxxxxxxxxxx xxx
         xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        android:textColor="@color/black"
+        android:textColor="@color/almostBlack"
         android:textSize="16sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
@@ -325,6 +325,24 @@
 
         app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
+        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintStart_toEndOf="@+id/tv_valor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"
+        app:layout_constraintVertical_bias="0.861" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_excluir_moradia_usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+
+        android:layout_marginRight="10dp"
+        android:background="@drawable/button_excluir"
+        android:text="@string/bt_moradia_cadastro_excluir"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+
+        app:layout_constraintBottom_toBottomOf="@id/ContainerMoradia"
+        app:layout_constraintEnd_toStartOf="@+id/bt_editar_moradia_usuario"
         app:layout_constraintHorizontal_bias="0.925"
         app:layout_constraintStart_toEndOf="@+id/tv_valor"
         app:layout_constraintTop_toBottomOf="@+id/tv_ic_pet"

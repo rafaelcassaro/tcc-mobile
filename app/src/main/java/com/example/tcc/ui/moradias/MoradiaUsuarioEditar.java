@@ -112,7 +112,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 // Ação a ser executada quando o usuário pressionar "Submit" no teclado
                 pegarCepViaApi();
-                return false;
+                return true;
             }
         });
 
@@ -125,22 +125,31 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                 Log.e("btRemoveImg", "listaBoolean: " + listaBoolean.size());
                 Log.e("btRemoveImg", "multiPartImgList2.size(): " + multiPartImgList2.size());
                 Log.e("btRemoveImg", "multiPartImgList.size(): " + multiPartImgList.size());
+                int position = recyclerview.getSelectedPosition();
 
-                for (int i = 0; i < fotosAntigas.size(); i++) {
-                    if (fotosAntigas.get(i).equals(imagemAdapter.getDb().get(recyclerview.getSelectedPosition()))) {
-                        listaBoolean.set(i, false);
+
+                if (position < imagemAdapter.getDb().size()) {
+                    for (int i = 0; i < fotosAntigas.size(); i++) {
+                        if (fotosAntigas.get(i).equals(imagemAdapter.getDb().get(recyclerview.getSelectedPosition()))) {
+                            listaBoolean.set(i, false);
+                        }
                     }
                 }
 
 
-                imagemAdapter.removeImg(recyclerview.getSelectedPosition());
+                imagemAdapter.removeImg(position);
+                // imagemAdapter.notifyItemRemoved(position);
+                //recyclerview.setAdapter(imagemAdapter);
+
                 Log.e("btRemoveImg", "multiPartImgList.size(): " + multiPartImgList.size());
                 if (!multiPartImgList.isEmpty() && recyclerview.getSelectedPosition() >= 0 && recyclerview.getSelectedPosition() < multiPartImgList.size()) {
                     multiPartImgList.remove(recyclerview.getSelectedPosition());
 
                     fotosJaCadastradas--;
                 }
+
                 imagemAdapter.addImgvazia();
+
                 recyclerview.smoothScrollToPosition(0);
             }
         });
@@ -201,7 +210,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         retrofitConfigCepApi = null;
         multiPartImgList.clear();
         multiPartImgList2.clear();
-        imagemAdapter = null;
+
     }
 
     private void setDadosPostInViews() {
@@ -263,7 +272,8 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
         imagemAdapter = new ImagemEditarMoradiaAdapter(this);
         recyclerview.setAdapter(imagemAdapter);
         imagemAdapter.addImgvazia();
-        recyclerview.setInfinite(true);
+
+        recyclerview.setInfinite(false);
         recyclerview.setFlat(true);
     }
 
@@ -286,7 +296,7 @@ public class MoradiaUsuarioEditar extends AppCompatActivity {
                     Log.e("BOTAO EDITAR CEP", "RETORNO BOM: " + response.errorBody());
 
                 } else {
-                    cepEt.requestFocus();
+                    //cepEt.requestFocus();
                     cepEt.setError("Digite um CEP valido!");
                     Log.e("BOTAO EDITAR CEP", "RETORNO ERROR: " + response.errorBody());
 

@@ -20,6 +20,7 @@
     <color name="cinzaClaro">#d8d8d8</color>
     <color name="almostWhite">#f4f4f4</color>
     <color name="red">#ff3232</color>
+    <color name="redWeak">#e61919</color>
     <color name="wppGreen">#25d366</color>
 </resources>
 

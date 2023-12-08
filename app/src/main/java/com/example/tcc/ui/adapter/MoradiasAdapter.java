@@ -1,7 +1,6 @@
 package com.example.tcc.ui.adapter;
 
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.login.FormCadastro;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
 import java.util.ArrayList;
@@ -72,31 +70,29 @@ public class MoradiasAdapter extends RecyclerView.Adapter<MoradiasAdapter.MyView
         holder.recyclerview.setAdapter(imagemAdapter);
 
 
-
-
         holder.denunciarIb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("denunciarIb", "onClick");
-                    SecurityPreferences securityPreferences = new SecurityPreferences(context);
-                    RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
-                    retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                SecurityPreferences securityPreferences = new SecurityPreferences(context);
+                RetrofitConfig retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+                retrofitConfig.setToken(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
 
-                    Call<Void> addDenuncia = retrofitConfig.getService(PostService.class).denunciarPost(db.get(position).getId());
-                    addDenuncia.enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(context, "Denúncia enviada!", Toast.LENGTH_SHORT).show();
-                            holder.denunciarIb.setClickable(false);
-                        }
+                Call<Void> addDenuncia = retrofitConfig.getService(PostService.class).denunciarPost(db.get(position).getId());
+                addDenuncia.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Toast.makeText(context, "Denúncia enviada!", Toast.LENGTH_SHORT).show();
+                        holder.denunciarIb.setClickable(false);
+                    }
 
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
 
-                        }
-                    });
+                    }
+                });
 
-                }
+            }
 
 
         });

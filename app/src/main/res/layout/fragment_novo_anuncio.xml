@@ -16,7 +16,7 @@
             android:id="@+id/ContainerComponents_anuncio"
             style="@style/ContainerComponentsFull"
             android:layout_width="match_parent"
-            android:layout_height="1260dp"
+            android:layout_height="1280dp"
             android:layout_marginTop="48dp"
             android:backgroundTint="@color/almostWhite"
 
@@ -488,6 +488,7 @@
             app:layout_constraintEnd_toStartOf="@id/ib_adicionar_img"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents_anuncio"
             app:layout_constraintTop_toBottomOf="@id/crv_fotos_moradia"
+
 
             />
 

@@ -1,7 +1,9 @@
 package com.example.tcc.ui.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tcc.MainActivity;
 import com.example.tcc.R;
+import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
+import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.moradias.MoradiaUsuarioEditar;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
@@ -20,11 +27,17 @@ import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuarioAdapter.MyViewHolder> {
 
     private List<Post> db = new ArrayList<>();
     private LayoutInflater inflater;
+    private SecurityPreferences securityPreferences;
+    private RetrofitConfig retrofitConfig;
     private ImagemAdapter imagemAdapter;
     private Context context;
 
@@ -34,6 +47,8 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
         this.context = context;
         db.clear();
         imagemAdapter = null;
+        securityPreferences = new SecurityPreferences(context);
+        retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
     }
 
 
@@ -72,6 +87,65 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
             }
         });
 
+        holder.btExcluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder confirmarSaida = new AlertDialog.Builder(context);
+                confirmarSaida.setTitle("Atenção!");
+                confirmarSaida.setMessage("Deseja excluir a moradia ? \n");
+                confirmarSaida.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Call<Void> call = retrofitConfig.getService(PostService.class).deletePost(db.get(holder.getAdapterPosition()).getId());
+                        Log.e("EXCLUIR", "ID: " + db.get(holder.getAdapterPosition()).getId());
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    intent.putExtra("novo_postMoradia_tag", "editPostTag");
+                                    context.startActivity(intent);
+                                } else {
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                });
+                confirmarSaida.setNegativeButton("Não", null);
+                confirmarSaida.create().show();
+
+
+                /*Call<Void> call = retrofitConfig.getService(PostService.class).deletePost(db.get(holder.getAdapterPosition()).getId());
+                Log.e("EXCLUIR", "ID: " + db.get(holder.getAdapterPosition()).getId());
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()){
+                            Intent intent = new Intent(context, MainActivity.class);
+                            intent.putExtra("novo_postMoradia_tag", "editPostTag");
+                            context.startActivity(intent);
+                        }
+                        else{
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                    }
+                });*/
+
+            }
+        });
+
     }
 
 
@@ -95,6 +169,7 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
         public TextView valorTv;
         public TextView comentarioTv;
         public Button editarBt;
+        public Button btExcluir;
         public CarouselRecyclerview recyclerview;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -113,7 +188,7 @@ public class MoradiasUsuarioAdapter extends RecyclerView.Adapter<MoradiasUsuario
             editarBt = itemView.findViewById(R.id.bt_editar_moradia_usuario);
             comentarioTv = itemView.findViewById(R.id.tv_comentario_usuario);
             recyclerview = itemView.findViewById(R.id.crv_fotos_moradia);
-
+            btExcluir = itemView.findViewById(R.id.bt_excluir_moradia_usuario);
         }
 
     }

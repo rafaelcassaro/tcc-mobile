@@ -63,15 +63,16 @@
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
         app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         />
-    <EditText
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/et_senha"
-        style="@style/Edit_Text_Cadastro"
-        android:hint="Senha"
-        android:textColorHint="@color/Grey"
+        style="@style/ButtonSenha"
+        android:hint="Alterar senha"
+        android:textColorHint="@color/white"
         android:textColor="@color/black"
         android:inputType="textPassword"
         android:drawableRight="@drawable/ic_eye"
-        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_celular"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
         app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         />
@@ -84,7 +85,7 @@
         android:inputType="phone"
         android:textColor="@color/black"
         android:drawableRight="@drawable/ic_celular"
-        app:layout_constraintTop_toBottomOf="@+id/et_senha"
+        app:layout_constraintTop_toBottomOf="@+id/et_email"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
         app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         android:maxLength="11"
@@ -96,7 +97,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:text="@string/redes_cadastro"
-        app:layout_constraintTop_toBottomOf="@+id/et_celular"
+        app:layout_constraintTop_toBottomOf="@+id/et_senha"
         app:layout_constraintStart_toStartOf="@+id/containerComponents_cadastro"
         app:layout_constraintEnd_toEndOf="@+id/containerComponents_cadastro"
         android:layout_marginTop="10dp"
@@ -148,7 +149,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_post"
-        style="@style/ButtonGrey"
+        style="@style/Button"
 
 
         android:text="Salvar"

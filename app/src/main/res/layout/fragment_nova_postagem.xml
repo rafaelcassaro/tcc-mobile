@@ -58,7 +58,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:textColor="@color/Grey"
-        android:text="São Paulo"
+        android:text="Cidade"
         android:textSize="16sp"
 
         app:layout_constraintTop_toBottomOf="@+id/iv_perfil_post"
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="SP"
+        android:text="Xx(Estado)"
         android:textColor="@color/Grey"
         android:textSize="16sp"
 

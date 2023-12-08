@@ -1,7 +1,9 @@
 package com.example.tcc.ui.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tcc.MainActivity;
 import com.example.tcc.R;
+import com.example.tcc.network.RetrofitConfig;
 import com.example.tcc.network.entities.Post;
 import com.example.tcc.network.repositories.SecurityPreferences;
+import com.example.tcc.network.services.PostService;
 import com.example.tcc.ui.constants.TaskConstants;
 import com.example.tcc.ui.postagens.PostagensUsuarioEditar;
 import com.squareup.picasso.MemoryPolicy;
@@ -28,12 +34,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.MyViewHolder> {
 
     private List<Post> db = new ArrayList<>();
 
     private SecurityPreferences securityPreferences;
+    private RetrofitConfig retrofitConfig;
     private Picasso picasso;
     private Context context;
 
@@ -50,6 +60,8 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
         picasso = new Picasso.Builder(context)
                 .downloader(new OkHttp3Downloader(getOkHttpClientWithAuthorization(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY))))
                 .build();
+        retrofitConfig = new RetrofitConfig(securityPreferences.getAuthToken(TaskConstants.SHARED.TOKEN_KEY));
+
         return new MyViewHolder(itemList);
     }
 
@@ -66,7 +78,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
             holder.nomeTv.setText(String.valueOf(db.get(holder.getAdapterPosition()).getUsuario().getNome()));
         }
 
-        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + db.get(holder.getAdapterPosition()).getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.imageView);
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL) + "/usuarios/fotoperfil/" + db.get(holder.getAdapterPosition()).getUsuario().getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.imageView);
 
         holder.btEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +89,47 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
 
             }
         });
+
+        holder.btExcluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder confirmarSaida = new AlertDialog.Builder(context);
+                confirmarSaida.setTitle("Atenção!");
+                confirmarSaida.setMessage("Deseja excluir a postagem ? \n");
+                confirmarSaida.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Call<Void> call = retrofitConfig.getService(PostService.class).deletePost(db.get(holder.getAdapterPosition()).getId());
+                        Log.e("EXCLUIR", "ID: " + db.get(holder.getAdapterPosition()).getId());
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    intent.putExtra("novo_post_tag", "editPostTag");
+                                    context.startActivity(intent);
+                                } else {
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+
+                            }
+                        });
+
+                    }
+                });
+                confirmarSaida.setNegativeButton("Não", null);
+                confirmarSaida.create().show();
+
+
+            }
+        });
+
 
     }
 
@@ -96,6 +149,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
         public TextView estadoTv;
         public CircleImageView imageView;
         public Button btEditar;
+        public Button btExcluir;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -108,6 +162,7 @@ public class PostUsuarioAdapter extends RecyclerView.Adapter<PostUsuarioAdapter.
             dataTv = itemView.findViewById(R.id.tv_data_usuario_post);
             imageView = itemView.findViewById(R.id.iv_perfil_post);
             btEditar = itemView.findViewById(R.id.bt_editar_postagem_usuario);
+            btExcluir = itemView.findViewById(R.id.bt_excluir_postagem_usuario);
         }
     }
 

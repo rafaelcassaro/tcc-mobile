@@ -136,12 +136,11 @@
         android:text="Celular: "
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ContainerPostagem"
-        app:layout_constraintEnd_toStartOf="@+id/ib_denunciar"
-        app:layout_constraintHorizontal_bias="0.0"
+
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
         app:layout_constraintTop_toBottomOf="@+id/tv_comment"
-        app:layout_constraintVertical_bias="0.0"
         />
 
     <TextView
@@ -150,19 +149,21 @@
         android:layout_height="wrap_content"
         android:layout_margin="25dp"
 
-        android:layout_marginTop="5dp"
+
+        android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-light"
+
+
         android:text="16 00000-0000"
+
         android:textColor="@color/black"
+
         android:textSize="16sp"
-
-
-        app:layout_constraintBottom_toBottomOf="@+id/ContainerPostagem"
-        app:layout_constraintEnd_toStartOf="@+id/ib_denunciar"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.236"
         app:layout_constraintStart_toStartOf="@+id/tv_celular"
         app:layout_constraintTop_toBottomOf="@+id/tv_comment"
-        app:layout_constraintVertical_bias="0.0" />
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_wpp"

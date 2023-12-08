@@ -101,10 +101,15 @@ public class ImagemEditarMoradiaAdapter extends RecyclerView.Adapter<ImagemEdita
 
         if (!db.isEmpty() && position >= 0 && position < db.size()) {
             db.remove(position);
+            //notifyItemRemoved(position);
+            notifyDataSetChanged();
+           // onAttachedToRecyclerView();
+           // db.size();
+            Log.e("ADAPTER", "addImagem db: " + db.size());
         }
 
-        notifyItemRemoved(position);
-        notifyDataSetChanged();
+       // notifyItemRemoved(position);
+       // notifyDataSetChanged();
 
     }
 

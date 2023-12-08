@@ -131,12 +131,10 @@
         android:text="Celular: "
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ContainerPostagem"
-        app:layout_constraintEnd_toStartOf="@+id/bt_editar_postagem_usuario"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
         app:layout_constraintTop_toBottomOf="@+id/tv_comment"
-        app:layout_constraintVertical_bias="0.0"
         />
 
     <TextView
@@ -152,12 +150,11 @@
         android:textSize="16sp"
 
 
-        app:layout_constraintBottom_toBottomOf="@+id/ContainerPostagem"
-        app:layout_constraintEnd_toStartOf="@+id/bt_editar_postagem_usuario"
-        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.236"
         app:layout_constraintStart_toStartOf="@+id/tv_celular"
         app:layout_constraintTop_toBottomOf="@+id/tv_comment"
-        app:layout_constraintVertical_bias="0.0" />
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_wpp"
@@ -189,6 +186,27 @@
 
         app:layout_constraintBottom_toBottomOf="@id/ContainerPostagem"
         app:layout_constraintEnd_toEndOf="@+id/ContainerPostagem"
+        app:layout_constraintHorizontal_bias="0.929"
+
+        app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"
+
+        app:layout_constraintTop_toTopOf="@+id/ContainerPostagem"
+        app:layout_constraintVertical_bias="0.926" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_excluir_postagem_usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+
+        android:background="@drawable/button_excluir"
+        android:text="@string/bt_moradia_cadastro_excluir"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+
+        app:layout_constraintBottom_toBottomOf="@id/ContainerPostagem"
+        app:layout_constraintEnd_toStartOf="@+id/bt_editar_postagem_usuario"
         app:layout_constraintHorizontal_bias="0.929"
 
         app:layout_constraintStart_toStartOf="@+id/ContainerPostagem"

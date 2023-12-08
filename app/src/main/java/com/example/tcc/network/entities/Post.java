@@ -14,6 +14,7 @@ public class Post implements Serializable {
     private String estado;
     private String dataPost;
     private String cep;
+    private boolean excluido;
     //protected SimpleDateFormat x = new SimpleDateFormat("dd/MM/yyyy");
 
     private Usuario usuario;
@@ -23,7 +24,7 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, String dataPost, String cep) {
+    public Post(Long id, Integer qntdDenuncia, String comentario, String cidade, String estado, String dataPost, String cep, boolean excluido) {
         this.id = id;
         this.qntdDenuncia = qntdDenuncia;
         this.comentario = comentario;
@@ -31,6 +32,7 @@ public class Post implements Serializable {
         this.estado = estado;
         this.dataPost = dataPost;
         this.cep = cep;
+        this.excluido = excluido;
     }
 
 
@@ -104,6 +106,14 @@ public class Post implements Serializable {
 
     public void setPostMoradia(PostMoradia postMoradia) {
         this.postMoradia = postMoradia;
+    }
+
+    public boolean isExcluido() {
+        return excluido;
+    }
+
+    public void setExcluido(boolean excluido) {
+        this.excluido = excluido;
     }
 
     @Override

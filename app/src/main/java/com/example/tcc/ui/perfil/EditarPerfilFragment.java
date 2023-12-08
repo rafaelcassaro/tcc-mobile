@@ -19,9 +19,9 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.tcc.MainActivity;
 import com.example.tcc.R;
 import com.example.tcc.databinding.FragmentPerfilBinding;
 import com.example.tcc.network.RetrofitConfig;
@@ -29,7 +29,6 @@ import com.example.tcc.network.entities.Usuario;
 import com.example.tcc.network.repositories.SecurityPreferences;
 import com.example.tcc.network.services.UserService;
 import com.example.tcc.ui.constants.TaskConstants;
-import com.example.tcc.ui.login.FormCadastro;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -47,6 +46,7 @@ public class EditarPerfilFragment extends Fragment {
 
     private FragmentPerfilBinding binding;
     private Usuario usuario;
+    private Usuario usuarioTrocarSenha;
     private Picasso picasso;
     private ActivityResultLauncher<Intent> resultLauncher;
     private Uri imageUri;
@@ -54,13 +54,14 @@ public class EditarPerfilFragment extends Fragment {
     private Long id;
     private SecurityPreferences securityPreferences;
     private RetrofitConfig retrofitConfig;
-
+    private String originalEmail;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPerfilBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         usuario = new Usuario();
+        usuarioTrocarSenha = new Usuario();
         setRetrofit();
 
         id = Long.valueOf(securityPreferences.getAuthToken(TaskConstants.SHARED.PERSON_KEY));
@@ -70,6 +71,15 @@ public class EditarPerfilFragment extends Fragment {
 
         binding.ivEditImgPerfil.setOnClickListener(view -> pickImage());
 
+        binding.etSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), TrocarSenha.class);
+                intent.putExtra(TaskConstants.SHARED.EXTRA_SHOW_USER, usuarioTrocarSenha);
+                startActivity(intent);
+            }
+        });
+
         binding.btPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +87,7 @@ public class EditarPerfilFragment extends Fragment {
                 verificarDados();
                 verificarCelular();
 
-                if(verificarDados() && verificarCelular()){
+                if (verificarDados() && verificarCelular()) {
                     editarViaApi();
                 }
 
@@ -93,12 +103,12 @@ public class EditarPerfilFragment extends Fragment {
                 "38", "21", "22", "24", "11", "12", "13", "14", "15", "16", "17", "18", "19", "41", "42", "43", "44", "45", "46", "51", "53", "54", "55", "47", "48", "49"};
         String teste;
         String teste2 = "";
-        if(binding.etCelular.getText().toString().length() > 3){
+        if (binding.etCelular.getText().toString().length() > 3) {
             teste2 = binding.etCelular.getText().toString().substring(0, 3);
         }
 
-        Log.e("verificarCelular", "teste2: "+ teste2);
-        Log.e("verificarCelular", "teste2: "+ teste2.equals("+55"));
+        Log.e("verificarCelular", "teste2: " + teste2);
+        Log.e("verificarCelular", "teste2: " + teste2.equals("+55"));
         if (teste2.equals("+55") && binding.etCelular.getText().toString().length() > 3 && binding.etCelular.getText().toString().length() != 0) {
             teste = binding.etCelular.getText().toString().substring(3, 5);
             Log.e("verificarCelular", "deu bao1: ");
@@ -116,7 +126,7 @@ public class EditarPerfilFragment extends Fragment {
             binding.etCelular.setError("Digite um número!");
             binding.etCelular.requestFocus();
             return false;
-        }else if(teste2 != "+55"){
+        } else if (teste2 != "+55") {
             Log.e("verificarCelular", "deu bao3: ");
             binding.etCelular.setError("Digite um ddd valido começado com +55ddd!!");
             binding.etCelular.requestFocus();
@@ -126,10 +136,10 @@ public class EditarPerfilFragment extends Fragment {
         return true;
     }
 
-    private boolean verificarDados(){
+    private boolean verificarDados() {
         String nomeAdd = binding.etNome.getText().toString();
         String emailAdd = binding.etEmail.getText().toString();
-        String senhaAdd = binding.etSenha.getText().toString();
+
         String instagramAdd = binding.etLink1.getText().toString();
         String facebookAdd = binding.etLink2.getText().toString();
         String TwitterAdd = binding.etLink3.getText().toString();
@@ -141,10 +151,6 @@ public class EditarPerfilFragment extends Fragment {
         } else if (nomeAdd.length() == 0) {
             binding.etNome.requestFocus();
             binding.etNome.setError("Preencha o campo");
-            return false;
-        } else if (senhaAdd.length() == 0) {
-            binding.etSenha.requestFocus();
-            binding.etSenha.setError("Preencha o campo");
             return false;
         } else if (binding.etLink1.getText().toString().length() >= 1 && !instagramAdd.matches("[a-zA-Z0-9._]+") || instagramAdd.startsWith(".") || instagramAdd.contains("..")) {
             binding.etLink1.setError("Nome de usuário inválido para o Instagram!");
@@ -176,11 +182,20 @@ public class EditarPerfilFragment extends Fragment {
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()) {
                     salvarImagemViaApi();
-                    Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(getContext().getPackageName());
-                    if (intent != null) {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+                    if (!usuario.getEmail().equals(originalEmail)) {
+                        Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(getContext().getPackageName());
+                        if (intent != null) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Intent intent = new Intent(getContext(), MainActivity.class);
                         startActivity(intent);
+                        Toast.makeText(getContext(), "Dados alterados!", Toast.LENGTH_SHORT).show();
                     }
+
 
                 } else {
                 }
@@ -212,12 +227,13 @@ public class EditarPerfilFragment extends Fragment {
     private void setarDados(Usuario usuario) {
         binding.etNome.setText(usuario.getNome());
         binding.etEmail.setText(usuario.getEmail());
+
         binding.etCelular.setText(usuario.getCelular());
         binding.etLink1.setText(usuario.getLink1());
         binding.etLink2.setText(usuario.getLink2());
         binding.etLink3.setText(usuario.getLink3());
 
-        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL)+"/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little)
+        picasso.load(securityPreferences.getAuthToken(TaskConstants.PATH.URL) + "/usuarios/fotoperfil/" + usuario.getNomeFotoPerfil()).noFade().placeholder(R.drawable.img_not_found_little)
                 .memoryPolicy(MemoryPolicy.NO_CACHE).into(binding.ivEditImgPerfil);
     }
 
@@ -229,7 +245,9 @@ public class EditarPerfilFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Usuario tempUser = response.body();
                     setarDados(tempUser);
-                    usuario.setSenha("");
+                    originalEmail = tempUser.getEmail();
+                    usuarioTrocarSenha = tempUser;
+                    //usuario.setSenha("");
                 } else {
 
                 }

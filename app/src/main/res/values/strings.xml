@@ -39,6 +39,7 @@
     <string name="redes_cadastro">Redes Sociais</string>
     <string name="foto_cadastro">Foto de perfil</string>
     <string name="bt_moradia_cadastro_editar">Editar</string>
+    <string name="bt_moradia_cadastro_excluir">Excluir</string>
     <string name="ic_moradores">moradores</string>
 
     <string name="bt_cadastro_add">Adicionar</string>

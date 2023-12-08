@@ -3,14 +3,13 @@ package com.example.tcc.ui.constants;
 public class TaskConstants {
 
 
-
-    public static class HTTP{
+    public static class HTTP {
         public final static int SUCCESS = 200;
         public final static int CREATED = 201;
 
     }
 
-    public static class PATH{
+    public static class PATH {
         public final static String URL = "url";
 
     }
@@ -24,6 +23,7 @@ public class TaskConstants {
         public static final String EXTRA_SHOW_SEARCH_POST = "EXTRA_SHOW_SEARCH_POST";
         public static final String EXTRA_SHOW_FILTER = "EXTRA_SHOW_FILTER";
         public static final String EXTRA_SHOW_CIT = "EXTRA_SHOW_FILTER";
+        public static final String EXTRA_SHOW_USER = "EXTRA_SHOW_USER";
         public static final String EXTRA_SHOW_BD2 = "EXTRA_SHOW_FILTER";
         public static final String PICK_IMAGE_REQUEST_CODE = "PICK_IMAGE_REQUEST_CODE";
 

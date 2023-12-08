@@ -23,7 +23,7 @@ public interface UserService {
     @POST("auth/register")
     Call<Usuario> registrar(@Body Usuario usuario);
 
-    @PUT("usuarios/{id}")
+    @PUT("usuarios/update/data/{id}")
     Call<Usuario> atualizarDados(@Path("id") Long id, @Body Usuario usuario);
 
     @Multipart
@@ -33,5 +33,9 @@ public interface UserService {
     @Multipart
     @POST("usuarios/edit/fotoperfil/{id}")
     Call<Usuario> editarFotoPerfil(@Part MultipartBody.Part file, @Path("id") Long id);
+
+    @PUT("usuarios/update/password/{id}")
+    Call<Usuario> atualizarSenha(@Path("id") Long id, @Body Usuario user);
+
 
 }

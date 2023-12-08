@@ -85,7 +85,7 @@
         android:padding="10dp"
         android:text="Procuro alguem para divir um ap próximo do lugar x, com valor de xxxx, que aceita pets xxxxxxxxxxxxxxxxxxxxxxxxxxx xxx
         xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        android:textColor="@color/black"
+        android:textColor="@color/almostBlack"
         android:textSize="16sp"
 
         app:layout_constraintEnd_toEndOf="@+id/ContainerMoradia"
