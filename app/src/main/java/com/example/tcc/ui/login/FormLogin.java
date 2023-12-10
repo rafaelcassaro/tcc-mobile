@@ -55,7 +55,6 @@ public class FormLogin extends AppCompatActivity {
         login_button = findViewById(R.id.bt_login);
         email = findViewById(R.id.edit_email);
         senha = findViewById(R.id.edit_senha);
-
     }
 
     private void mostrarErro(FormLogin x, String mensagem) {

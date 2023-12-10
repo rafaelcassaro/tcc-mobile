@@ -108,25 +108,28 @@ public class MoradiasFragment extends Fragment {
                 cidade2 = securityPreferences.getAuthToken(TaskConstants.SHARED.EXTRA_SHOW_CIT);
                // dbCidadesSegurar.clear();
 
-                Log.e("setSearchBar", "(String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH); "+ cidade);
-                if (cidade == null && db2.isEmpty() && cidade2==null) {
-                    Log.e("threadGetDataFromApi", "cidade == null && db2==null && cidade2==null ");
-                    //dbCidadesSegurar = null;
-                    getDbBack();
-                } else if(cidade2!=null && cidade ==null && !db2.isEmpty()){
-                    Log.e("threadGetDataFromApi", "cidade2!=null && cidade ==null && db2 != null ");
-                    getPostCidadesBack2(cidade2);
-                }
-                else if (cidade != null && cidade2 == null) {
-                    Log.e("threadGetDataFromApi", "cidade != null && cidade2 == null ");
-                    getPostCidadesBack(cidade);
-                }
-                else if (cidade ==null && cidade2 == null && !db2.isEmpty()) {
-                    Log.e("threadGetDataFromApi", "db2 !=null && cidade ==null && cidade2 == null && dbCidadesSegurar ==null ");
-                    db.clear();
-                    db.addAll(db2);
-                    moradiasAdapter.setPostagens(db);
-                }
+                new Thread(() -> {
+                    Log.e("setSearchBar", "(String) getActivity().getIntent().getSerializableExtra(TaskConstants.SHARED.EXTRA_SHOW_SEARCH); "+ cidade);
+                    if (cidade == null && db2.isEmpty() && cidade2==null) {
+                        Log.e("threadGetDataFromApi", "cidade == null && db2==null && cidade2==null ");
+                        //dbCidadesSegurar = null;
+                        getDbBack();
+                    } else if(cidade2!=null && cidade ==null && !db2.isEmpty()){
+                        Log.e("threadGetDataFromApi", "cidade2!=null && cidade ==null && db2 != null ");
+                        getPostCidadesBack2(cidade2);
+                    }
+                    else if (cidade != null && cidade2 == null) {
+                        Log.e("threadGetDataFromApi", "cidade != null && cidade2 == null ");
+                        getPostCidadesBack(cidade);
+                    }
+                    else if (cidade ==null && cidade2 == null && !db2.isEmpty()) {
+                        Log.e("threadGetDataFromApi", "db2 !=null && cidade ==null && cidade2 == null && dbCidadesSegurar ==null ");
+                        db.clear();
+                        db.addAll(db2);
+                        moradiasAdapter.setPostagens(db);
+                    }
+                }).start();
+
             }
         }).start();
     }
@@ -212,110 +215,123 @@ public class MoradiasFragment extends Fragment {
                     }
                 }).start();
 
-                if(db2.isEmpty()){
-                    closeIcon.setIcon(R.drawable.ic_invisivel);
-                }else if (!db2.isEmpty() && dbCidadesSegurar.isEmpty() ){
 
-                        Log.e("setSearchBar", "db2 != null && dbCidadesSegurar.size() =" +
-                                "= 0 | dbCidadesSegurar "+ dbCidadesSegurar);
-                        Log.e("setSearchBar", "db2 != null && dbCidadesSegurar.size() == 0  |  db2.size()"+ db2.size());
-                        closeIcon.setIcon(R.drawable.ic_close);
-                        filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
-
-                        closeIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                                Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() == 0 "+ db2);
-                                db2.clear();
-                                getDbBack();
-
-                                filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
-                                closeIcon.setIcon(R.drawable.ic_invisivel);
-                                Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() == 0 "+ db2);
-                                return false;
-                            }
-                        });
-
-                }else if (!db2.isEmpty() && !dbCidadesSegurar.isEmpty()){
-
-                        Log.e("setSearchBar", "db2 != null && dbCidadesSegurar.size() > 0 |dbCidadesSegurar "+ dbCidadesSegurar);
-                        closeIcon.setIcon(R.drawable.ic_close);
-                        filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
-
-                        // FECHAR BAR CIDADE E FILTRO
-                        closeIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                                Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() > 0 "+ db2);
-                                db.clear();
-                                db.addAll(dbCidadesSegurar);
-                                db2.clear();
-
-                                moradiasAdapter.setPostagens(db);
-                                filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
-                                closeIcon.setIcon(R.drawable.ic_invisivel);
-                                Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() > 0 "+ db2);
-                                return false;
-                            }
-                        });
-                }
-
-
-                if(cidade == null && cidade2 ==null){
-                    closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
-                }else if(cidade != null){
-                    closeCitSerchIcon.setIcon(R.drawable.ic_close);
-                    barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar_selecionado, cidade, R.color.black);
-
-                    closeCitSerchIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(@NonNull MenuItem item) {
-
-                            cidade = null;
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getDbBack();
-                                    securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, null);
-                                    securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, null);
-                                    cidade = null;
-                                }
-                            }).start();
-                            closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
-                            barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar, "Digite uma cidade", R.color.cinzaClaro);
-                            filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(db2.isEmpty()){
                             closeIcon.setIcon(R.drawable.ic_invisivel);
-                            cidade = null;
-                            return false;
-                        }
-                    });
-                }
-                else if(cidade2 != null && cidade == null){
-                    closeCitSerchIcon.setIcon(R.drawable.ic_close);
-                    barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar_selecionado, cidade2, R.color.black);
-                    closeCitSerchIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(@NonNull MenuItem item) {
-                            cidade = null;
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getDbBack();
-                                    securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, null);
-                                    securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, null);
-                                    cidade = null;
-                                }
-                            }).start();
+                        }else if (!db2.isEmpty() && dbCidadesSegurar.isEmpty() ){
 
-                            closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
-                            barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar, "Digite uma cidade", R.color.cinzaClaro);
-                            filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
-                            closeIcon.setIcon(R.drawable.ic_invisivel);
-                            cidade = null;
-                            return false;
+                            Log.e("setSearchBar", "db2 != null && dbCidadesSegurar.size() =" +
+                                    "= 0 | dbCidadesSegurar "+ dbCidadesSegurar);
+                            Log.e("setSearchBar", "db2 != null && dbCidadesSegurar.size() == 0  |  db2.size()"+ db2.size());
+                            closeIcon.setIcon(R.drawable.ic_close);
+                            filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
+
+                            closeIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                    Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() == 0 "+ db2);
+                                    db2.clear();
+                                    getDbBack();
+
+                                    filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                                    closeIcon.setIcon(R.drawable.ic_invisivel);
+                                    Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() == 0 "+ db2);
+                                    return false;
+                                }
+                            });
+
+                        }else if (!db2.isEmpty() && !dbCidadesSegurar.isEmpty()){
+
+                            Log.e("setSearchBar", "db2 != null && dbCidadesSegurar.size() > 0 |dbCidadesSegurar "+ dbCidadesSegurar);
+                            closeIcon.setIcon(R.drawable.ic_close);
+                            filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar_selecionado));
+
+                            // FECHAR BAR CIDADE E FILTRO
+                            closeIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                    Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() > 0 "+ db2);
+                                    db.clear();
+                                    db.addAll(dbCidadesSegurar);
+                                    db2.clear();
+
+                                    moradiasAdapter.setPostagens(db);
+                                    filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                                    closeIcon.setIcon(R.drawable.ic_invisivel);
+                                    Log.e("setSearchBar", "closeIcon.setOnMenuItemClickListener db2 != null && dbCidadesSegurar.size() > 0 "+ db2);
+                                    return false;
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+                }).start();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(cidade == null && cidade2 ==null){
+                            closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+                        }else if(cidade != null){
+                            closeCitSerchIcon.setIcon(R.drawable.ic_close);
+                            barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar_selecionado, cidade, R.color.black);
+
+                            closeCitSerchIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+
+                                    cidade = null;
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            getDbBack();
+                                            securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, null);
+                                            securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, null);
+                                            cidade = null;
+                                        }
+                                    }).start();
+                                    closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+                                    barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar, "Digite uma cidade", R.color.cinzaClaro);
+                                    filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                                    closeIcon.setIcon(R.drawable.ic_invisivel);
+                                    cidade = null;
+                                    return false;
+                                }
+                            });
+                        }
+                        else if(cidade2 != null && cidade == null){
+                            closeCitSerchIcon.setIcon(R.drawable.ic_close);
+                            barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar_selecionado, cidade2, R.color.black);
+                            closeCitSerchIcon.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                    cidade = null;
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            getDbBack();
+                                            securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_CIT, null);
+                                            securityPreferences.store(TaskConstants.SHARED.EXTRA_SHOW_SEARCH, null);
+                                            cidade = null;
+                                        }
+                                    }).start();
+
+                                    closeCitSerchIcon.setIcon(R.drawable.ic_invisivel);
+                                    barraPesquisaPadrao(searchEditText, R.drawable.button_filtrar, "Digite uma cidade", R.color.cinzaClaro);
+                                    filterEditText.setBackground(getContext().getDrawable(R.drawable.button_filtrar));
+                                    closeIcon.setIcon(R.drawable.ic_invisivel);
+                                    cidade = null;
+                                    return false;
+                                }
+                            });
+                        }
+                    }
+                }).start();
+
+
+
 
 
 

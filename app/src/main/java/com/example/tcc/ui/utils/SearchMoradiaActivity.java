@@ -55,6 +55,13 @@ public class SearchMoradiaActivity extends AppCompatActivity {
         setBtVoltar();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cidades = null;
+        listaCidades = null;
+    }
+
     private void iniciarViews() {
         searchView = findViewById(R.id.edit_procurar);
         rv = findViewById(R.id.rv_moradias_search);
